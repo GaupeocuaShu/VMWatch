@@ -23,20 +23,13 @@ class RegisteredUserController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
         ]);
-        // $user = User::create([
-        //     'name' => $request->username,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        // ]);
-        User::create([
+        $user = User::create([
             'name' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        // event(new Registered($user));
-
-        // Auth::login($user);
-
-        return response("Sign Up Successfully",202); 
+        event(new Registered($user));
+        Auth::login($user);
+        return response(["message" => "Sign Up Successfully","user" => Auth::user()],202); 
     }
 }

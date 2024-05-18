@@ -5,9 +5,10 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import Logo from "../../../components/Logo";
 import axiosClient from "../../../axios-client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useAuthContext } from "../../../contexts/AuthContext";
 const initialValues = {
     username: "",
     email: "",
@@ -28,23 +29,23 @@ const validationSchema = yup.object({
         .required("Password must match"),
 });
 const SignUp = () => {
+    const { user, setUser } = useAuthContext();
     const [loading, setLoading] = useState(false);
     const [errorFromServer, setErrorFromServer] = useState("");
+    if (user) return <Navigate to="/" />;
     const handleFormSubmit = async (data) => {
         setLoading(true);
         setErrorFromServer("");
         await axiosClient.get("/sanctum/csrf-cookie");
-        try {
-            await axiosClient
-                .post("/register", data)
-                .then((res) => {})
-                .catch(({ response }) => {
-                    setErrorFromServer(response.data.message);
-                })
-                .finally(() => setLoading(false));
-        } catch (err) {
-            console.log(err);
-        }
+        await axiosClient
+            .post("/register", data)
+            .then(({ data }) => {
+                setUser(data.user);
+            })
+            .catch(({ response }) => {
+                setErrorFromServer(response.data.message);
+            })
+            .finally(() => setLoading(false));
     };
     return (
         <Box

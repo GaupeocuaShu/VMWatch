@@ -16,10 +16,11 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): Response
     {
         $request->authenticate();
-
         $request->session()->regenerate();
-
-        return response()->noContent();
+        $user = Auth::user();
+        return response(["message" => "Login Successfully",
+                        "user" =>  $user ,
+                     ]);
     }
 
     /**
@@ -27,12 +28,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        Auth::guard('web')->logout();
-
+        /**@var User $user */
+        $user = Auth::user();
+        Auth::guard('web')->logout();  
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return response()->noContent();
     }
 }

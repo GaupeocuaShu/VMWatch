@@ -1,6 +1,5 @@
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import { Formik } from "formik";
@@ -9,6 +8,8 @@ import Logo from "../../../components/Logo";
 import axiosClient from "../../../axios-client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 const initialValues = {
     email: "",
     password: "",
@@ -21,23 +22,26 @@ const validationSchema = yup.object({
     password: yup.string().required("Password is required"),
 });
 const Login = () => {
+    const { user, setUser } = useAuthContext();
     const [loading, setLoading] = useState(false);
     const [errorFromServer, setErrorFromServer] = useState("");
+    console.log(user);
+    if (user) return <Navigate to="/" />;
     const handleFormSubmit = async (data) => {
         setLoading(true);
         setErrorFromServer("");
         await axiosClient.get("/sanctum/csrf-cookie");
-        try {
-            await axiosClient
-                .post("/register", data)
-                .then((res) => {})
-                .catch(({ response }) => {
-                    setErrorFromServer(response.data.message);
-                })
-                .finally(() => setLoading(false));
-        } catch (err) {
-            console.log(err);
-        }
+
+        await axiosClient
+            .post("/login", data)
+            .then(({ data }) => {
+                setUser(data.user);
+                console.log(data);
+            })
+            .catch(({ response }) => {
+                setErrorFromServer(response.data.message);
+            })
+            .finally(() => setLoading(false));
     };
     return (
         <Box
