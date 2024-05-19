@@ -1,13 +1,13 @@
 import React from "react";
 import { Box } from "@mui/material";
-const Logo = () => {
+const Logo = ({ isMobile }) => {
     return (
         <Box>
             <img
                 alt="Logo"
                 src={`../../assets/user-avatar.png`}
-                width="100"
-                height="100"
+                width={isMobile ? "50" : "100"}
+                height={isMobile ? "50" : "100"}
             />
         </Box>
     );

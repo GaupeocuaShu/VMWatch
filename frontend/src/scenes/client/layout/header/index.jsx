@@ -19,39 +19,37 @@ import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import WatchOutlinedIcon from "@mui/icons-material/WatchOutlined";
 import { useAuthContext } from "../../../../contexts/AuthContext";
 import axiosClient from "../../../../axios-client";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import { useTheme } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 // "Account", "Order", "Cart", "Log out"
 const settings = [
     {
         name: "Profile",
         link: "/profile",
-        icon: <PersonOutlinedIcon fontSize="sm" />,
+        icon: <PersonOutlinedIcon />,
     },
     {
         name: "Order",
         link: "/order",
-        icon: <WatchOutlinedIcon fontSize="sm" />,
+        icon: <WatchOutlinedIcon />,
     },
 ];
 const Header = () => {
-    const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
     const { user, setUser } = useAuthContext();
-
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("sm"));
+    console.log(matches);
     const handleLogOut = () => {
         axiosClient.post("/logout").then(() => {
             setUser(null);
@@ -73,18 +71,20 @@ const Header = () => {
     }, []);
 
     return (
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Box>
-                <Logo />
-            </Box>
+        <>
             <Box
+                sx={{ paddingX: { md: "200px" } }}
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                columnGap={4}
             >
+                {/* Logo */}
+                <Box>
+                    <Logo isMobile={!matches} />
+                </Box>
+                {/* Search */}
                 <Box
-                    width="400px"
+                    sx={{ width: { md: "500px", sx: "350px" } }}
                     display="flex"
                     bgcolor="#f0f0f0"
                     borderRadius="5px"
@@ -105,101 +105,214 @@ const Header = () => {
                         }}
                     />
                 </Box>
-                {!user ? (
-                    <Button
+
+                {/* User Information */}
+
+                {/* Laptop */}
+                <LaptopNavigation user={user} handleLogOut={handleLogOut} />
+
+                {/* Mobile */}
+
+                <MobileNavigation user={user} handleLogOut={handleLogOut} />
+            </Box>
+        </>
+    );
+};
+
+export default Header;
+
+function LaptopNavigation({ user, handleLogOut }) {
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+    return (
+        <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            columnGap={4}
+            sx={{ display: { xs: "none", md: "flex" } }}
+        >
+            {!user ? (
+                <Button
+                    LinkComponent={Link}
+                    to="/login"
+                    endIcon={<LoginOutlinedIcon />}
+                    variant="outlined"
+                >
+                    Login
+                </Button>
+            ) : (
+                <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title="Open settings">
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <Avatar alt="Avatar" />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        sx={{ mt: "45px" }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                    >
+                        <MenuItem
+                            key={0}
+                            sx={{ width: "150px" }}
+                            onClick={handleCloseUserMenu}
+                        >
+                            <Typography
+                                textAlign="center"
+                                fontWeight="bold"
+                                ml={1}
+                            >
+                                {user && user?.name}
+                            </Typography>
+                        </MenuItem>
+                        <Divider />
+
+                        {settings.map((setting, key) => (
+                            <MenuItem
+                                sx={{ width: "150px" }}
+                                key={key + 1}
+                                onClick={handleCloseUserMenu}
+                                LinkComponent={Link}
+                                to={setting.link}
+                            >
+                                {setting.icon}
+                                <Typography textAlign="center" marginLeft={1}>
+                                    {setting.name}
+                                </Typography>
+                            </MenuItem>
+                        ))}
+                        <Divider />
+
+                        <MenuItem
+                            key={settings.length + 1}
+                            sx={{ width: "150px" }}
+                            onClick={handleLogOut}
+                        >
+                            <LoginOutlinedIcon fontSize="sm" color="error" />
+
+                            <Typography
+                                sx={{ color: "#c70707" }}
+                                textAlign="center"
+                                marginLeft={1}
+                            >
+                                Log Out
+                            </Typography>
+                        </MenuItem>
+                    </Menu>
+                    &emsp;
+                    <IconButton>
+                        <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                </Box>
+            )}
+        </Box>
+    );
+}
+function MobileNavigation({ user, handleLogOut }) {
+    const [state, setState] = useState(false);
+
+    const toggleDrawer = (open) => (event) => {
+        if (
+            event &&
+            event.type === "keydown" &&
+            (event.key === "Tab" || event.key === "Shift")
+        ) {
+            return;
+        }
+
+        setState(open);
+    };
+
+    const list = (anchor) => (
+        <Box
+            sx={{
+                width: 250,
+            }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <List>
+                <ListItem key={0} disablePadding>
+                    <ListItemButton
                         LinkComponent={Link}
                         to="/login"
                         endIcon={<LoginOutlinedIcon />}
                         variant="outlined"
                     >
-                        Login
-                    </Button>
-                ) : (
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton
-                                onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
-                            >
-                                <Avatar alt="Avatar" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <MenuItem
-                                key={0}
-                                sx={{ width: "150px" }}
-                                onClick={handleCloseUserMenu}
-                            >
-                                <Typography
-                                    textAlign="center"
-                                    fontWeight="bold"
-                                    ml={1}
-                                >
-                                    {user && user?.name}
-                                </Typography>
-                            </MenuItem>
-                            {settings.map((setting, key) => (
-                                <MenuItem
-                                    sx={{ width: "150px" }}
-                                    key={key + 1}
-                                    onClick={handleCloseUserMenu}
-                                    LinkComponent={Link}
-                                    to={setting.link}
-                                >
-                                    {setting.icon}
-                                    <Typography
-                                        textAlign="center"
-                                        marginLeft={1}
-                                    >
-                                        {setting.name}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
-                            <MenuItem
-                                key={settings.length + 1}
-                                sx={{ width: "150px" }}
-                                onClick={handleLogOut}
-                            >
-                                <LoginOutlinedIcon
-                                    fontSize="sm"
-                                    color="error"
-                                />
-
-                                <Typography
-                                    sx={{ color: "#c70707" }}
-                                    textAlign="center"
-                                    marginLeft={1}
-                                >
-                                    Log Out
-                                </Typography>
-                            </MenuItem>
-                        </Menu>
-                        &emsp;
-                        <IconButton>
-                            <ShoppingCartOutlinedIcon
-                                sx={{ fontSize: "30px" }}
+                        {!user ? (
+                            <ListItemText
+                                sx={{
+                                    textAlign: "center",
+                                    fontWeight: "500px",
+                                }}
+                                primary="Login"
                             />
-                        </IconButton>
-                    </Box>
-                )}
-            </Box>
+                        ) : (
+                            <ListItemText
+                                sx={{
+                                    textAlign: "center",
+                                    fontWeight: "500px",
+                                }}
+                                primary={user.name}
+                            />
+                        )}
+                    </ListItemButton>
+                </ListItem>
+                <Divider />
+                {settings.map((setting, index) => (
+                    <ListItem key={index} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>{setting.icon}</ListItemIcon>
+                            <ListItemText primary={setting.name} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
         </Box>
     );
-};
 
-export default Header;
+    return (
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton onClick={toggleDrawer(true)}>
+                <ListOutlinedIcon fontSize="large" />
+            </IconButton>
+            <SwipeableDrawer
+                anchor={"right"}
+                open={state}
+                onClose={toggleDrawer(false)}
+                onOpen={toggleDrawer(true)}
+            >
+                {list("right")}
+            </SwipeableDrawer>
+        </Box>
+    );
+}
