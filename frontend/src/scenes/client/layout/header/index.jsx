@@ -31,6 +31,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Navbar from "../navbar";
 
 // "Account", "Order", "Cart", "Log out"
 const settings = [
@@ -77,6 +78,7 @@ const Header = () => {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
+                gap={5}
             >
                 {/* Logo */}
                 <Box>
@@ -84,16 +86,17 @@ const Header = () => {
                 </Box>
                 {/* Search */}
                 <Box
-                    sx={{ width: { md: "500px", sx: "350px" } }}
                     display="flex"
                     bgcolor="#f0f0f0"
                     borderRadius="5px"
+                    flex={1}
                     height="40px"
                 >
                     <IconButton
                         type="button"
                         sx={{ p: "10px" }}
                         aria-label="search"
+                        color="secondary"
                     >
                         <SearchIcon />
                     </IconButton>
@@ -120,7 +123,7 @@ const Header = () => {
 };
 
 export default Header;
-
+// Laptop navigation
 function LaptopNavigation({ user, handleLogOut }) {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -227,7 +230,7 @@ function LaptopNavigation({ user, handleLogOut }) {
                         </MenuItem>
                     </Menu>
                     &emsp;
-                    <IconButton>
+                    <IconButton color="secondary">
                         <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
                     </IconButton>
                 </Box>
@@ -235,6 +238,7 @@ function LaptopNavigation({ user, handleLogOut }) {
         </Box>
     );
 }
+// Mobile navigation
 function MobileNavigation({ user, handleLogOut }) {
     const [state, setState] = useState(false);
 
@@ -296,6 +300,8 @@ function MobileNavigation({ user, handleLogOut }) {
                     </ListItem>
                 ))}
             </List>
+            <Divider />
+            <Navbar isMobile={true} />
             <Divider />
         </Box>
     );

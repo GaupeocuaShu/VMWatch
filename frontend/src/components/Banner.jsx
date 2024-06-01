@@ -1,13 +1,14 @@
 import React from "react";
 import { Box } from "@mui/material";
-const Banner = () => {
+const Banner = ({ src }) => {
     return (
-        <Box>
+        <Box overflow="hidden">
             <img
                 width="100%"
-                style={{ objectFit: "cover" }}
-                alt="Logo"
-                src={`../../assets/KOI-Noble-PC.jpg`}
+                height="400px"
+                style={{ objectFit: "contain" }}
+                alt="Banner"
+                src={src}
             />
         </Box>
     );

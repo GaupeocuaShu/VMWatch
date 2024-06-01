@@ -41,3 +41,13 @@ body,
 .hover-underline:hover {
     color: #9e1d25 !important;
 }
+.hover-zoom {
+    overflow: hidden;
+}
+.hover-zoom img {
+    transition: 0.5s;
+}
+.hover-zoom:hover img {
+    transform: scale(1.1);
+    transition: 0.5s;
+}
