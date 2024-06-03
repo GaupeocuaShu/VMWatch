@@ -6,6 +6,7 @@ import Navbar from "../navbar";
 import Banner from "../../../../components/Banner";
 import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Footer from "../footer";
 const Master = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -15,6 +16,8 @@ const Master = () => {
             {matches && <Navbar />}
             <Divider />
             <Outlet />
+            <Divider />
+            <Footer />
         </Box>
     );
 };
