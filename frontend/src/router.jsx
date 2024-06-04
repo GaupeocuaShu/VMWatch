@@ -4,6 +4,7 @@ import Login from "./scenes/auth/login";
 import Master from "./scenes/client/layout/master";
 import Home from "./scenes/client/home";
 import Dashboard from "./scenes/dashboard/home";
+import ProductDetail from "./scenes/client/product-detail";
 const router = createBrowserRouter([
     {
         path: "/sign-up",
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
         children: [
             { path: "/", element: <Home /> },
             { path: "/home", element: <Home /> },
+            { path: "/product/:productSlug", element: <ProductDetail /> },
         ],
     },
     {
