@@ -155,14 +155,17 @@ export const themeSettings = (mode) => {
                 },
                 secondary: { main: colors.pink[500] },
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
-                background: { default: colors.primary[500] }
+                background: { default: colors.primary[500] },
+                green: { main: colors.greenAccent[500] },
             } : {
                 primary: {
                     main: colors.primary[100],
                 },
                 secondary: { main: colors.pink[500] },
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
-                background: { default: "#fcfcfc" }
+                background: { default: "#fcfcfc" },
+                green: { main: colors.greenAccent[500] },
+
             })
         },
         typography: {
@@ -204,8 +207,8 @@ export const ColorModeContext = createContext({
 
 
 export const useMode = () => {
-    const [mode, setMode] = useState("dark")
-    const colorMode = useMemo(() => ({ toggleColorMode: () => setMode((prev) => (prev === "light" ? "dark" : "light")) }), []);
+    const [mode, setMode] = useState("light")
+    const colorMode = useMemo(() => ({ toggleColorMode: (mode) => setMode(mode) }), []);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
     return [theme, colorMode];
 }
