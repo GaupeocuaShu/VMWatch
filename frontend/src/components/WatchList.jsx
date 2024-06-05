@@ -2,6 +2,7 @@ import React from "react";
 import { Box, TextField, Typography, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const WatchList = (props) => {
     const watches = props.watches.filter((e) => e.gender === props.gender);
@@ -41,6 +42,8 @@ const WatchList = (props) => {
                         className="hover-unhide-back-image"
                         onMouseEnter={() => handleMouseEnter(i)}
                         onMouseLeave={handleMouseLeave}
+                        component={Link}
+                        to="/product/abc"
                     >
                         <img
                             height="70%"

@@ -51,10 +51,7 @@ body,
     transform: scale(1.1);
     transition: 0.5s;
 }
-/* 
-.hover-unhide-back-image:hover .hide-back-image {
-    display: block;
+a {
+    text-decoration: none;
+    color: unset;
 }
-.hide-back-image {
-    display: none;
-} */

@@ -1,8 +1,9 @@
 import React from "react";
 import { Box } from "@mui/material";
+import { Link } from "react-router-dom";
 const Logo = ({ isMobile }) => {
     return (
-        <Box>
+        <Box component={Link} to="/">
             <img
                 alt="Logo"
                 src={`../../assets/user-avatar.png`}

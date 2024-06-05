@@ -19,18 +19,21 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { useTheme } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 const exampleWatch = watches[0];
 const ProductDetail = () => {
     const { productSlug } = useParams();
-    console.log(productSlug);
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
     return (
-        <Box margin="20px 200px">
+        <Box margin={matches ? "20px 200px" : "20px 20px"}>
             <Breadcrumb />
 
             <Box
                 display="grid"
                 gap={5}
-                gridTemplateColumns="repeat(2,1fr)"
+                gridTemplateColumns={matches && "repeat(2,1fr)"}
                 my={8}
             >
                 <Box>
@@ -96,7 +99,7 @@ const ProductDetail = () => {
                 </Box>
             </Box>
 
-            <Gurantees />
+            <Gurantees matches={matches} />
             <Box my={8} sx={{ fontSize: "large" }}>
                 <Accordion defaultExpanded>
                     <AccordionSummary

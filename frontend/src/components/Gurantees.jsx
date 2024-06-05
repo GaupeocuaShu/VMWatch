@@ -58,12 +58,14 @@ const gurantees = [
         ),
     },
 ];
-export default function Gurantees() {
+export default function Gurantees({ matches }) {
     return (
         <List
             sx={{
                 display: "grid",
-                gridTemplateColumns: "repeat(4,1fr)",
+                gridTemplateColumns: matches
+                    ? "repeat(4,1fr)"
+                    : "repeat(2,1fr)",
                 gap: "1rem",
             }}
         >

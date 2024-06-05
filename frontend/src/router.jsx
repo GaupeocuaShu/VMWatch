@@ -5,6 +5,8 @@ import Master from "./scenes/client/layout/master";
 import Home from "./scenes/client/home";
 import Dashboard from "./scenes/dashboard/home";
 import ProductDetail from "./scenes/client/product-detail";
+import AdminMaster from "./scenes/admin/global/master";
+import Team from "./scenes/admin/team";
 const router = createBrowserRouter([
     {
         path: "/sign-up",
@@ -26,6 +28,11 @@ const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: <Dashboard />,
+    },
+    {
+        path: "/admin",
+        element: <AdminMaster />,
+        children: [{ path: "/admin/team", element: <Team /> }],
     },
 ]);
 

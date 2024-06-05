@@ -1,6 +1,5 @@
 import { useState, useMemo, createContext } from "react";
 import { Typography, createTheme } from "@mui/material";
-import { brown } from "@mui/material/colors";
 
 
 export const tokens = (mode) => ({
@@ -83,7 +82,7 @@ export const tokens = (mode) => ({
             800: "#c2c2c2",
             900: "#e0e0e0",
         },
-        brown,
+
         primary: {
             100: "#040509",
             200: "#080b12",
@@ -154,7 +153,7 @@ export const themeSettings = (mode) => {
                 primary: {
                     main: colors.primary[500],
                 },
-                secondary: { main: colors.brown[800] },
+                secondary: { main: colors.pink[500] },
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
                 background: { default: colors.primary[500] }
             } : {
@@ -205,7 +204,7 @@ export const ColorModeContext = createContext({
 
 
 export const useMode = () => {
-    const [mode, setMode] = useState("light")
+    const [mode, setMode] = useState("dark")
     const colorMode = useMemo(() => ({ toggleColorMode: () => setMode((prev) => (prev === "light" ? "dark" : "light")) }), []);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
     return [theme, colorMode];
