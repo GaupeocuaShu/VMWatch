@@ -2,6 +2,7 @@ import { useState, useMemo, createContext } from "react";
 import { Typography, createTheme } from "@mui/material";
 import { brown } from "@mui/material/colors";
 
+
 export const tokens = (mode) => ({
     ...(mode === 'dark' ? {
         grey: {
@@ -26,7 +27,17 @@ export const tokens = (mode) => ({
             800: "#080b12",
             900: "#040509"
         },
-        brown,
+        pink: {
+            100: "#ecd2d4",
+            200: "#d8a5a9",
+            300: "#c5777e",
+            400: "#b14a53",
+            500: "#9e1d28",
+            600: "#7e1720",
+            700: "#5f1118",
+            800: "#3f0c10",
+            900: "#200608"
+        },
         greenAccent: {
             100: "#dbf5ee",
             200: "#b7ebde",
@@ -84,6 +95,18 @@ export const tokens = (mode) => ({
             800: "#a1a4ab",
             900: "#d0d1d5",
         },
+        pink: {
+            100: "#200608",
+            200: "#3f0c10",
+            300: "#5f1118",
+            400: "#7e1720",
+            500: "#9e1d28",
+            600: "#b14a53",
+            700: "#c5777e",
+            800: "#d8a5a9",
+            900: "#ecd2d4",
+        },
+
         greenAccent: {
             100: "#0f2922",
             200: "#1e5245",
@@ -138,7 +161,7 @@ export const themeSettings = (mode) => {
                 primary: {
                     main: colors.primary[100],
                 },
-                secondary: { main: colors.brown[800] },
+                secondary: { main: colors.pink[500] },
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
                 background: { default: "#fcfcfc" }
             })
