@@ -2,6 +2,7 @@ import { Typography, Box, useTheme, Button } from "@mui/material";
 import { tokens } from "../theme";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 const Header = ({ title, subtitle }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -30,6 +31,7 @@ const Header = ({ title, subtitle }) => {
                         color="green"
                         LinkComponent={Link}
                         to="/admin/user"
+                        endIcon={<ReplyAllOutlinedIcon />}
                     >
                         Back
                     </Button>
@@ -39,7 +41,7 @@ const Header = ({ title, subtitle }) => {
                         variant="outlined"
                         color="green"
                         LinkComponent={Link}
-                        to="/admin/team/create"
+                        to="/admin/user/create"
                     >
                         Create
                     </Button>
