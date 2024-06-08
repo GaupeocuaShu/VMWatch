@@ -29,7 +29,7 @@ const Header = ({ title, subtitle }) => {
                         variant="outlined"
                         color="green"
                         LinkComponent={Link}
-                        to="/admin/team"
+                        to="/admin/user"
                     >
                         Back
                     </Button>

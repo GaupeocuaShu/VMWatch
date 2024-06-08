@@ -157,6 +157,7 @@ export const themeSettings = (mode) => {
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
                 background: { default: colors.primary[500] },
                 green: { main: colors.greenAccent[500] },
+                blue: { main: colors.blueAccent[400] },
             } : {
                 primary: {
                     main: colors.primary[100],
@@ -165,6 +166,7 @@ export const themeSettings = (mode) => {
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
                 background: { default: "#fcfcfc" },
                 green: { main: colors.greenAccent[500] },
+                blue: { main: colors.blueAccent[400] },
 
             })
         },

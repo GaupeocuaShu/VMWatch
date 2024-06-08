@@ -119,13 +119,13 @@ const Sidebar = () => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Ed Roh
+                                    VMWatch
                                 </Typography>
                                 <Typography
                                     variant="h5"
                                     color={colors.greenAccent[500]}
                                 >
-                                    VP Fancy Admin
+                                    Adminstration Site
                                 </Typography>
                             </Box>
                         </Box>
@@ -153,9 +153,10 @@ const Sidebar = () => {
                         >
                             Data
                         </Typography>
+
                         <Item
-                            title="Manage Team"
-                            to="/admin/team"
+                            title="Manage user"
+                            to="/admin/user"
                             icon={<PeopleOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

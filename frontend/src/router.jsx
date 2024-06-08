@@ -8,6 +8,7 @@ import ProductDetail from "./scenes/client/product-detail";
 import AdminMaster from "./scenes/admin/global/master";
 import Team from "./scenes/admin/team";
 import Form from "./scenes/admin/form";
+import User from "./scenes/admin/users";
 const router = createBrowserRouter([
     {
         path: "/sign-up",
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
         element: <AdminMaster />,
         children: [
             { path: "/admin/team", element: <Team /> },
+            { path: "/admin/user", element: <User /> },
             { path: "/admin/team/:action", element: <Form /> },
         ],
     },

@@ -31,7 +31,6 @@ const Login = () => {
         setLoading(true);
         setErrorFromServer("");
         await axiosClient.get("/sanctum/csrf-cookie");
-
         await axiosClient
             .post("/login", data)
             .then(({ data }) => {
