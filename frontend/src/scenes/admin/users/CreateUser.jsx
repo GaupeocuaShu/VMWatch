@@ -8,21 +8,26 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import { useState } from "react";
 import axiosClient from "../../../axios-client";
 import ShowSnackbar from "../../../components/SnackBar";
-
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 export const CreateUser = () => {
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
-    const handleFormSubmit = async (data) => {
+    const [snackBarMessage, setSnackBarMessage] = useState("success");
+    const [severity, setSeverity] = useState("");
+    const handleFormSubmit = async (data, { resetForm }) => {
         setLoading(true);
         await axiosClient
             .post("api/users", data)
             .then(({ data }) => {
                 setSnackBarOpen(true);
-                console.log(data.data);
+                setSnackBarMessage("Create User Successfully");
+                setSeverity("success");
+                resetForm();
             })
             .catch(({ response }) => {
+                setSeverity("error");
                 setSnackBarOpen(true);
-                console.log(response.data.message);
+                setSnackBarMessage(response.data.message);
             })
             .finally(() => setLoading(false));
     };
@@ -133,17 +138,33 @@ export const CreateUser = () => {
                                         formik.errors.passwordConfirm
                                     }
                                 />
-                                <LoadingButton
-                                    size="large"
-                                    loading={loading}
-                                    endIcon={<CheckCircleOutlineOutlinedIcon />}
-                                    color="blue"
-                                    type="submit"
-                                    variant="outlined"
-                                    loadingPosition="center"
+                                <Box
+                                    display="flex"
+                                    justifyContent="end"
+                                    gap={3}
                                 >
-                                    Create
-                                </LoadingButton>
+                                    <Button
+                                        onClick={formik.handleReset}
+                                        variant="outlined"
+                                        size="large"
+                                        endIcon={<RestartAltOutlinedIcon />}
+                                    >
+                                        Reset
+                                    </Button>
+                                    <LoadingButton
+                                        size="large"
+                                        loading={loading}
+                                        endIcon={
+                                            <CheckCircleOutlineOutlinedIcon />
+                                        }
+                                        color="blue"
+                                        type="submit"
+                                        variant="outlined"
+                                        loadingPosition="center"
+                                    >
+                                        Create
+                                    </LoadingButton>
+                                </Box>
                             </Box>
                         </form>
                     );
@@ -152,6 +173,8 @@ export const CreateUser = () => {
             <ShowSnackbar
                 open={snackBarOpen}
                 onClose={() => setSnackBarOpen(false)}
+                message={snackBarMessage}
+                severity={severity}
             />
         </Box>
     );

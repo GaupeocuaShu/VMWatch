@@ -155,7 +155,7 @@ function LaptopNavigation({ user, handleLogOut }) {
                     LinkComponent={Link}
                     to="/login"
                     endIcon={<LoginOutlinedIcon />}
-                    variant="outlined"
+                    variant="contained"
                 >
                     Login
                 </Button>

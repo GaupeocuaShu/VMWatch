@@ -60,15 +60,11 @@ const User = () => {
                             sx={{ mx: "0.5rem" }}
                             variant="outlined"
                             size="medium"
-                            color="blue"
+                            color="primary"
                         >
                             Edit
                         </Button>
-                        <Button
-                            variant="outlined"
-                            size="medium"
-                            color="secondary"
-                        >
+                        <Button variant="outlined" size="medium" color="error">
                             Delete
                         </Button>
                     </Box>
