@@ -7,7 +7,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     /**
@@ -44,15 +44,23 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return new UserResource(User::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+    { 
+
+        $request->validate([
+            'email' => [Rule::unique('users')->ignore($id)]
+        ],[
+            'email.unique' => "Email existed"
+        ]);
+        $user = User::findOrFail($id); 
+        $user->update($request->all()); 
+        return new UserResource($user);
     }
 
     /**
@@ -60,6 +68,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id); 
+        $user->delete();
+        return response(['status' => 'Delete User Successfully']);
     }
 }

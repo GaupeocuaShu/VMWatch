@@ -9,6 +9,11 @@ import { useState } from "react";
 import axiosClient from "../../../axios-client";
 import ShowSnackbar from "../../../components/SnackBar";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 export const CreateUser = () => {
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -33,7 +38,11 @@ export const CreateUser = () => {
     };
     return (
         <Box m="20px">
-            <Header title="CREATE USER" subtitle="Create a New User Profile" />
+            <Header
+                title="CREATE USER"
+                subtitle="Create a New User Profile"
+                action="create"
+            />
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleFormSubmit}
@@ -92,22 +101,36 @@ export const CreateUser = () => {
                                         formik.errors.phone
                                     }
                                 />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="role"
-                                    label="Role"
-                                    {...formik.getFieldProps("role")}
-                                    error={
-                                        formik.touched.role &&
-                                        formik.errors.role
-                                    }
-                                    helperText={
-                                        formik.touched.role &&
-                                        formik.errors.role
-                                    }
-                                />
-
+                                <FormControl>
+                                    <InputLabel
+                                        error={
+                                            formik.touched.role &&
+                                            formik.errors.role
+                                        }
+                                        id="demo-simple-select-helper-label"
+                                    >
+                                        Role
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        id="demo-simple-select-helper"
+                                        label="Role"
+                                        defaultValue="user"
+                                        error={
+                                            formik.touched.role &&
+                                            formik.errors.role
+                                        }
+                                        {...formik.getFieldProps("role")}
+                                    >
+                                        <MenuItem value="admin">Admin</MenuItem>
+                                        <MenuItem value="user">User</MenuItem>
+                                    </Select>
+                                    {formik.touched.role && (
+                                        <FormHelperText error>
+                                            {formik.errors.role}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
                                 <TextField
                                     type="password"
                                     variant="outlined"

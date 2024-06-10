@@ -3,11 +3,11 @@ import { tokens } from "../theme";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
-const Header = ({ title, subtitle }) => {
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+const Header = ({ title, subtitle, action = "index" }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const { action } = useParams();
-    console.log(action);
+
     return (
         <Box display="flex" justifyContent="space-between" alignItems="center">
             <Box mb="30px">
@@ -24,7 +24,18 @@ const Header = ({ title, subtitle }) => {
                 </Typography>
             </Box>
             <Box>
-                {action === "create" ? (
+                {action === "index" ? (
+                    <Button
+                        size="large"
+                        variant="outlined"
+                        color="green"
+                        LinkComponent={Link}
+                        to="/admin/user/create"
+                        endIcon={<AddCircleOutlinedIcon />}
+                    >
+                        Create
+                    </Button>
+                ) : (
                     <Button
                         size="large"
                         variant="outlined"
@@ -34,16 +45,6 @@ const Header = ({ title, subtitle }) => {
                         endIcon={<ReplyAllOutlinedIcon />}
                     >
                         Back
-                    </Button>
-                ) : (
-                    <Button
-                        size="large"
-                        variant="outlined"
-                        color="green"
-                        LinkComponent={Link}
-                        to="/admin/user/create"
-                    >
-                        Create
                     </Button>
                 )}
             </Box>

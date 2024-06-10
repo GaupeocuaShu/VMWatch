@@ -1,31 +1,23 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
-import { DataGrid, useFirstRender } from "@mui/x-data-grid";
+import { Box, Button, useTheme } from "@mui/material";
+import { DataGrid, GridToolbar, useFirstRender } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
-import { mockDataTeam } from "../../../constants/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+
 import Header from "../../../components/Header";
 import { useEffect, useState } from "react";
 import axiosClient from "../../../axios-client";
 import LinearProgress from "@mui/material/LinearProgress";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
+import { Link } from "react-router-dom";
 const User = () => {
+    const [filterModel, setFilterModel] = useState({
+        items: [],
+        quickFilterValues: [],
+    });
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    console.log(users);
-    // Fetch User
-    useEffect(() => {
-        const fetchUser = async () => {
-            await axiosClient
-                .get("api/users")
-                .then(({ data }) => {
-                    setUsers(data.data);
-                    setIsLoading(false);
-                })
-                .catch(({ response }) => console.log(response.error));
-        };
-        fetchUser();
-    }, []);
+
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const columns = [
@@ -33,13 +25,12 @@ const User = () => {
         {
             field: "name",
             headerName: "Name",
-            flex: 1,
             cellClassName: "name-column--cell",
         },
         {
             field: "phone",
             headerName: "Phone Number",
-            flex: 1,
+            flex: 0.5,
         },
         {
             field: "email",
@@ -50,21 +41,35 @@ const User = () => {
             field: "Action",
             headerName: "Action",
             flex: 1,
-            renderCell: () => {
+            renderCell: ({ row: { id } }) => {
                 return (
-                    <Box>
-                        <Button variant="outlined" size="medium" color="green">
+                    <Box textAlign="center">
+                        <Button
+                            endIcon={<WysiwygIcon />}
+                            variant="outlined"
+                            color="green"
+                            size="small"
+                        >
                             View
                         </Button>
                         <Button
                             sx={{ mx: "0.5rem" }}
                             variant="outlined"
-                            size="medium"
+                            size="small"
                             color="primary"
+                            endIcon={<EditNoteOutlinedIcon />}
+                            component={Link}
+                            to={`/admin/user/${id}/edit`}
                         >
                             Edit
                         </Button>
-                        <Button variant="outlined" size="medium" color="error">
+                        <Button
+                            endIcon={<DeleteSweepOutlinedIcon />}
+                            variant="outlined"
+                            color="error"
+                            size="small"
+                            onClick={() => handleDeleteUser(id)}
+                        >
                             Delete
                         </Button>
                     </Box>
@@ -73,6 +78,33 @@ const User = () => {
         },
     ];
 
+    // Use Effect Hook
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    // Handle Delete
+    const handleDeleteUser = async (id) => {
+        setIsLoading(true);
+        await axiosClient
+            .delete(`api/users/${id}`)
+            .then(({ data }) => {
+                fetchUser();
+            })
+            .catch(({ response }) => console.log(response))
+            .finally(() => setIsLoading(false));
+    };
+
+    // Fetch User
+    const fetchUser = async () => {
+        await axiosClient
+            .get("api/users")
+            .then(({ data }) => {
+                setUsers(data.data);
+                setIsLoading(false);
+            })
+            .catch(({ response }) => console.log(response.error));
+    };
     return (
         <Box m="20px" height="100%">
             <Header title="User" subtitle="Managing the User Members" />
@@ -114,13 +146,17 @@ const User = () => {
                 }}
             >
                 <DataGrid
+                    filterModel={filterModel}
+                    onFilterModelChange={setFilterModel}
                     slots={{
                         loadingOverlay: LinearProgress,
+                        toolbar: GridToolbar,
                     }}
                     loading={isLoading}
                     checkboxSelection
                     columns={columns}
                     rows={users}
+                    slotProps={{ toolbar: { showQuickFilter: true } }}
                 />
             </Box>
         </Box>
