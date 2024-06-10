@@ -9,6 +9,8 @@ import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const User = () => {
     const [filterModel, setFilterModel] = useState({
         items: [],
@@ -76,7 +78,7 @@ const User = () => {
             },
         },
     ];
-
+    const MySwal = withReactContent(Swal);
     // Use Effect Hook
     useEffect(() => {
         fetchUser();
@@ -85,13 +87,31 @@ const User = () => {
     // Handle Delete
     const handleDeleteUser = async (id) => {
         setIsLoading(true);
-        await axiosClient
-            .delete(`api/users/${id}`)
-            .then(({ data }) => {
-                fetchUser();
-            })
-            .catch(({ response }) => console.log(response))
-            .finally(() => setIsLoading(false));
+        //Show alert
+        const result = await MySwal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        });
+        if (result.isConfirmed) {
+            await axiosClient
+                .delete(`api/users/${id}`)
+                .then(({ data }) => {
+                    fetchUser();
+                    MySwal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success",
+                    });
+                })
+                .catch(({ response }) => console.log(response))
+                .finally(() => setIsLoading(false));
+        }
+        setIsLoading(false);
     };
 
     // Fetch User
