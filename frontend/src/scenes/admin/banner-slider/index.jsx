@@ -16,7 +16,7 @@ const BannerSlider = () => {
         items: [],
         quickFilterValues: [],
     });
-    const [users, setUsers] = useState([]);
+    const [banners, setBanners] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const theme = useTheme();
@@ -24,19 +24,37 @@ const BannerSlider = () => {
     const columns = [
         { field: "id", headerName: "ID" },
         {
+            field: "banner",
+            headerName: "Banner",
+            flex: 1,
+
+            renderCell: ({ row: { banner } }) => {
+                return (
+                    <img
+                        height="100%"
+                        style={{ objectFit: "cover" }}
+                        width="100%"
+                        alt="banner"
+                        src={banner}
+                    />
+                );
+            },
+        },
+        {
             field: "name",
             headerName: "Name",
             cellClassName: "name-column--cell",
-        },
-        {
-            field: "phone",
-            headerName: "Phone Number",
             flex: 0.5,
         },
         {
-            field: "email",
-            headerName: "Email",
-            flex: 1,
+            field: "serial",
+            headerName: "Serial",
+            cellClassName: "name-column--cell",
+        },
+        {
+            field: "status",
+            headerName: "Status",
+            cellClassName: "name-column--cell",
         },
         {
             field: "Action",
@@ -60,7 +78,7 @@ const BannerSlider = () => {
                             color="primary"
                             endIcon={<EditNoteOutlinedIcon />}
                             component={Link}
-                            to={`/admin/user/${id}/edit`}
+                            to={`/admin/banner/${id}/edit`}
                         >
                             Edit
                         </Button>
@@ -69,7 +87,7 @@ const BannerSlider = () => {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDeleteUser(id)}
+                            onClick={() => handleDeleteBanner(id)}
                         >
                             Delete
                         </Button>
@@ -79,13 +97,14 @@ const BannerSlider = () => {
         },
     ];
     const MySwal = withReactContent(Swal);
+
     // Use Effect Hook
     useEffect(() => {
-        fetchUser();
+        fetchBanners();
     }, []);
 
     // Handle Delete
-    const handleDeleteUser = async (id) => {
+    const handleDeleteBanner = async (id) => {
         setIsLoading(true);
         //Show alert
         const result = await MySwal.fire({
@@ -99,9 +118,9 @@ const BannerSlider = () => {
         });
         if (result.isConfirmed) {
             await axiosClient
-                .delete(`api/users/${id}`)
+                .delete(`api/banners/${id}`)
                 .then(({ data }) => {
-                    fetchUser();
+                    fetchBanners();
                     MySwal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
@@ -114,12 +133,12 @@ const BannerSlider = () => {
         setIsLoading(false);
     };
 
-    // Fetch User
-    const fetchUser = async () => {
+    // Fetch banner
+    const fetchBanners = async () => {
         await axiosClient
-            .get("api/users")
+            .get("api/banners")
             .then(({ data }) => {
-                setUsers(data.data);
+                setBanners(data.data);
                 setIsLoading(false);
             })
             .catch(({ response }) => console.log(response.error));
@@ -129,7 +148,7 @@ const BannerSlider = () => {
             <Header
                 title="Banner"
                 subtitle="Managing the Banners"
-                router="banner-slider"
+                router="banner"
             />
             <Box
                 height="100vh"
@@ -178,8 +197,9 @@ const BannerSlider = () => {
                     loading={isLoading}
                     checkboxSelection
                     columns={columns}
-                    rows={users}
+                    rows={banners}
                     slotProps={{ toolbar: { showQuickFilter: true } }}
+                    getRowHeight={(params) => 150}
                 />
             </Box>
         </Box>

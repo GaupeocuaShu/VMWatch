@@ -62,6 +62,9 @@ const CreateUser = lazy(() => import("./scenes/admin/users/CreateUser"));
 const EditUser = lazy(() => import("./scenes/admin/users/EditUser"));
 const NotFound = lazy(() => import("./scenes/NotFound"));
 const BannerSlider = lazy(() => import("./scenes/admin/banner-slider"));
+const EditBanner = lazy(() =>
+    import("./scenes/admin/banner-slider/EditBanner")
+);
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -76,9 +79,9 @@ const routes = {
         EDIT_USER: "/admin/user/:id/edit",
 
         // Slider
-        BANNER_SLIDER: "/admin/banner-slider",
-        CREATE_BANNER_SLIDER: "/admin/banner-slider/create",
-        EDIT_BANNER_SLIDER: "/admin/banner-slider/:id/edit",
+        BANNER_SLIDER: "/admin/banner",
+        CREATE_BANNER_SLIDER: "/admin/banner/create",
+        EDIT_BANNER_SLIDER: "/admin/banner/:id/edit",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
 };
@@ -177,6 +180,14 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <CreateBanner />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_BANNER_SLIDER,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditBanner />
                     </Suspense>
                 ),
             },

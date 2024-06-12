@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BannerResource;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 use App\Traits\ImageHandle;
 class BannerController extends Controller
@@ -18,7 +20,8 @@ class BannerController extends Controller
     }
     public function index()
     {
-        //
+        $banners = Banner::all(); 
+        return BannerResource::collection($banners);  
     }
 
     /**
@@ -26,7 +29,15 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->uploadImage($request,'uploads','banner');
+        $path = $this->uploadImage($request,'uploads','banner'); 
+        $banner = Banner::create([
+            'link' => $request->link, 
+            'name' => $request->name, 
+            'url' => $path, 
+            'serial' => $request->serial, 
+            'status' => $request->status, 
+        ]);
+        return new BannerResource($banner);
     }
 
     /**
@@ -34,7 +45,8 @@ class BannerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $banner = Banner::findOrFail($id); 
+        return new BannerResource($banner);
     }
 
     /**
@@ -42,7 +54,19 @@ class BannerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $banner = Banner::findOrFail($id);  
+        $path = null;
+        if($request->banner) {
+            $path = $this->updateImage($request,$banner->url,'uploads','banner'); 
+        }
+        $banner->update([
+            'name' => $request->name, 
+            'link' => $request->link, 
+            'serial' => $request->serial, 
+            'status' => $request->status,
+            'url' =>  $path ? $path : $banner->url
+        ]);
+        return new BannerResource($banner);
     }
 
     /**
@@ -50,6 +74,9 @@ class BannerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $banner = Banner::findOrFail($id); 
+        $this->deleteImage($banner->url);
+        $banner->delete(); 
+        return response(['status' => 'Delete Banner Successfully']);
     }
 }

@@ -66,7 +66,6 @@ const EditUser = () => {
 
     return (
         <>
-            <Box m="20px"></Box>
             {user ? (
                 <Box m="20px">
                     <Header

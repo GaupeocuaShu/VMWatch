@@ -1,7 +1,6 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Skeleton } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../../components/Header";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
@@ -29,13 +28,32 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const CreateBanner = () => {
+    // Notification --------------------------------
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState("success");
     const [severity, setSeverity] = useState("");
+    // Notification --------------------------------
+
+    // Upload -------------------------------
+    const [isImageEmpty, setIsImageEmpty] = useState(true);
+    const [banner, setBanner] = useState(null);
+    const [file, setFile] = useState(null);
+    // Upload -------------------------------
+
+    // Handle Reset
+    const handleReset = (handleReset) => {
+        handleReset();
+        setBanner("");
+        setIsImageEmpty(true);
+        setFile(null);
+    };
     // Submit preview image
     const handleSubmitPreviewImage = async (event) => {
+        setBanner(null);
+        setIsImageEmpty(false);
         const file = event.target.files[0];
+        setFile(file);
         const form = new FormData();
         form.append("banner", file);
         const {
@@ -43,18 +61,20 @@ const CreateBanner = () => {
         } = await axiosClient.post("api/banners/preview-upload", form, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log(banner);
+        setBanner(banner);
     };
     // Submit the form
     const handleFormSubmit = async (data, { resetForm }) => {
-        setLoading(true);
+        data = { ...data, banner: file };
         await axiosClient
-            .post("api/users", data)
+            .post("api/banners", data, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
             .then(({ data }) => {
-                setSnackBarOpen(true);
-                setSnackBarMessage("Create User Successfully");
                 setSeverity("success");
-                resetForm();
+                setSnackBarOpen(true);
+                setSnackBarMessage("Create Banner Successfully");
+                handleReset(resetForm);
             })
             .catch(({ response }) => {
                 setSeverity("error");
@@ -69,7 +89,7 @@ const CreateBanner = () => {
                 title="CREATE BANNER"
                 subtitle="Create a New User Profile"
                 action="create"
-                router="banner-slider"
+                router="banner"
             />
             <Formik
                 initialValues={initialValues}
@@ -89,7 +109,24 @@ const CreateBanner = () => {
                                         sx={{ height: "400px", width: "100%" }}
                                         component="label"
                                     >
-                                        <NoImage />
+                                        {isImageEmpty ? (
+                                            <NoImage />
+                                        ) : banner ? (
+                                            <img
+                                                height="100%"
+                                                width="100%"
+                                                src={banner}
+                                                alt="banner"
+                                            />
+                                        ) : (
+                                            <Skeleton
+                                                variant="rectangular"
+                                                width="100%"
+                                                height="100%"
+                                                animation="wave"
+                                            />
+                                        )}
+
                                         <VisuallyHiddenInput
                                             type="file"
                                             onChange={handleSubmitPreviewImage}
@@ -177,7 +214,9 @@ const CreateBanner = () => {
                                     gap={3}
                                 >
                                     <Button
-                                        onClick={formik.handleReset}
+                                        onClick={() =>
+                                            handleReset(formik.handleReset)
+                                        }
                                         variant="outlined"
                                         size="large"
                                         endIcon={<RestartAltOutlinedIcon />}

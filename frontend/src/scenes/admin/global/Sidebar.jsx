@@ -185,7 +185,7 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Banner Slider"
-                            to="/admin/banner-slider"
+                            to="/admin/banner"
                             icon={<ViewCarouselOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

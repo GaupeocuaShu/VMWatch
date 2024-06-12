@@ -3,31 +3,33 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
 trait ImageHandle{ 
 
-    
+
     public function uploadImage(Request $request,$pathName,$inputName)
     { 
-        
         $this->clearPreviewsImage();
         if($request->hasFile($inputName)){ 
             $image = $request->$inputName;
             $imageName = date('Y-m-d')."_".$image->getClientOriginalName();
             $path = $pathName."/".$imageName;
             $image->move(public_path($pathName),$imageName);
-            return $path;
+            return asset($path);
         }
     }
 
     public function updateImage(Request $request,$oldAvatar,$pathName,$inputName){ 
+        $this->clearPreviewsImage();
+        $rootPath = url('').'/';
+        $oldPath = Str::replaceFirst($rootPath, '', $oldAvatar); 
         if($request->hasFile($inputName)){ 
-            if(File::exists(public_path($oldAvatar))) File::delete(public_path($oldAvatar)); 
+            if(File::exists(public_path($oldPath))) File::delete(public_path($oldPath)); 
             $image = $request->$inputName;
             $imageName = date('Y-m-d')."_".$image->getClientOriginalName();
             $path = $pathName."/".$imageName;
             $image->move(public_path($pathName),$imageName);
-            return $path;
+            return asset($path);
         }
     }
     public function uploadMultiImage(Request $request, $name, $pathName)
@@ -44,13 +46,18 @@ trait ImageHandle{
     }
     public function deleteImage(string $path)
     {
-        if (File::exists(public_path($path))) File::delete(public_path($path));
+        $rootPath = url('').'/';
+        $oldPath = Str::replaceFirst($rootPath, '', $path); 
+        if (File::exists(public_path($oldPath))) File::delete(public_path($oldPath));
     } 
 
-    public function clearPreviewsImage() { 
-        $files = Storage::allFiles(public_path("previews")); 
+    
+    public function clearPreviewsImage()
+    {
+        $files = File::allFiles('previews'); 
         foreach ($files as $file) {
             File::delete($file);
         }
     }
+    
 }
