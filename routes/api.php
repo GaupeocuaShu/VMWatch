@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Banner API 
                //  ------- FETCH USER--------------- 
-
+        Route::post("banners/preview-upload",[BannerController::class,"previewUpload"]);
         Route::apiResource("banners",BannerController::class);
     });
 });

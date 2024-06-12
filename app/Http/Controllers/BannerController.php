@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\ImageHandle;
-
 class BannerController extends Controller
 {
     use ImageHandle;
     /**
      * Display a listing of the resource.
+     *
      */
+    public function previewUpload(Request $request){ 
+        
+        $path = $this->uploadImage($request,'previews','banner');
+        return response(["status" => "success","banner" => $path],200);
+    }
     public function index()
     {
         //

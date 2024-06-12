@@ -2,9 +2,15 @@
 namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-trait UploadTrait{
+use Illuminate\Support\Facades\Storage;
+
+trait ImageHandle{ 
+
+    
     public function uploadImage(Request $request,$pathName,$inputName)
-    {
+    { 
+        
+        $this->clearPreviewsImage();
         if($request->hasFile($inputName)){ 
             $image = $request->$inputName;
             $imageName = date('Y-m-d')."_".$image->getClientOriginalName();
@@ -39,5 +45,12 @@ trait UploadTrait{
     public function deleteImage(string $path)
     {
         if (File::exists(public_path($path))) File::delete(public_path($path));
+    } 
+
+    public function clearPreviewsImage() { 
+        $files = Storage::allFiles(public_path("previews")); 
+        foreach ($files as $file) {
+            File::delete($file);
+        }
     }
 }

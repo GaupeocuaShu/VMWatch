@@ -36,6 +36,14 @@ const CreateBanner = () => {
     // Submit preview image
     const handleSubmitPreviewImage = async (event) => {
         const file = event.target.files[0];
+        const form = new FormData();
+        form.append("banner", file);
+        const {
+            data: { banner },
+        } = await axiosClient.post("api/banners/preview-upload", form, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        console.log(banner);
     };
     // Submit the form
     const handleFormSubmit = async (data, { resetForm }) => {
