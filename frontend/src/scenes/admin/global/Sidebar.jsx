@@ -17,6 +17,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ViewCarouselOutlinedIcon from "@mui/icons-material/ViewCarouselOutlined";
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -180,12 +181,12 @@ const Sidebar = () => {
                             color={colors.grey[300]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
-                            Pages
+                            Pages Configuration
                         </Typography>
                         <Item
-                            title="Profile Form"
-                            to="/form"
-                            icon={<PersonOutlinedIcon />}
+                            title="Banner Slider"
+                            to="/admin/banner-slider"
+                            icon={<ViewCarouselOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

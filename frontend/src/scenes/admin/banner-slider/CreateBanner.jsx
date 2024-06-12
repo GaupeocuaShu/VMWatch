@@ -14,11 +14,30 @@ import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
-const CreateUser = () => {
+import { styled } from "@mui/material/styles";
+import NoImage from "../../../components/NoImage";
+const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+});
+
+const CreateBanner = () => {
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState("success");
     const [severity, setSeverity] = useState("");
+    // Submit preview image
+    const handleSubmitPreviewImage = async (event) => {
+        const file = event.target.files[0];
+    };
+    // Submit the form
     const handleFormSubmit = async (data, { resetForm }) => {
         setLoading(true);
         await axiosClient
@@ -39,9 +58,10 @@ const CreateUser = () => {
     return (
         <Box m="20px">
             <Header
-                title="CREATE USER"
+                title="CREATE BANNER"
                 subtitle="Create a New User Profile"
                 action="create"
+                router="banner-slider"
             />
             <Formik
                 initialValues={initialValues}
@@ -56,26 +76,23 @@ const CreateUser = () => {
                                 flexDirection="column"
                                 rowGap={4}
                             >
-                                <TextField
-                                    type="email"
-                                    variant="outlined"
-                                    name="email"
-                                    label="Email"
-                                    {...formik.getFieldProps("email")}
-                                    error={
-                                        formik.touched.email &&
-                                        formik.errors.email
-                                    }
-                                    helperText={
-                                        formik.touched.email &&
-                                        formik.errors.email
-                                    }
-                                />
+                                <Box border="1px dashed white">
+                                    <Button
+                                        sx={{ height: "400px", width: "100%" }}
+                                        component="label"
+                                    >
+                                        <NoImage />
+                                        <VisuallyHiddenInput
+                                            type="file"
+                                            onChange={handleSubmitPreviewImage}
+                                        />
+                                    </Button>
+                                </Box>
                                 <TextField
                                     type="text"
                                     variant="outlined"
                                     name="name"
-                                    label="Name"
+                                    label="name"
                                     {...formik.getFieldProps("name")}
                                     error={
                                         formik.touched.name &&
@@ -86,81 +103,66 @@ const CreateUser = () => {
                                         formik.errors.name
                                     }
                                 />
+
                                 <TextField
                                     type="text"
                                     variant="outlined"
-                                    name="phone"
-                                    label="Phone"
-                                    {...formik.getFieldProps("phone")}
+                                    name="link"
+                                    label="link"
+                                    {...formik.getFieldProps("link")}
                                     error={
-                                        formik.touched.phone &&
-                                        formik.errors.phone
+                                        formik.touched.link &&
+                                        formik.errors.link
                                     }
                                     helperText={
-                                        formik.touched.phone &&
-                                        formik.errors.phone
+                                        formik.touched.link &&
+                                        formik.errors.link
+                                    }
+                                />
+                                <TextField
+                                    type="text"
+                                    variant="outlined"
+                                    name="serial"
+                                    label="serial"
+                                    {...formik.getFieldProps("serial")}
+                                    error={
+                                        formik.touched.serial &&
+                                        formik.errors.serial
+                                    }
+                                    helperText={
+                                        formik.touched.serial &&
+                                        formik.errors.serial
                                     }
                                 />
                                 <FormControl>
                                     <InputLabel
                                         error={
-                                            formik.touched.role &&
-                                            formik.errors.role
+                                            formik.touched.status &&
+                                            formik.errors.status
                                         }
                                         id="demo-simple-select-helper-label"
                                     >
-                                        Role
+                                        status
                                     </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-helper-label"
                                         id="demo-simple-select-helper"
-                                        label="Role"
-                                        defaultValue="user"
+                                        label="status"
                                         error={
-                                            formik.touched.role &&
-                                            formik.errors.role
+                                            formik.touched.status &&
+                                            formik.errors.status
                                         }
-                                        {...formik.getFieldProps("role")}
+                                        {...formik.getFieldProps("status")}
                                     >
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="user">User</MenuItem>
+                                        <MenuItem value="1">Active</MenuItem>
+                                        <MenuItem value="0">Inactive</MenuItem>
                                     </Select>
-                                    {formik.touched.role && (
+                                    {formik.touched.status && (
                                         <FormHelperText error>
-                                            {formik.errors.role}
+                                            {formik.errors.status}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
-                                <TextField
-                                    type="password"
-                                    variant="outlined"
-                                    name="password"
-                                    label="Password"
-                                    {...formik.getFieldProps("password")}
-                                    error={
-                                        formik.touched.password &&
-                                        formik.errors.password
-                                    }
-                                    helperText={
-                                        formik.touched.password &&
-                                        formik.errors.password
-                                    }
-                                />
-                                <TextField
-                                    type="password"
-                                    variant="outlined"
-                                    name="passwordConfirm"
-                                    label="Password Confirm"
-                                    {...formik.getFieldProps("passwordConfirm")}
-                                    error={
-                                        formik.touched.passwordConfirm &&
-                                        formik.errors.passwordConfirm
-                                    }
-                                    helperText={
-                                        formik.touched.passwordConfirm &&
-                                        formik.errors.passwordConfirm
-                                    }
-                                />
                                 <Box
                                     display="flex"
                                     justifyContent="end"
@@ -202,30 +204,18 @@ const CreateUser = () => {
         </Box>
     );
 };
-export default CreateUser;
-const phoneRegExp =
-    /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+export default CreateBanner;
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required("required"),
-    role: yup.string().required("required"),
-    email: yup.string().email("invalid email").required("required"),
-    password: yup.string().required("required"),
-    passwordConfirm: yup
-        .string()
-        .required()
-        .oneOf([yup.ref("password")], "Passwords must match")
-        .required("Password must match"),
-    phone: yup
-        .string()
-        .matches(phoneRegExp, "Phone number is not valid")
-        .required("required"),
+    name: yup.string().required("Required"),
+    link: yup.string(),
+    serial: yup.number().typeError("Must be a number"),
+    status: yup.string().required("Required"),
 });
+
 const initialValues = {
     name: "",
-    email: "",
-    phone: "",
-    role: "",
-    password: "",
-    passwordConfirm: "",
+    link: "",
+    serial: "",
+    status: "1", // Set default status as "true" for Active
 };

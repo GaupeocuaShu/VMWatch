@@ -4,7 +4,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
-const Header = ({ title, subtitle, action = "index" }) => {
+const Header = ({ title, subtitle, action = "index", router = "user" }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -30,7 +30,7 @@ const Header = ({ title, subtitle, action = "index" }) => {
                         variant="outlined"
                         color="green"
                         LinkComponent={Link}
-                        to="/admin/user/create"
+                        to={`/admin/${router}/create`}
                         endIcon={<AddCircleOutlinedIcon />}
                     >
                         Create
@@ -41,7 +41,7 @@ const Header = ({ title, subtitle, action = "index" }) => {
                         variant="outlined"
                         color="green"
                         LinkComponent={Link}
-                        to="/admin/user"
+                        to={`/admin/${router}`}
                         endIcon={<ReplyAllOutlinedIcon />}
                     >
                         Back

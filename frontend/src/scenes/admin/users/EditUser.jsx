@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
 import Alert from "@mui/material/Alert";
-export const EditUser = () => {
+const EditUser = () => {
     const { id } = useParams();
     const [userFound, setUserFound] = useState(true);
     const [user, setUser] = useState(null);
@@ -221,6 +221,7 @@ export const EditUser = () => {
         </>
     );
 };
+export default EditUser;
 
 const phoneRegExp =
     /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
