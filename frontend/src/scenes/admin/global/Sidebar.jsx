@@ -18,6 +18,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ViewCarouselOutlinedIcon from "@mui/icons-material/ViewCarouselOutlined";
+import PunchClockOutlinedIcon from "@mui/icons-material/PunchClockOutlined";
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -156,9 +158,16 @@ const Sidebar = () => {
                         </Typography>
 
                         <Item
-                            title="Manage user"
+                            title="Manage User"
                             to="/admin/user"
                             icon={<PeopleOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Manage Brand"
+                            to="/admin/brand"
+                            icon={<PunchClockOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

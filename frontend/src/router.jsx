@@ -65,6 +65,11 @@ const BannerSlider = lazy(() => import("./scenes/admin/banner-slider"));
 const EditBanner = lazy(() =>
     import("./scenes/admin/banner-slider/EditBanner")
 );
+
+const BrandList = lazy(() => import("./scenes/admin/brands/index"));
+const EditBrand = lazy(() => import("./scenes/admin/brands/EditBrand"));
+const CreateBrand = lazy(() => import("./scenes/admin/brands/CreateBrand"));
+
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -82,6 +87,11 @@ const routes = {
         BANNER_SLIDER: "/admin/banner",
         CREATE_BANNER_SLIDER: "/admin/banner/create",
         EDIT_BANNER_SLIDER: "/admin/banner/:id/edit",
+
+        // Brand
+        BRAND: "/admin/brand",
+        CREATE_BRAND: "/admin/brand/create",
+        EDIT_BRAND: "/admin/brand/:id/edit",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
 };
@@ -188,6 +198,34 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <EditBanner />
+                    </Suspense>
+                ),
+            },
+            // -----------------------------------------------
+
+            //  BRAND ---------------------------------------------------------
+
+            {
+                path: routes.ADMIN.BRAND,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <BrandList />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.CREATE_BRAND,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <CreateBrand />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_BRAND,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditBrand />
                     </Suspense>
                 ),
             },

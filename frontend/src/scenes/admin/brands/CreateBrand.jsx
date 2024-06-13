@@ -27,7 +27,7 @@ const VisuallyHiddenInput = styled("input")({
     width: 1,
 });
 
-const CreateBanner = () => {
+const CreateBrand = () => {
     // Notification --------------------------------
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -68,7 +68,7 @@ const CreateBanner = () => {
         setLoading(true);
         data = { ...data, banner: file };
         await axiosClient
-            .post("api/banners", data, {
+            .post("api/brands", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
             .then(({ data }) => {
@@ -88,9 +88,9 @@ const CreateBanner = () => {
         <Box m="20px">
             <Header
                 title="CREATE BANNER"
-                subtitle="Create a New User Profile"
+                subtitle="Create a New Brand "
                 action="create"
-                router="banner"
+                router="brand"
             />
             <Formik
                 initialValues={initialValues}
@@ -153,62 +153,19 @@ const CreateBanner = () => {
                                 <TextField
                                     type="text"
                                     variant="outlined"
-                                    name="link"
-                                    label="link"
-                                    {...formik.getFieldProps("link")}
+                                    name="description"
+                                    label="description"
+                                    {...formik.getFieldProps("description")}
                                     error={
-                                        formik.touched.link &&
-                                        formik.errors.link
+                                        formik.touched.description &&
+                                        formik.errors.description
                                     }
                                     helperText={
-                                        formik.touched.link &&
-                                        formik.errors.link
+                                        formik.touched.description &&
+                                        formik.errors.description
                                     }
                                 />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="serial"
-                                    label="serial"
-                                    {...formik.getFieldProps("serial")}
-                                    error={
-                                        formik.touched.serial &&
-                                        formik.errors.serial
-                                    }
-                                    helperText={
-                                        formik.touched.serial &&
-                                        formik.errors.serial
-                                    }
-                                />
-                                <FormControl>
-                                    <InputLabel
-                                        error={
-                                            formik.touched.status &&
-                                            formik.errors.status
-                                        }
-                                        id="demo-simple-select-helper-label"
-                                    >
-                                        status
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-helper-label"
-                                        id="demo-simple-select-helper"
-                                        label="status"
-                                        error={
-                                            formik.touched.status &&
-                                            formik.errors.status
-                                        }
-                                        {...formik.getFieldProps("status")}
-                                    >
-                                        <MenuItem value="1">Active</MenuItem>
-                                        <MenuItem value="0">Inactive</MenuItem>
-                                    </Select>
-                                    {formik.touched.status && (
-                                        <FormHelperText error>
-                                            {formik.errors.status}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
+
                                 <Box
                                     display="flex"
                                     justifyContent="end"
@@ -252,18 +209,14 @@ const CreateBanner = () => {
         </Box>
     );
 };
-export default CreateBanner;
+export default CreateBrand;
 
 const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
-    link: yup.string(),
-    serial: yup.number().typeError("Must be a number"),
-    status: yup.string().required("Required"),
+    description: yup.string().required("Required"),
 });
 
 const initialValues = {
     name: "",
-    link: "",
-    serial: "",
-    status: "1", // Set default status as "true" for Active
+    description: "",
 };

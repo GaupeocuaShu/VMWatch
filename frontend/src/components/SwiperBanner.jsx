@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -10,12 +10,24 @@ import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import Banner from "./Banner";
-const bannerSRCs = [
-    "../../assets/KOI-Noble-PC.jpg",
-    "../../assets/neeraj-kumar-watch-banner.jpg",
-    "../../assets/dong-ho-limited-edition-phien-ban-gioi-han.avif",
-];
+import axiosClient from "../axios-client";
+import { Skeleton } from "@mui/material";
 export default function SwiperBanner() {
+    const [banners, setBanners] = useState([]);
+    // Fetch Banner
+    useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const { data } = await axiosClient.get("api/get-banners");
+
+                setBanners(data.data.sort((a, b) => a.serial - b.serial));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchBanners();
+    }, []);
+
     return (
         <>
             <Swiper
@@ -32,11 +44,19 @@ export default function SwiperBanner() {
                 className="mySwiper"
                 style={{ backgroundColor: "#EEEEEE" }}
             >
-                {bannerSRCs.map((e, i) => (
-                    <SwiperSlide>
-                        <Banner src={e} />
-                    </SwiperSlide>
-                ))}
+                {!banners.length ? (
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height="400px"
+                    />
+                ) : (
+                    banners.map((e, i) => (
+                        <SwiperSlide>
+                            <Banner src={e.banner} alt={e.name} />
+                        </SwiperSlide>
+                    ))
+                )}
             </Swiper>
         </>
     );
