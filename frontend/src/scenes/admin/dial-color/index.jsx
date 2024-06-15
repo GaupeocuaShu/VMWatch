@@ -1,12 +1,12 @@
 import CustomDataGrid from "../../../components/CustomDataGrid";
 import { Box } from "@mui/material";
-export default function Strap() {
+export default function DialColor() {
     return (
         <Box>
             <CustomDataGrid
-                title="Strap"
-                api="straps"
-                description="Manage Strap"
+                title="Dial Colors"
+                api="dial-colors"
+                description="Manage Dial Colors"
             />
         </Box>
     );

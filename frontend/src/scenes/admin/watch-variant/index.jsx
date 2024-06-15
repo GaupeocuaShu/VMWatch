@@ -4,6 +4,7 @@ import Header from "../../../components/Header";
 import { tokens } from "../../../theme";
 import Strap from "../strap";
 import DialSize from "../dial-size";
+import DialShape from "../dial-shape";
 
 const WatchVariant = () => {
     const theme = useTheme();
@@ -51,9 +52,17 @@ const WatchVariant = () => {
                     },
                 }}
             >
-                <Box height="100vh" display="flex" gap={5}>
+                <Box
+                    display="grid"
+                    gridTemplateColumns="repeat(2,1fr)"
+                    gridTemplateRows="repeat(2,500px)"
+                    columnGap={5}
+                    rowGap="150px"
+                >
                     <Strap />
                     <DialSize />
+                    <DialShape />
+                    <DialShape />
                 </Box>
             </Box>
         </Box>

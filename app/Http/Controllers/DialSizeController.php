@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DialSizeResource;
 use Illuminate\Http\Request;
 use App\Models\DialSize;
-use App\Http\Resources\DialResource; 
 use Illuminate\Support\Str;
 class DialSizeController extends Controller
 {
@@ -14,7 +14,7 @@ class DialSizeController extends Controller
     public function index()
     {
         $dialSizes = DialSize::orderBy('id','asc')->get(); 
-        return DialResource::collection($dialSizes);
+        return DialSizeResource::collection($dialSizes);
     }
 
     /**
@@ -26,7 +26,7 @@ class DialSizeController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
         ]);
-        return new DialResource($dialSize);
+        return new DialSizeResource($dialSize);
     }
 
 
@@ -36,7 +36,7 @@ class DialSizeController extends Controller
     public function update(Request $request, string $id)
     {
         $strap =DialSize::updateOrCreate(['name' => $request->name,'slug' => Str::slug($request->name)],['id' => $id]);
-        return new DialResource($strap);
+        return new DialSizeResource($strap);
     }
 
     /**
