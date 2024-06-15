@@ -5,6 +5,11 @@ import { tokens } from "../../../theme";
 import Strap from "../strap";
 import DialSize from "../dial-size";
 import DialShape from "../dial-shape";
+import DialColor from "../dial-color";
+import WaterResistanceLevel from "../water-resistance-level";
+
+import CaseColor from "../case-color";
+import GlassMaterial from "../glass-material";
 
 const WatchVariant = () => {
     const theme = useTheme();
@@ -55,14 +60,17 @@ const WatchVariant = () => {
                 <Box
                     display="grid"
                     gridTemplateColumns="repeat(2,1fr)"
-                    gridTemplateRows="repeat(2,500px)"
+                    gridTemplateRows="repeat(4,500px)"
                     columnGap={5}
                     rowGap="150px"
                 >
                     <Strap />
                     <DialSize />
                     <DialShape />
-                    <DialShape />
+                    <DialColor />
+                    <GlassMaterial />
+                    <CaseColor />
+                    <WaterResistanceLevel />
                 </Box>
             </Box>
         </Box>
