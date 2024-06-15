@@ -19,17 +19,20 @@ import {
     GridRowEditStopReasons,
     GridToolbar,
 } from "@mui/x-data-grid";
-import { randomId } from "@mui/x-data-grid-generator";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
-
-    const handleClick = () => {
-        const id = randomId();
-        setRows((oldRows) => [
-            ...oldRows,
-            { id, name: "", age: "", isNew: true },
-        ]);
+    console.log(props);
+    const {
+        setRows,
+        setRowModesModel,
+        newID: id,
+        editMode,
+        setEditMode,
+    } = props;
+    const handleOpenCreate = () => {
+        setEditMode((mode) => !mode);
+        setRows((oldRows) => [...oldRows, { id, name: "", isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -50,7 +53,8 @@ function EditToolbar(props) {
                     variant="outlined"
                     color="green"
                     endIcon={<AddCircleOutlinedIcon />}
-                    onClick={handleClick}
+                    onClick={handleOpenCreate}
+                    disabled={editMode}
                 >
                     Create
                 </Button>
@@ -64,15 +68,18 @@ export default function Strap() {
         items: [],
         quickFilterValues: [],
     });
+    const [editMode, setEditMode] = useState(false);
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isLoading, setIsLoading] = useState(true);
+    const [newID, setNewID] = useState();
     // Notification
     const [snackBarOpen, setSnackBarOpen] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState("success");
     const [severity, setSeverity] = useState("");
+    const MySwal = withReactContent(Swal);
 
     // Use Effect Hook
     useEffect(() => {
@@ -83,7 +90,10 @@ export default function Strap() {
         await axiosClient
             .get("api/straps")
             .then(({ data }) => {
-                setRows(data.data);
+                const rows = data.data;
+                setRows(rows);
+                let currentID = rows[rows.length - 1]?.id ?? -1;
+                setNewID(currentID + 1);
                 setIsLoading(false);
             })
             .catch(({ response }) => console.log(response.error));
@@ -98,6 +108,8 @@ export default function Strap() {
                 setSnackBarOpen(true);
                 setSnackBarMessage("Update Strap Successfully");
                 setSeverity("success");
+                setNewID((newID) => newID + 1);
+                setEditMode(false);
             })
             .catch(({ response }) => {
                 setSeverity("error");
@@ -127,11 +139,37 @@ export default function Strap() {
         });
     };
 
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
+    const handleDeleteClick = (id) => async () => {
+        setIsLoading(true);
+        //Show alert
+        const result = await MySwal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        });
+        if (result.isConfirmed) {
+            await axiosClient
+                .delete(`api/straps/${id}`)
+                .then(({ data }) => {
+                    MySwal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success",
+                    });
+                    setRows(rows.filter((row) => row.id !== id));
+                })
+                .catch(({ response }) => console.log(response))
+                .finally(() => setIsLoading(false));
+        }
+        setIsLoading(false);
     };
 
     const handleCancelClick = (id) => () => {
+        setEditMode((mode) => !mode);
         setRowModesModel({
             ...rowModesModel,
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
@@ -267,7 +305,10 @@ export default function Strap() {
                         toolbar: {
                             setRows,
                             setRowModesModel,
+                            setEditMode,
                             showQuickFilter: true,
+                            newID,
+                            editMode,
                         },
                     }}
                     filterModel={filterModel}

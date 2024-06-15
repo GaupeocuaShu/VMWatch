@@ -13,7 +13,7 @@ class StrapController extends Controller
      */
     public function index()
     {
-        $straps = Strap::all();
+        $straps = Strap::orderBy('id','asc')->get(); 
         return StrapResource::collection($straps);
     }
 
@@ -35,8 +35,7 @@ class StrapController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $strap = Strap::findOrFail($id); 
-        $strap->updateOrCreate(['name' => $request->name],['id' => $request->id]);
+        $strap =Strap::updateOrCreate(['name' => $request->name,'slug' => Str::slug($request->name)],['id' => $request->id]);
         return new StrapResource($strap);
     }
 
