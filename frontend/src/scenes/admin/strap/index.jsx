@@ -10,6 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import axiosClient from "../../../axios-client";
 import { useState, useEffect } from "react";
+import ShowSnackbar from "../../../components/SnackBar";
 import {
     GridRowModes,
     DataGrid,
@@ -18,7 +19,7 @@ import {
     GridRowEditStopReasons,
     GridToolbar,
 } from "@mui/x-data-grid";
-import { randomTraderName, randomId } from "@mui/x-data-grid-generator";
+import { randomId } from "@mui/x-data-grid-generator";
 
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
@@ -68,14 +69,16 @@ export default function Strap() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isLoading, setIsLoading] = useState(true);
-    const handleOnChange = (e) => {
-        console.log(123123);
-    };
+    // Notification
+    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const [snackBarMessage, setSnackBarMessage] = useState("success");
+    const [severity, setSeverity] = useState("");
+
     // Use Effect Hook
     useEffect(() => {
         fetchStrap();
     }, []);
-    // Fetch User
+    // Fetch Strap
     const fetchStrap = async () => {
         await axiosClient
             .get("api/straps")
@@ -86,9 +89,25 @@ export default function Strap() {
             .catch(({ response }) => console.log(response.error));
     };
 
-    const handleRowEditStop = (params, event) => {
-        console.log(1);
+    // Update Strap
+    const updateStrap = async (data) => {
+        setIsLoading(true);
+        await axiosClient
+            .put(`api/straps/${data.id}`, data)
+            .then(({ data }) => {
+                setSnackBarOpen(true);
+                setSnackBarMessage("Update Strap Successfully");
+                setSeverity("success");
+            })
+            .catch(({ response }) => {
+                setSeverity("error");
+                setSnackBarOpen(true);
+                setSnackBarMessage(response.data.message);
+            })
+            .finally(() => setIsLoading(false));
+    };
 
+    const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
             event.defaultMuiPrevented = true;
         }
@@ -125,6 +144,7 @@ export default function Strap() {
     };
 
     const processRowUpdate = (newRow) => {
+        updateStrap(newRow);
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
@@ -257,6 +277,12 @@ export default function Strap() {
                     loading={isLoading}
                 />
             </Box>
+            <ShowSnackbar
+                open={snackBarOpen}
+                onClose={() => setSnackBarOpen(false)}
+                message={snackBarMessage}
+                severity={severity}
+            />
         </Box>
     );
 }

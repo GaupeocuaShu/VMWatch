@@ -36,7 +36,7 @@ class StrapController extends Controller
     public function update(Request $request, string $id)
     {
         $strap = Strap::findOrFail($id); 
-        $strap->update(['name' => $request->name]);
+        $strap->updateOrCreate(['name' => $request->name],['id' => $request->id]);
         return new StrapResource($strap);
     }
 
