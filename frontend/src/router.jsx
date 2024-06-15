@@ -70,6 +70,8 @@ const BrandList = lazy(() => import("./scenes/admin/brands/index"));
 const EditBrand = lazy(() => import("./scenes/admin/brands/EditBrand"));
 const CreateBrand = lazy(() => import("./scenes/admin/brands/CreateBrand"));
 
+const StrapList = lazy(() => import("./scenes/admin/strap/index"));
+
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -92,6 +94,11 @@ const routes = {
         BRAND: "/admin/brand",
         CREATE_BRAND: "/admin/brand/create",
         EDIT_BRAND: "/admin/brand/:id/edit",
+
+        // Brand
+        STRAP: "/admin/strap",
+        CREATE_STRAP: "/admin/strap/create",
+        EDIT_STRAP: "/admin/strap/:id/edit",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
 };
@@ -229,6 +236,18 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            // -----------------------------------------------
+            //  STRAP ---------------------------------------------------------
+
+            {
+                path: routes.ADMIN.STRAP,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <StrapList />
+                    </Suspense>
+                ),
+            },
+
             // -----------------------------------------------
         ],
     },

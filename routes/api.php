@@ -3,6 +3,7 @@
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,7 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         // Brand API 
-        Route::apiResource("brands",BrandController::class); 
+        Route::apiResource("brands",BrandController::class);  
 
+        // Strap API 
+        Route::apiResource("straps",StrapController::class); 
     });
 });

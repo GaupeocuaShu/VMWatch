@@ -172,6 +172,13 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
+                            title="Manage Strap"
+                            to="/admin/strap"
+                            icon={<PunchClockOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
                             title="Contacts Information"
                             to="/contacts"
                             icon={<ContactsOutlinedIcon />}
