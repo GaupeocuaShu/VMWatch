@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\DialSizeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
@@ -43,5 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Strap API 
         Route::apiResource("straps",StrapController::class); 
+
+        // Dial Size API 
+        Route::apiResource("dial-sizes",DialSizeController::class); 
     });
 });

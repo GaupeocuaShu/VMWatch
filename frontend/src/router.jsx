@@ -48,8 +48,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingComponent from "./components/LoadingComponent";
-import CreateBanner from "./scenes/admin/banner-slider/CreateBanner";
-
 const SignUp = lazy(() => import("./scenes/auth/sign-up"));
 const Login = lazy(() => import("./scenes/auth/login"));
 const Master = lazy(() => import("./scenes/client/layout/master"));
@@ -65,13 +63,13 @@ const BannerSlider = lazy(() => import("./scenes/admin/banner-slider"));
 const EditBanner = lazy(() =>
     import("./scenes/admin/banner-slider/EditBanner")
 );
-
+const CreateBanner = lazy(() =>
+    import("./scenes/admin/banner-slider/CreateBanner")
+);
 const BrandList = lazy(() => import("./scenes/admin/brands/index"));
 const EditBrand = lazy(() => import("./scenes/admin/brands/EditBrand"));
 const CreateBrand = lazy(() => import("./scenes/admin/brands/CreateBrand"));
-
-const StrapList = lazy(() => import("./scenes/admin/strap/index"));
-
+const WatchVariant = lazy(() => import("./scenes/admin/watch-variant"));
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -96,9 +94,7 @@ const routes = {
         EDIT_BRAND: "/admin/brand/:id/edit",
 
         // Brand
-        STRAP: "/admin/strap",
-        CREATE_STRAP: "/admin/strap/create",
-        EDIT_STRAP: "/admin/strap/:id/edit",
+        WATCH_VARIANT: "/admin/watch-variant",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
 };
@@ -240,10 +236,10 @@ const router = createBrowserRouter([
             //  STRAP ---------------------------------------------------------
 
             {
-                path: routes.ADMIN.STRAP,
+                path: routes.ADMIN.WATCH_VARIANT,
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
-                        <StrapList />
+                        <WatchVariant />
                     </Suspense>
                 ),
             },

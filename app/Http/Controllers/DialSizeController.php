@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\StrapResource;
-use App\Models\Strap;
 use Illuminate\Http\Request;
+use App\Models\DialSize;
+use App\Http\Resources\DialResource; 
 use Illuminate\Support\Str;
-class StrapController extends Controller
+class DialSizeController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $straps = Strap::orderBy('id','asc')->get(); 
-        return StrapResource::collection($straps);
+        $dialSizes = DialSize::orderBy('id','asc')->get(); 
+        return DialResource::collection($dialSizes);
     }
 
     /**
@@ -22,11 +22,11 @@ class StrapController extends Controller
      */
     public function store(Request $request)
     {
-        $strap = Strap::create([
+        $dialSize = DialSize::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
         ]);
-        return new StrapResource($strap);
+        return new DialResource($dialSize);
     }
 
 
@@ -35,8 +35,8 @@ class StrapController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $strap =Strap::updateOrCreate(['name' => $request->name,'slug' => Str::slug($request->name)],['id' => $id]);
-        return new StrapResource($strap);
+        $strap =DialSize::updateOrCreate(['name' => $request->name,'slug' => Str::slug($request->name)],['id' => $id]);
+        return new DialResource($strap);
     }
 
     /**
@@ -44,8 +44,8 @@ class StrapController extends Controller
      */
     public function destroy(string $id)
     {
-        $strap = Strap::findOrFail($id); 
-        $strap->delete();
-        return response(['status' => 'Delete Strap Successfully']);
+        $dialSize = DialSize::findOrFail($id); 
+        $dialSize->delete();
+        return response(['status' => 'Delete Dial Size Successfully']);
     }
 }

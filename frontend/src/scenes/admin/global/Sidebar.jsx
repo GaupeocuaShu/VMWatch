@@ -172,8 +172,8 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Manage Strap"
-                            to="/admin/strap"
+                            title="Manage Watch Variant"
+                            to="/admin/watch-variant"
                             icon={<PunchClockOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

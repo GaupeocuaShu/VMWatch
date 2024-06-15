@@ -23,31 +23,33 @@ const Header = ({ title, subtitle, action = "index", router = "user" }) => {
                     {subtitle}
                 </Typography>
             </Box>
-            <Box>
-                {action === "index" ? (
-                    <Button
-                        size="large"
-                        variant="outlined"
-                        color="green"
-                        LinkComponent={Link}
-                        to={`/admin/${router}/create`}
-                        endIcon={<AddCircleOutlinedIcon />}
-                    >
-                        Create
-                    </Button>
-                ) : (
-                    <Button
-                        size="large"
-                        variant="outlined"
-                        color="green"
-                        LinkComponent={Link}
-                        to={`/admin/${router}`}
-                        endIcon={<ReplyAllOutlinedIcon />}
-                    >
-                        Back
-                    </Button>
-                )}
-            </Box>
+            {action !== "none" && (
+                <Box>
+                    {action === "index" ? (
+                        <Button
+                            size="large"
+                            variant="outlined"
+                            color="green"
+                            LinkComponent={Link}
+                            to={`/admin/${router}/create`}
+                            endIcon={<AddCircleOutlinedIcon />}
+                        >
+                            Create
+                        </Button>
+                    ) : (
+                        <Button
+                            size="large"
+                            variant="outlined"
+                            color="green"
+                            LinkComponent={Link}
+                            to={`/admin/${router}`}
+                            endIcon={<ReplyAllOutlinedIcon />}
+                        >
+                            Back
+                        </Button>
+                    )}
+                </Box>
+            )}
         </Box>
     );
 };
