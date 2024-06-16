@@ -74,8 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Watch API 
         Route::post("watchs/preview-upload",[WatchController::class,"previewUpload"]);
-        Route::get("watchs/select-options",[WatchController::class,"selectOptions"]);
-
+        Route::get("watches/select-options",[WatchController::class,"selectOptions"]);
+        Route::apiResource("watches",WatchController::class);
 
     });
 });

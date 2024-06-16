@@ -36,7 +36,7 @@ const CreateWatch = () => {
         const fetchData = async () => {
             try {
                 const response = await axiosClient.get(
-                    "/api/watchs/select-options"
+                    "/api/watches/select-options"
                 );
                 const data = response.data[0];
                 setBrands(data.brands);
@@ -60,9 +60,7 @@ const CreateWatch = () => {
     const handleFormSubmit = async (data, { resetForm }) => {
         setLoading(true);
         await axiosClient
-            .post("api/brands", data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
+            .post("api/watches", data)
             .then(({ data }) => {
                 setSeverity("success");
                 setSnackBarOpen(true);
@@ -780,7 +778,7 @@ const validationSchema = yup.object().shape({
     stock_quantity: yup.number().required("Stock quantity is required"),
     description: yup.string().required("Description is required"),
     weight: yup.number().required("Weight is required"),
-    warranty: yup.string().required("Warranty is required"),
+    warranty: yup.number().required("Warranty is required"),
     meta_title: yup.string().required("Meta title is required"),
     meta_description: yup.string().required("Meta description is required"),
     meta_keywords: yup.string().required("Meta keywords are required"),

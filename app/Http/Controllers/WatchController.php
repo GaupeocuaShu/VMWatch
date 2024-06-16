@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WatchResource;
 use App\Models\Watch;
 use App\Traits\ImageHandle;
 use Illuminate\Http\Request;
@@ -33,7 +34,8 @@ class WatchController extends Controller
      */
     public function index()
     {
-        //
+        $watches = Watch::all(); 
+        return WatchResource::collection($watches); 
     }
 
     /**
@@ -41,7 +43,8 @@ class WatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $watch = Watch::create($request->all());
+        return new WatchResource($watch);
     }
 
     /**

@@ -10,35 +10,19 @@ import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-const Brand = () => {
+const WatchList = () => {
     const [filterModel, setFilterModel] = useState({
         items: [],
         quickFilterValues: [],
     });
-    const [brands, setBrands] = useState([]);
+    const [watches, setWatches] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const columns = [
         { field: "id", headerName: "ID" },
-        {
-            field: "banner",
-            headerName: "Banner",
-            flex: 1,
 
-            renderCell: ({ row: { banner } }) => {
-                return (
-                    <img
-                        height="100%"
-                        style={{ objectFit: "cover" }}
-                        width="100%"
-                        alt="banner"
-                        src={banner}
-                    />
-                );
-            },
-        },
         {
             field: "name",
             headerName: "Name",
@@ -68,7 +52,7 @@ const Brand = () => {
                             color="primary"
                             endIcon={<EditNoteOutlinedIcon />}
                             component={Link}
-                            to={`/admin/brand/${id}/edit`}
+                            to={`/admin/watch/${id}/edit`}
                         >
                             Edit
                         </Button>
@@ -77,7 +61,7 @@ const Brand = () => {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDeleteBrand(id)}
+                            onClick={() => handleDeleteWatch(id)}
                         >
                             Delete
                         </Button>
@@ -89,11 +73,11 @@ const Brand = () => {
     const MySwal = withReactContent(Swal);
     // Use Effect Hook
     useEffect(() => {
-        fetchBrand();
+        fetchWatches();
     }, []);
 
     // Handle Delete
-    const handleDeleteBrand = async (id) => {
+    const handleDeleteWatch = async (id) => {
         setIsLoading(true);
         //Show alert
         const result = await MySwal.fire({
@@ -107,9 +91,9 @@ const Brand = () => {
         });
         if (result.isConfirmed) {
             await axiosClient
-                .delete(`api/brands/${id}`)
+                .delete(`api/watches/${id}`)
                 .then(({ data }) => {
-                    fetchBrand();
+                    fetchWatches();
                     MySwal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
@@ -122,12 +106,12 @@ const Brand = () => {
         setIsLoading(false);
     };
 
-    // Fetch Brand
-    const fetchBrand = async () => {
+    // Fetch Watches
+    const fetchWatches = async () => {
         await axiosClient
-            .get("api/brands")
+            .get("api/watches")
             .then(({ data }) => {
-                setBrands(data.data);
+                setWatches(data.data);
                 setIsLoading(false);
             })
             .catch(({ response }) => console.log(response.error));
@@ -186,7 +170,7 @@ const Brand = () => {
                     loading={isLoading}
                     checkboxSelection
                     columns={columns}
-                    rows={brands}
+                    rows={watches}
                     slotProps={{ toolbar: { showQuickFilter: true } }}
                     getRowHeight={(params) => 150}
                 />
@@ -195,4 +179,4 @@ const Brand = () => {
     );
 };
 
-export default Brand;
+export default WatchList;
