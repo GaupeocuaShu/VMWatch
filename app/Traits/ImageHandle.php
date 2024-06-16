@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 trait ImageHandle{ 
 
 
-    public function uploadImage(Request $request,$pathName,$inputName)
+    public function uploadImage(Request $request,$pathName,$inputName,$isClear = true)
     { 
-        $this->clearPreviewsImage();
+        if($isClear) $this->clearPreviewsImage();
         if($request->hasFile($inputName)){ 
             $image = $request->$inputName;
             $imageName = date('Y-m-d')."_".$image->getClientOriginalName();

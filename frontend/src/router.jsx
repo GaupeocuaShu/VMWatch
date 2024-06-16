@@ -44,7 +44,7 @@
 // ]);
 
 // export default router;
-
+import Test from "./scenes/admin/test";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingComponent from "./components/LoadingComponent";
@@ -70,6 +70,11 @@ const BrandList = lazy(() => import("./scenes/admin/brands/index"));
 const EditBrand = lazy(() => import("./scenes/admin/brands/EditBrand"));
 const CreateBrand = lazy(() => import("./scenes/admin/brands/CreateBrand"));
 const WatchVariant = lazy(() => import("./scenes/admin/watch-variant"));
+
+const WatchList = lazy(() => import("./scenes/admin/watchs/index"));
+const EditWatch = lazy(() => import("./scenes/admin/watchs/EditWatch"));
+const CreateWatch = lazy(() => import("./scenes/admin/watchs/CreateWatch"));
+
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -95,6 +100,13 @@ const routes = {
 
         // Brand
         WATCH_VARIANT: "/admin/watch-variant",
+
+        // WATCH
+        WATCH: "/admin/watch",
+        CREATE_WATCH: "/admin/watch/create",
+        EDIT_WATCH: "/admin/watch/:id/edit",
+
+        TEST: "/admin/test",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
 };
@@ -245,6 +257,41 @@ const router = createBrowserRouter([
             },
 
             // -----------------------------------------------
+
+            //  WATCH ---------------------------------------------------------
+
+            {
+                path: routes.ADMIN.WATCH,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <WatchList />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.CREATE_WATCH,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <CreateWatch />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_WATCH,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditWatch />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.TEST,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <Test />
+                    </Suspense>
+                ),
+            },
         ],
     },
     {

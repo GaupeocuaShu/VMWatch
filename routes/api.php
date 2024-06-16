@@ -6,10 +6,13 @@ use App\Http\Controllers\CaseColorController;
 use App\Http\Controllers\DialColorController;
 use App\Http\Controllers\DialShapeController;
 use App\Http\Controllers\DialSizeController;
+use App\Http\Controllers\EnergyController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GlassMaterialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WatchController;
 use App\Http\Controllers\WaterResistanceLevelController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,11 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
         // User API 
         Route::apiResource("users",UserController::class); 
 
-
         // Banner API 
         Route::post("banners/preview-upload",[BannerController::class,"previewUpload"]);
         Route::apiResource("banners",BannerController::class); 
-
 
         // Brand API 
         Route::apiResource("brands",BrandController::class);  
@@ -61,7 +62,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource("glass-materials",GlassMaterialController::class); 
         // Case Color API 
         Route::apiResource("case-colors",CaseColorController::class); 
-        // Water Resistance Level
+        // Water Resistance Level API
         Route::apiResource("water-resistance-levels",WaterResistanceLevelController::class); 
+
+        // Energy API
+        Route::apiResource("energies",EnergyController::class);         
+
+        // Feature API
+        Route::apiResource("features",FeatureController::class);    
+
+
+        // Watch API 
+        Route::post("watchs/preview-upload",[WatchController::class,"previewUpload"]);
+        Route::get("watchs/select-options",[WatchController::class,"selectOptions"]);
+
+
     });
 });
