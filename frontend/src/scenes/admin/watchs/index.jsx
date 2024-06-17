@@ -28,15 +28,42 @@ const WatchList = () => {
             headerName: "Name",
             cellClassName: "name-column--cell",
         },
+
         {
-            field: "slug",
-            headerName: "slug",
+            field: "brand",
+            headerName: "brand",
             cellClassName: "name-column--cell",
         },
         {
-            field: "description",
-            headerName: "description",
+            field: "gender",
+            headerName: "gender",
             cellClassName: "name-column--cell",
+        },
+        {
+            field: "price",
+            headerName: "price",
+            cellClassName: "name-column--cell",
+        },
+        {
+            field: "origin",
+            headerName: "origin",
+            cellClassName: "name-column--cell",
+        },
+        {
+            field: "energy",
+            headerName: "energy",
+            cellClassName: "name-column--cell",
+        },
+        {
+            field: "stock_quantity",
+            headerName: "stock_quantity",
+            cellClassName: "name-column--cell",
+        },
+        {
+            field: "created_at",
+            headerName: "created_at",
+            cellClassName: "name-column--cell",
+            flex: 1,
         },
         {
             field: "Action",

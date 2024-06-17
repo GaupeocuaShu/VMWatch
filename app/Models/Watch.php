@@ -23,7 +23,7 @@ class Watch extends Model
         'dial_size_id',
         'dial_shape_id',
         'glass_material_id',
-        'energy',
+        'energy_id',
         'sku',
         'stock_quantity',
         'description',

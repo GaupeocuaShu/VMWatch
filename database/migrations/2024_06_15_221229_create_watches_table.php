@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string("dial_size_id"); 
             $table->string("dial_shape_id"); 
             $table->string("glass_material_id"); 
-            $table->string("energy"); 
+            $table->string("energy_id"); 
             $table->string("sku"); 
             $table->integer("stock_quantity"); 
             $table->text("description"); 

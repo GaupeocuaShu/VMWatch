@@ -548,15 +548,15 @@ const CreateWatch = () => {
                                         Energy
                                     </InputLabel>
                                     <Select
-                                        labelId="energy-label"
-                                        id="energy"
+                                        labelId="energy-label_id"
+                                        id="energy_id"
                                         label="Energy"
                                         defaultValue=""
                                         error={
                                             formik.touched.energy &&
                                             formik.errors.energy
                                         }
-                                        {...formik.getFieldProps("energy")}
+                                        {...formik.getFieldProps("energy_id")}
                                     >
                                         {energies.map((energy) => (
                                             <MenuItem
@@ -773,7 +773,7 @@ const validationSchema = yup.object().shape({
     dial_size_id: yup.string().required("Dial size is required"),
     dial_shape_id: yup.string().required("Dial shape is required"),
     glass_material_id: yup.string().required("Glass material is required"),
-    energy: yup.string().required("Energy is required"),
+    energy_id: yup.string().required("Energy is required"),
     sku: yup.string().required("SKU is required"),
     stock_quantity: yup.number().required("Stock quantity is required"),
     description: yup.string().required("Description is required"),
@@ -800,7 +800,7 @@ const initialValues = {
     dial_size_id: "",
     dial_shape_id: "",
     glass_material_id: "",
-    energy: "",
+    energy_id: "",
     sku: "",
     stock_quantity: "",
     description: "",
