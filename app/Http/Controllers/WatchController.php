@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EditWatchResource;
 use App\Http\Resources\WatchResource;
 use App\Models\Watch;
 use App\Traits\ImageHandle;
@@ -52,7 +53,8 @@ class WatchController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $watch = Watch::findOrFail($id); 
+        return new EditWatchResource($watch);
     }
 
     /**
@@ -60,7 +62,11 @@ class WatchController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $watch = Watch::findOrFail($id); 
+        $watch->update($request->all());
+        return new EditWatchResource($watch);
+
+
     }
 
     /**
