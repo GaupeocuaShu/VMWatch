@@ -27,23 +27,23 @@ class WatchController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function previewUpload(Request $request){ 
+    // public function previewUpload(Request $request){ 
         
 
-        $path = $this->uploadImage($request,'previews','banner',false);
-        return response(["status" => "success","banner" => asset($path),"path" => $path,"isSaved" => false],200);
-    }
+    //     $path = $this->uploadImage($request,'previews','banner',false);
+    //     return response(["status" => "success","banner" => asset($path),"path" => $path,"isSaved" => false],200);
+    // }
 
-    public function savedUpload(Request $request){
-        try {  
-            $this->moveAllFileFromPreviewsToUploads(); 
+    // public function savedUpload(Request $request){
+    //     try {  
+    //         $this->moveAllFileFromPreviewsToUploads(); 
             
-            return response(['status' => "success"],200);
-        } catch (\Throwable $th) {
-            return response(['status' => 'failed','reason' => $th]);
-        }
+    //         return response(['status' => "success"],200);
+    //     } catch (\Throwable $th) {
+    //         return response(['status' => 'failed','reason' => $th]);
+    //     }
         
-    }
+    // }
     /**
      * Display a listing of the resource.
      */

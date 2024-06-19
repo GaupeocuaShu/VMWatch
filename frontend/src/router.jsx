@@ -74,7 +74,16 @@ const WatchVariant = lazy(() => import("./scenes/admin/watch-variant"));
 const WatchList = lazy(() => import("./scenes/admin/watchs/index"));
 const EditWatch = lazy(() => import("./scenes/admin/watchs/EditWatch"));
 const CreateWatch = lazy(() => import("./scenes/admin/watchs/CreateWatch"));
-const WatchGallery = lazy(() => import("./scenes/admin/watchs/Gallery"));
+
+const WatchGalleryList = lazy(() =>
+    import("./scenes/admin/watchs/Gallery/index")
+);
+const EditWatchGallery = lazy(() =>
+    import("./scenes/admin/watchs/Gallery/EditWatchGallery")
+);
+const CreateWatchGallery = lazy(() =>
+    import("./scenes/admin/watchs/Gallery/CreateWatchGallery")
+);
 
 const routes = {
     SIGN_UP: "/sign-up",
@@ -106,7 +115,12 @@ const routes = {
         WATCH: "/admin/watch",
         CREATE_WATCH: "/admin/watch/create",
         EDIT_WATCH: "/admin/watch/:id/edit",
-        WATCH_GALLERY: "/admin/watch/:id/gallery",
+
+        // WATCH GALLERY
+
+        WATCH_GALLERY: "/admin/watch/:id/watch-gallery",
+        CREATE_WATCH_GALLERY: "/admin/watch/:id/watch-gallery/create",
+        EDIT_WATCH_GALLERY: "/admin/watch/:id/watch-gallery/:id/edit",
 
         TEST: "/admin/test",
     },
@@ -286,16 +300,32 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            //  GALLERY ---------------------------------------------------------
 
             {
                 path: routes.ADMIN.WATCH_GALLERY,
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
-                        <WatchGallery />
+                        <WatchGalleryList />
                     </Suspense>
                 ),
             },
-
+            {
+                path: routes.ADMIN.CREATE_WATCH_GALLERY,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <CreateWatchGallery />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_BRAND,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditWatchGallery />
+                    </Suspense>
+                ),
+            },
             {
                 path: routes.ADMIN.TEST,
                 element: (

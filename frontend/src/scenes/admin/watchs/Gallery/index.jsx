@@ -1,68 +1,59 @@
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
-import Header from "../../../components/Header";
+import { tokens } from "../../../../theme";
+import Header from "../../../../components/Header";
 import { useEffect, useState } from "react";
-import axiosClient from "../../../axios-client";
+import axiosClient from "../../../../axios-client";
 import LinearProgress from "@mui/material/LinearProgress";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
-import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-const WatchList = () => {
+
+const WatchGalleryList = () => {
+    const { id } = useParams();
     const [filterModel, setFilterModel] = useState({
         items: [],
         quickFilterValues: [],
     });
-    const [watches, setWatches] = useState([]);
+    const [brands, setBrands] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const columns = [
         { field: "id", headerName: "ID" },
+        {
+            field: "banner",
+            headerName: "Banner",
+            flex: 1,
 
+            renderCell: ({ row: { banner } }) => {
+                return (
+                    <img
+                        height="100%"
+                        style={{ objectFit: "cover" }}
+                        width="100%"
+                        alt="banner"
+                        src={banner}
+                    />
+                );
+            },
+        },
         {
             field: "name",
             headerName: "Name",
             cellClassName: "name-column--cell",
         },
-
         {
-            field: "brand",
-            headerName: "brand",
+            field: "slug",
+            headerName: "slug",
             cellClassName: "name-column--cell",
         },
         {
-            field: "gender",
-            headerName: "gender",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "price",
-            headerName: "price",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "origin",
-            headerName: "origin",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "energy",
-            headerName: "energy",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "stock_quantity",
-            headerName: "stock_quantity",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "created_at",
-            headerName: "created_at",
+            field: "description",
+            headerName: "description",
             cellClassName: "name-column--cell",
         },
         {
@@ -76,21 +67,10 @@ const WatchList = () => {
                             sx={{ mx: "0.5rem" }}
                             variant="outlined"
                             size="small"
-                            color="green"
-                            endIcon={<CollectionsOutlinedIcon />}
-                            component={Link}
-                            to={`/admin/watch/${id}/watch-gallery`}
-                        >
-                            Image
-                        </Button>
-                        <Button
-                            sx={{ mx: "0.5rem" }}
-                            variant="outlined"
-                            size="small"
                             color="primary"
                             endIcon={<EditNoteOutlinedIcon />}
                             component={Link}
-                            to={`/admin/watch/${id}/edit`}
+                            to={`/admin/brand/${id}/edit`}
                         >
                             Edit
                         </Button>
@@ -99,7 +79,7 @@ const WatchList = () => {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDeleteWatch(id)}
+                            onClick={() => handleDeleteBrand(id)}
                         >
                             Delete
                         </Button>
@@ -111,11 +91,11 @@ const WatchList = () => {
     const MySwal = withReactContent(Swal);
     // Use Effect Hook
     useEffect(() => {
-        fetchWatches();
+        fetchBrand();
     }, []);
 
     // Handle Delete
-    const handleDeleteWatch = async (id) => {
+    const handleDeleteBrand = async (id) => {
         setIsLoading(true);
         //Show alert
         const result = await MySwal.fire({
@@ -129,9 +109,9 @@ const WatchList = () => {
         });
         if (result.isConfirmed) {
             await axiosClient
-                .delete(`api/watches/${id}`)
+                .delete(`api/brands/${id}`)
                 .then(({ data }) => {
-                    fetchWatches();
+                    fetchBrand();
                     MySwal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
@@ -144,12 +124,12 @@ const WatchList = () => {
         setIsLoading(false);
     };
 
-    // Fetch Watches
-    const fetchWatches = async () => {
+    // Fetch Brand
+    const fetchBrand = async () => {
         await axiosClient
-            .get("api/watches")
+            .get("api/brands")
             .then(({ data }) => {
-                setWatches(data.data);
+                setBrands(data.data);
                 setIsLoading(false);
             })
             .catch(({ response }) => console.log(response.error));
@@ -157,9 +137,9 @@ const WatchList = () => {
     return (
         <Box m="20px" height="100%">
             <Header
-                title="Watch"
-                subtitle="Managing the Watchs"
-                router="watch"
+                title="Gallery"
+                subtitle="Managing the Gallery"
+                router={`watch/${id}/watch-gallery`}
             />
             <Box
                 height="100vh"
@@ -208,7 +188,7 @@ const WatchList = () => {
                     loading={isLoading}
                     checkboxSelection
                     columns={columns}
-                    rows={watches}
+                    rows={brands}
                     slotProps={{ toolbar: { showQuickFilter: true } }}
                     getRowHeight={(params) => 150}
                 />
@@ -217,4 +197,4 @@ const WatchList = () => {
     );
 };
 
-export default WatchList;
+export default WatchGalleryList;

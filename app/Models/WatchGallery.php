@@ -9,6 +9,6 @@ class WatchGallery extends Model
 {
     use HasFactory; 
     protected $fillables = [
-        'banner','watch_id','type',
+        'banner','watch_id','type','serial'
     ];
 }

@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('watch_galleries', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();  
+            $table->integer('serial');
             $table->string("banner"); 
             $table->string("watch_id"); 
             $table->enum("type",['front','thumb','gallery']); 
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 
