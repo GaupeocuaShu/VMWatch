@@ -7,6 +7,7 @@ import axiosClient from "../../../axios-client";
 import LinearProgress from "@mui/material/LinearProgress";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
+import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -63,7 +64,6 @@ const WatchList = () => {
             field: "created_at",
             headerName: "created_at",
             cellClassName: "name-column--cell",
-            flex: 1,
         },
         {
             field: "Action",
@@ -72,6 +72,17 @@ const WatchList = () => {
             renderCell: ({ row: { id } }) => {
                 return (
                     <Box textAlign="center">
+                        <Button
+                            sx={{ mx: "0.5rem" }}
+                            variant="outlined"
+                            size="small"
+                            color="green"
+                            endIcon={<CollectionsOutlinedIcon />}
+                            component={Link}
+                            to={`/admin/watch/${id}/gallery`}
+                        >
+                            Image
+                        </Button>
                         <Button
                             sx={{ mx: "0.5rem" }}
                             variant="outlined"

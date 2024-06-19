@@ -8,6 +8,9 @@ use App\Models\Watch;
 use App\Traits\ImageHandle;
 use Illuminate\Http\Request;
 use App\Models\WatchGallery;
+
+use function Laravel\Prompts\error;
+
 class WatchController extends Controller
 {
 
@@ -28,7 +31,18 @@ class WatchController extends Controller
         
 
         $path = $this->uploadImage($request,'previews','banner',false);
-        return response(["status" => "success","banner" => $path],200);
+        return response(["status" => "success","banner" => asset($path),"path" => $path,"isSaved" => false],200);
+    }
+
+    public function savedUpload(Request $request){
+        try {  
+            $this->moveAllFileFromPreviewsToUploads(); 
+            
+            return response(['status' => "success"],200);
+        } catch (\Throwable $th) {
+            return response(['status' => 'failed','reason' => $th]);
+        }
+        
     }
     /**
      * Display a listing of the resource.

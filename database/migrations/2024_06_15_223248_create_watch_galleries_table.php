@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('watch_galleries', function (Blueprint $table) {
             $table->id(); 
-            $table->string("name"); 
             $table->string("banner"); 
             $table->string("watch_id"); 
             $table->enum("type",['front','thumb','gallery']); 

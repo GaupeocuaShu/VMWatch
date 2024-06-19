@@ -51,7 +51,12 @@ body,
     transform: scale(1.1);
     transition: 0.5s;
 }
-a {
-    text-decoration: none;
-    color: unset;
+
+.swiper-slide {
+    width: 25% !important;
+    height: 100% !important;
+}
+
+.swiper-slide img {
+    width: 100% !important;
 }

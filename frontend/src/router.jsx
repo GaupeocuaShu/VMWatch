@@ -74,6 +74,7 @@ const WatchVariant = lazy(() => import("./scenes/admin/watch-variant"));
 const WatchList = lazy(() => import("./scenes/admin/watchs/index"));
 const EditWatch = lazy(() => import("./scenes/admin/watchs/EditWatch"));
 const CreateWatch = lazy(() => import("./scenes/admin/watchs/CreateWatch"));
+const WatchGallery = lazy(() => import("./scenes/admin/watchs/Gallery"));
 
 const routes = {
     SIGN_UP: "/sign-up",
@@ -105,6 +106,7 @@ const routes = {
         WATCH: "/admin/watch",
         CREATE_WATCH: "/admin/watch/create",
         EDIT_WATCH: "/admin/watch/:id/edit",
+        WATCH_GALLERY: "/admin/watch/:id/gallery",
 
         TEST: "/admin/test",
     },
@@ -284,6 +286,16 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+
+            {
+                path: routes.ADMIN.WATCH_GALLERY,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <WatchGallery />
+                    </Suspense>
+                ),
+            },
+
             {
                 path: routes.ADMIN.TEST,
                 element: (

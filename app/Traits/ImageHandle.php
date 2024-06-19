@@ -14,7 +14,8 @@ trait ImageHandle{
             $image = $request->$inputName;
             $imageName = date('Y-m-d')."_".$image->getClientOriginalName();
             $path = $pathName."/".$imageName;
-            $image->move(public_path($pathName),$imageName);
+            $image->move(public_path($pathName),$imageName); 
+            if(!$isClear) return $path;
             return asset($path);
         }
     }
@@ -60,4 +61,13 @@ trait ImageHandle{
         }
     }
     
+    public function moveAllFileFromPreviewsToUploads(){
+        $files = File::allFiles('previews'); 
+  
+        foreach ($files as $file) { 
+            $fromPath = public_path('previews/'.$file->getFilename()); 
+            $toPath = public_path('uploads/'.$file->getFilename()); 
+            File::move($fromPath,$toPath);
+        }
+    }
 }
