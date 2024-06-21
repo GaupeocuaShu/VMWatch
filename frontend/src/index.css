@@ -12,6 +12,9 @@ body,
     display: flex;
     position: relative;
 }
+a {
+    text-decoration: none;
+}
 ::-webkit-scrollbar {
     width: 10px;
 }

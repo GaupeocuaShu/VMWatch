@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->string("name"); 
             $table->string("brand_id"); 
+            $table->enum("type",['new_arrival','best_seller','none']); 
             $table->enum("gender",['male','female','unisex','couple']); 
             $table->double("price"); 
             $table->string("slug"); 

@@ -13,6 +13,7 @@ class Watch extends Model
         "name",
         "brand_id",
         'gender',
+        'type',
         'price',
         'slug',
         'origin',

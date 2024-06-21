@@ -186,27 +186,12 @@ const CreateWatch = () => {
                                     )}
                                 </FormControl>
                             </Box>
+                            
                             <Box
                                 display="flex"
                                 justifyContent="space-between"
                                 gap={3}
                             >
-                                {/* Price */}
-                                <TextField
-                                    type="number"
-                                    variant="outlined"
-                                    name="price"
-                                    label="Price"
-                                    {...formik.getFieldProps("price")}
-                                    error={
-                                        formik.touched.price &&
-                                        formik.errors.price
-                                    }
-                                    helperText={
-                                        formik.touched.price &&
-                                        formik.errors.price
-                                    }
-                                />
                                 {/* Strap */}
                                 <FormControl sx={{ flex: 1 }}>
                                     <InputLabel
@@ -244,8 +229,59 @@ const CreateWatch = () => {
                                         </FormHelperText>
                                     )}
                                 </FormControl>
+                                {/* Type */}
+                                <FormControl sx={{ flex: 1 }}>
+                                    <InputLabel
+                                        error={
+                                            formik.touched.type &&
+                                            formik.errors.type
+                                        }
+                                        id="type-label"
+                                    >
+                                        Type
+                                    </InputLabel>
+                                    <Select
+                                        labelId="type-label"
+                                        id="type"
+                                        label="Type"
+                                        defaultValue=""
+                                        error={
+                                            formik.touched.type &&
+                                            formik.errors.type
+                                        }
+                                        {...formik.getFieldProps("type")}
+                                    >
+                                        <MenuItem key={0} value="none">
+                                            None
+                                        </MenuItem>
+                                        <MenuItem key={1} value="best_seller">
+                                            Best Seller
+                                        </MenuItem>
+                                        <MenuItem key={2} value="new_arrival">
+                                            New Arrival
+                                        </MenuItem>
+                                    </Select>
+                                    {formik.touched.type && (
+                                        <FormHelperText error>
+                                            {formik.errors.type}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
                             </Box>
-
+                            {/* Price */}
+                            <TextField
+                                type="number"
+                                variant="outlined"
+                                name="price"
+                                label="Price"
+                                {...formik.getFieldProps("price")}
+                                error={
+                                    formik.touched.price && formik.errors.price
+                                }
+                                helperText={
+                                    formik.touched.price && formik.errors.price
+                                }
+                            />
                             {/* Slug */}
                             <TextField
                                 type="text"
@@ -760,6 +796,7 @@ export default CreateWatch;
 const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     brand_id: yup.string().required("Brand is required"),
+    type: yup.string().required("Type is required"),
     gender: yup.string().required("Gender is required"),
     price: yup.number().required("Price is required"),
     strap_id: yup.string().required("Strap is required"),
@@ -789,6 +826,7 @@ const validationSchema = yup.object().shape({
 const initialValues = {
     name: "",
     brand_id: "",
+    type: "",
     gender: "",
     price: "",
     strap_id: "",

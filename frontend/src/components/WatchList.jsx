@@ -53,10 +53,21 @@ const WatchList = (props) => {
                             style={{ objectFit: "cover" }}
                             className="frontImage"
                         />
-                        <Typography variant="h5" mt={4} textAlign="center">
+                        <Typography
+                            variant="h5"
+                            mt={1}
+                            textAlign="center"
+                            color="gray"
+                        >
                             {e.name} - {e.dial} - {e.crystal} - {e.gender}
                         </Typography>
-                        <Typography variant="h4" textAlign="center">
+                        <Typography
+                            mt={1}
+                            variant="h3"
+                            textAlign="center"
+                            color="secondary"
+                            fontWeight="bolder"
+                        >
                             {e.price}
                         </Typography>
                     </Box>
