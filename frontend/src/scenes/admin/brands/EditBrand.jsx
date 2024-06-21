@@ -106,9 +106,8 @@ const EditBrand = () => {
             {brand ? (
                 <Box m="20px">
                     <Header
-                        title="CREATE BRAND"
-                        subtitle="Create A New Brand "
-                        action="create"
+                        title="EDIT BRAND"
+                        subtitle="Edit Brand "
                         router="brand"
                     />
                     <Formik

@@ -11,6 +11,11 @@ import ShowSnackbar from "../../../../components/SnackBar";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -23,8 +28,10 @@ const VisuallyHiddenInput = styled("input")({
     width: 1,
 });
 const EditWatchGallery = () => {
-    const { id } = useParams();
+    const { watchID, id } = useParams();
+    console.log(watchID + " " + id);
     const [brandFound, setBrandFound] = useState(true);
+
     const [previewBanner, setPreviewBanner] = useState(false);
 
     // Upload -------------------------------
@@ -50,25 +57,25 @@ const EditWatchGallery = () => {
 
     //fetch Banner by id
     useEffect(() => {
-        const fetchBrandByID = async (id) => {
+        const fetchWatchGalleryByID = async (id) => {
             await axiosClient
-                .get(`/api/brands/${id}`)
+                .get(`/api/watches/${watchID}/watch-gallery/${id}/edit`)
                 .then(({ data }) => {
-                    const rawBrand = data.data;
-                    console.log(rawBrand);
-                    const brandObject = {
-                        id: rawBrand.id,
-                        name: rawBrand.name,
-                        description: rawBrand.description,
-                        banner: rawBrand.banner,
+                    const rawWatchGallery = data.data;
+                    console.log(rawWatchGallery);
+                    const watchGalleryObject = {
+                        id: rawWatchGallery.id,
+                        serial: rawWatchGallery.serial,
+                        type: rawWatchGallery.type,
+                        banner: rawWatchGallery.banner,
                     };
 
-                    setBrand(brandObject);
-                    setPreviewBanner(brandObject.banner);
+                    setBrand(watchGalleryObject);
+                    setPreviewBanner(watchGalleryObject.banner);
                 })
                 .catch(({ response }) => setBrandFound(false));
         };
-        fetchBrandByID(id);
+        fetchWatchGalleryByID(id);
     }, []);
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -78,8 +85,8 @@ const EditWatchGallery = () => {
         setLoading(true);
         const formData = new FormData();
         formData.append("_method", "PUT");
-        formData.append("name", data.name);
-        formData.append("description", data.description);
+        formData.append("serial", data.serial);
+        formData.append("type", data.type);
 
         // Append file if it exists
         if (file) {
@@ -87,10 +94,13 @@ const EditWatchGallery = () => {
         }
         console.log(formData);
         await axiosClient
-            .post(`api/brands/${brand.id}`, formData)
+            .post(
+                `api/watches/${watchID}/watch-gallery/${brand.id}/update`,
+                formData
+            )
             .then(({ data }) => {
                 setSnackBarOpen(true);
-                setSnackBarMessage("Update Brand Successfully");
+                setSnackBarMessage("Update Watch Gallery Successfully");
                 setSeverity("success");
             })
             .catch(({ response }) => {
@@ -106,10 +116,10 @@ const EditWatchGallery = () => {
             {brand ? (
                 <Box m="20px">
                     <Header
-                        title="CREATE GALLERY"
+                        title="EDIT GALLERY"
                         subtitle="Create A New Gallery "
-                        action="create"
-                        router=""
+                        action="edit"
+                        router={`watch/${id}/watch-gallery`}
                     />
                     <Formik
                         initialValues={brand}
@@ -155,38 +165,62 @@ const EditWatchGallery = () => {
                                                 />
                                             </Button>
                                         </Box>
+
                                         <TextField
                                             type="text"
                                             variant="outlined"
-                                            name="name"
-                                            label="name"
-                                            {...formik.getFieldProps("name")}
+                                            name="serial"
+                                            label="serial"
+                                            {...formik.getFieldProps("serial")}
                                             error={
-                                                formik.touched.name &&
-                                                formik.errors.name
+                                                formik.touched.serial &&
+                                                formik.errors.serial
                                             }
                                             helperText={
-                                                formik.touched.name &&
-                                                formik.errors.name
+                                                formik.touched.serial &&
+                                                formik.errors.serial
                                             }
                                         />
-                                        <TextField
-                                            type="text"
-                                            variant="outlined"
-                                            name="description"
-                                            label="description"
-                                            {...formik.getFieldProps(
-                                                "description"
+                                        <FormControl>
+                                            <InputLabel
+                                                error={
+                                                    formik.touched.type &&
+                                                    formik.errors.type
+                                                }
+                                                id="demo-simple-select-helper-label"
+                                            >
+                                                type
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-helper-label"
+                                                id="demo-simple-select-helper"
+                                                label="type"
+                                                defaultValue="user"
+                                                error={
+                                                    formik.touched.type &&
+                                                    formik.errors.type
+                                                }
+                                                {...formik.getFieldProps(
+                                                    "type"
+                                                )}
+                                            >
+                                                <MenuItem value="main">
+                                                    Main
+                                                </MenuItem>
+                                                <MenuItem value="thumb">
+                                                    Thumb
+                                                </MenuItem>
+                                                <MenuItem value="gallery">
+                                                    Gallery
+                                                </MenuItem>
+                                            </Select>
+                                            {formik.touched.type && (
+                                                <FormHelperText error>
+                                                    {formik.errors.type}
+                                                </FormHelperText>
                                             )}
-                                            error={
-                                                formik.touched.description &&
-                                                formik.errors.description
-                                            }
-                                            helperText={
-                                                formik.touched.description &&
-                                                formik.errors.description
-                                            }
-                                        />
+                                        </FormControl>
+
                                         <Box
                                             display="flex"
                                             justifyContent="end"
@@ -241,6 +275,6 @@ const EditWatchGallery = () => {
 export default EditWatchGallery;
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required("Required"),
-    description: yup.string().required("Required"),
+    serial: yup.number().integer("Must be number").required("Required"),
+    type: yup.string().required("required"),
 });

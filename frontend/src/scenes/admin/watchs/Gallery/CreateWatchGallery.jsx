@@ -68,9 +68,9 @@ const CreateWatchGallery = () => {
     // Submit the form
     const handleFormSubmit = async (data, { resetForm }) => {
         setLoading(true);
-        data = { ...data, banner: file };
+        data = { ...data, banner: file, watch_id: id };
         await axiosClient
-            .post("api/watches", data, {
+            .post("api/watches/save-upload", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
             .then(({ data }) => {
@@ -140,6 +140,7 @@ const CreateWatchGallery = () => {
                                         />
                                     </Button>
                                 </Box>
+
                                 <TextField
                                     type="text"
                                     variant="outlined"

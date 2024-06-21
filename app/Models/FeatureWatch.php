@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WatchGallery extends Model
+class FeatureWatch extends Model
 {
     use HasFactory; 
     protected $fillable = [
-        'banner','watch_id','type','serial'
-    ];
+        'watch_id','feature_id',
+    ]; 
+
+
+    public function feature(){
+        return $this->belongsTo(Feature::class);
+    }
 }

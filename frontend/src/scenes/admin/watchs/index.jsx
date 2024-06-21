@@ -8,6 +8,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
 import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
+import FeaturedPlayListOutlinedIcon from "@mui/icons-material/FeaturedPlayListOutlined";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -45,11 +46,7 @@ const WatchList = () => {
             headerName: "price",
             cellClassName: "name-column--cell",
         },
-        {
-            field: "origin",
-            headerName: "origin",
-            cellClassName: "name-column--cell",
-        },
+
         {
             field: "energy",
             headerName: "energy",
@@ -73,7 +70,16 @@ const WatchList = () => {
                 return (
                     <Box textAlign="center">
                         <Button
-                            sx={{ mx: "0.5rem" }}
+                            variant="outlined"
+                            size="small"
+                            color="blue"
+                            endIcon={<FeaturedPlayListOutlinedIcon />}
+                            component={Link}
+                            to={`/admin/watch/${id}/watch-feature`}
+                        >
+                            Feature
+                        </Button>
+                        <Button
                             variant="outlined"
                             size="small"
                             color="green"
@@ -84,7 +90,6 @@ const WatchList = () => {
                             Image
                         </Button>
                         <Button
-                            sx={{ mx: "0.5rem" }}
                             variant="outlined"
                             size="small"
                             color="primary"

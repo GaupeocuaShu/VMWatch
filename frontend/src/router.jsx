@@ -85,6 +85,7 @@ const CreateWatchGallery = lazy(() =>
     import("./scenes/admin/watchs/Gallery/CreateWatchGallery")
 );
 
+const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -120,7 +121,10 @@ const routes = {
 
         WATCH_GALLERY: "/admin/watch/:id/watch-gallery",
         CREATE_WATCH_GALLERY: "/admin/watch/:id/watch-gallery/create",
-        EDIT_WATCH_GALLERY: "/admin/watch/:id/watch-gallery/:id/edit",
+        EDIT_WATCH_GALLERY: "/admin/watch/:watchID/watch-gallery/:id/edit",
+
+        // WATCH FEATURE
+        WATCH_FEATURE: "/admin/watch/:watchID/watch-feature",
 
         TEST: "/admin/test",
     },
@@ -319,10 +323,19 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: routes.ADMIN.EDIT_BRAND,
+                path: routes.ADMIN.EDIT_WATCH_GALLERY,
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <EditWatchGallery />
+                    </Suspense>
+                ),
+            },
+            //  FEATURE ---------------------------------------------------------
+            {
+                path: routes.ADMIN.WATCH_FEATURE,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <WatchFeature />
                     </Suspense>
                 ),
             },

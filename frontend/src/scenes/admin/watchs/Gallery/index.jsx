@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 const WatchGalleryList = () => {
-    const { id } = useParams();
+    const { id: watchID } = useParams();
     const [filterModel, setFilterModel] = useState({
         items: [],
         quickFilterValues: [],
@@ -42,18 +42,14 @@ const WatchGalleryList = () => {
             },
         },
         {
-            field: "name",
-            headerName: "Name",
+            field: "serial",
+            headerName: "serial",
             cellClassName: "name-column--cell",
         },
+
         {
-            field: "slug",
-            headerName: "slug",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "description",
-            headerName: "description",
+            field: "type",
+            headerName: "type",
             cellClassName: "name-column--cell",
         },
         {
@@ -70,7 +66,7 @@ const WatchGalleryList = () => {
                             color="primary"
                             endIcon={<EditNoteOutlinedIcon />}
                             component={Link}
-                            to={`/admin/brand/${id}/edit`}
+                            to={`/admin/watch/${watchID}/watch-gallery/${id}/edit`}
                         >
                             Edit
                         </Button>
@@ -79,7 +75,7 @@ const WatchGalleryList = () => {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDeleteBrand(id)}
+                            onClick={() => handleDeleteGallery(id)}
                         >
                             Delete
                         </Button>
@@ -91,11 +87,11 @@ const WatchGalleryList = () => {
     const MySwal = withReactContent(Swal);
     // Use Effect Hook
     useEffect(() => {
-        fetchBrand();
+        fetchWachGallery();
     }, []);
 
     // Handle Delete
-    const handleDeleteBrand = async (id) => {
+    const handleDeleteGallery = async (id) => {
         setIsLoading(true);
         //Show alert
         const result = await MySwal.fire({
@@ -109,9 +105,9 @@ const WatchGalleryList = () => {
         });
         if (result.isConfirmed) {
             await axiosClient
-                .delete(`api/brands/${id}`)
+                .delete(`api/watches/${watchID}/watch-gallery/${id}/delete`)
                 .then(({ data }) => {
-                    fetchBrand();
+                    fetchWachGallery();
                     MySwal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
@@ -125,9 +121,9 @@ const WatchGalleryList = () => {
     };
 
     // Fetch Brand
-    const fetchBrand = async () => {
+    const fetchWachGallery = async () => {
         await axiosClient
-            .get("api/brands")
+            .get(`api/watches/${watchID}/watch-gallery`)
             .then(({ data }) => {
                 setBrands(data.data);
                 setIsLoading(false);
@@ -139,7 +135,7 @@ const WatchGalleryList = () => {
             <Header
                 title="Gallery"
                 subtitle="Managing the Gallery"
-                router={`watch/${id}/watch-gallery`}
+                router={`watch/${watchID}/watch-gallery`}
             />
             <Box
                 height="100vh"

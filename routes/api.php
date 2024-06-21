@@ -72,9 +72,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource("features",FeatureController::class);    
 
 
-        // Watch API 
-        Route::get("watches/select-options",[WatchController::class,"selectOptions"]); 
+        // Watch API   
+        // Watch Gallery API 
+        Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
+        Route::post("watches/save-upload",[WatchController::class,"saveUpload"]);
+        Route::get("watches/{watchID}/watch-gallery/{id}/edit",[WatchController::class,"watchGalleryEdit"]);
+        Route::put("watches/{watchID}/watch-gallery/{id}/update",[WatchController::class,"watchGalleryUpdate"]);
+        Route::delete("watches/{watchID}/watch-gallery/{id}/delete",[WatchController::class,"watchGalleryDelete"]);
+        Route::get("watches/{watchID}/watch-gallery",[WatchController::class,"watchGalleryIndex"]);
+        // Watch Gallery API 
+
+        // Watch Feature API    
+        Route::get("watches/{watchID}/feature-watch",[WatchController::class,"watchFeatureIndex"]);
+        Route::put("watches/{watchID}/feature-watch/{id}",[WatchController::class,"watchFeatureUpdateOrCreate"]);
+        Route::delete("watches/{watchID}/feature-watch/{id}",[WatchController::class,"watchFeatureDelete"]);
+        
+        // Watch Feature API   
+        
+
         Route::apiResource("watches",WatchController::class);
-        Route::apiResource("watches/wach-gallery",Watch)        
+        // Watch API   
+   
     });
 });

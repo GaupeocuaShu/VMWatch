@@ -20,7 +20,17 @@ import withReactContent from "sweetalert2-react-content";
 import { EditToolbar } from "./EditToolbar";
 import { Button } from "@mui/material";
 import Header from "./Header";
-export default function CustomDataGrid({ api, title, description }) {
+export default function CustomDataGrid({
+    api,
+    title,
+    description,
+    customColumn = {
+        field: "name",
+        headerName: "Name",
+        width: 300,
+        editable: true,
+    },
+}) {
     const [filterModel, setFilterModel] = useState({
         items: [],
         quickFilterValues: [],
@@ -148,12 +158,7 @@ export default function CustomDataGrid({ api, title, description }) {
     };
 
     const columns = [
-        {
-            field: "name",
-            headerName: "Name",
-            width: 300,
-            editable: true,
-        },
+        { ...customColumn },
 
         {
             field: "actions",
