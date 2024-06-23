@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
+Route::get("/get-brands",[BrandController::class,'index']); 
 
 // Get current user / authenticated user 
 

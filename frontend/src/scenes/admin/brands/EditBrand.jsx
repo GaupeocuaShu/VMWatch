@@ -11,6 +11,11 @@ import ShowSnackbar from "../../../components/SnackBar";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -169,6 +174,42 @@ const EditBrand = () => {
                                                 formik.errors.name
                                             }
                                         />
+                                        <FormControl>
+                                            <InputLabel
+                                                error={
+                                                    formik.touched.type &&
+                                                    formik.errors.type
+                                                }
+                                                id="demo-simple-select-helper-label"
+                                            >
+                                                type
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-helper-label"
+                                                id="demo-simple-select-helper"
+                                                label="type"
+                                                defaultValue="user"
+                                                error={
+                                                    formik.touched.type &&
+                                                    formik.errors.type
+                                                }
+                                                {...formik.getFieldProps(
+                                                    "type"
+                                                )}
+                                            >
+                                                <MenuItem value="high-end-swiss">
+                                                    High-end from Swiss
+                                                </MenuItem>
+                                                <MenuItem value="famous">
+                                                    Famous
+                                                </MenuItem>
+                                            </Select>
+                                            {formik.touched.type && (
+                                                <FormHelperText error>
+                                                    {formik.errors.type}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
                                         <TextField
                                             type="text"
                                             variant="outlined"

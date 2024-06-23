@@ -23,7 +23,7 @@ const WatchList = (props) => {
                 variant="h3"
                 textAlign="center"
                 textTransform="uppercase"
-                color="secondary"
+                color="gray"
                 fontWeight={600}
             >
                 Best Seller Watches For {props.gender}

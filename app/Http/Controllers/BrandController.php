@@ -28,6 +28,7 @@ class BrandController extends Controller
         $banner = Brand::create([
             'name' => $request->name, 
             'banner' => $path, 
+            'type' => $request->type, 
             'slug' => Str::slug($request->name),
             'description' => $request->description, 
         ]);
@@ -55,6 +56,7 @@ class BrandController extends Controller
         }
         $brand->update([
             'name' => $request->name, 
+            'type' => $request->type, 
             'description' => $request->description, 
             'banner' =>  $path ? $path : $brand->url
         ]);

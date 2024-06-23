@@ -149,7 +149,40 @@ const CreateBrand = () => {
                                         formik.errors.name
                                     }
                                 />
-
+                                <FormControl>
+                                    <InputLabel
+                                        error={
+                                            formik.touched.type &&
+                                            formik.errors.type
+                                        }
+                                        id="demo-simple-select-helper-label"
+                                    >
+                                        type
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        id="demo-simple-select-helper"
+                                        label="type"
+                                        defaultValue="user"
+                                        error={
+                                            formik.touched.type &&
+                                            formik.errors.type
+                                        }
+                                        {...formik.getFieldProps("type")}
+                                    >
+                                        <MenuItem value="high-end-swiss">
+                                            High-end from Swiss
+                                        </MenuItem>
+                                        <MenuItem value="famous">
+                                            Famous
+                                        </MenuItem>
+                                    </Select>
+                                    {formik.touched.type && (
+                                        <FormHelperText error>
+                                            {formik.errors.type}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
                                 <TextField
                                     type="text"
                                     variant="outlined"
@@ -213,10 +246,12 @@ export default CreateBrand;
 
 const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
+    type: yup.string().required("Required"),
     description: yup.string().required("Required"),
 });
 
 const initialValues = {
     name: "",
+    type: "",
     description: "",
 };

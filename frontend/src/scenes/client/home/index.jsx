@@ -8,7 +8,8 @@ import WatchList from "../../../components/WatchList";
 import { watches } from "../../../constants/index";
 import { useContext } from "react";
 import { ColorModeContext, tokens } from "../../../theme";
-
+import BrandCard from "../../../components/BrandCard";
+import PopularBrand from "../../../components/PopularBrand";
 const Home = () => {
     return (
         <Box>
@@ -19,6 +20,10 @@ const Home = () => {
             <WatchList gender="male" watches={watches} />
             <Divider />
             <WatchList gender="female" watches={watches} />
+            <Divider />
+            <PopularBrand />
+            <Divider />
+            <PopularBrand type="high-end-swiss" title="High-end Swiss Brand" />
         </Box>
     );
 };
