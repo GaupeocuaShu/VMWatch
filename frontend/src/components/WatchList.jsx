@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, TextField, Typography, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axiosClient from "../axios-client";
 
 const WatchList = (props) => {
-    const watches = props.watches.filter((e) => e.gender === props.gender);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const [isHovered, setIsHovered] = useState(null);
+    const watches = props.watches.filter((e) => e.gender === props.gender);
+
     const handleMouseEnter = (index) => {
         setIsHovered(index);
     };
@@ -44,11 +46,16 @@ const WatchList = (props) => {
                         onMouseLeave={handleMouseLeave}
                         component={Link}
                         to="/product/abc"
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                        height="100%"
+                        width="85̀%"
                     >
                         <img
-                            height="70%"
+                            height="100%"
                             width="100%"
-                            src={isHovered === i ? e.backImage : e.frontImage}
+                            src={isHovered === i ? e.thumb : e.front}
                             alt={e.name}
                             style={{ objectFit: "cover" }}
                             className="frontImage"
@@ -59,7 +66,8 @@ const WatchList = (props) => {
                             textAlign="center"
                             color="gray"
                         >
-                            {e.name} - {e.dial} - {e.crystal} - {e.gender}
+                            {e.name} - {e.dialSize} - {e.glassMaterial} -
+                            {e.gender}
                         </Typography>
                         <Typography
                             mt={1}
@@ -68,7 +76,7 @@ const WatchList = (props) => {
                             color="secondary"
                             fontWeight="bolder"
                         >
-                            {e.price}
+                            ${e.price}
                         </Typography>
                     </Box>
                 ))}

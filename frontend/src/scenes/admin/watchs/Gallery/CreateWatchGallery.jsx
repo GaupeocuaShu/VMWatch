@@ -177,7 +177,7 @@ const CreateWatchGallery = () => {
                                         }
                                         {...formik.getFieldProps("type")}
                                     >
-                                        <MenuItem value="main">Main</MenuItem>
+                                        <MenuItem value="front">Main</MenuItem>
                                         <MenuItem value="thumb">Thumb</MenuItem>
                                         <MenuItem value="gallery">
                                             Gallery

@@ -35,7 +35,9 @@ class Watch extends Model
         'meta_keywords',
         'release_date'
     ];
-
+    public function watchGalleries(){
+        return $this->hasMany(WatchGallery::class);
+    }
     public function brand()
     {
         return $this->belongsTo(Brand::class);

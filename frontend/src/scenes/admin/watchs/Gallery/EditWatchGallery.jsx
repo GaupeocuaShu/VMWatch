@@ -204,7 +204,7 @@ const EditWatchGallery = () => {
                                                     "type"
                                                 )}
                                             >
-                                                <MenuItem value="main">
+                                                <MenuItem value="front">
                                                     Main
                                                 </MenuItem>
                                                 <MenuItem value="thumb">

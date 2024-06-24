@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
-Route::get("/get-brands",[BrandController::class,'index']); 
-
+Route::get("/get-brands",[HomeController::class,'getBrands']); 
+Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
 // Get current user / authenticated user 
 
 Route::get("authenticated-user",function(){

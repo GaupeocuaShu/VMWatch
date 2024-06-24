@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Divider, useTheme } from "@mui/material";
 import Banner from "../../../components/Banner";
 import BannerGallery from "../../../components/BannerGallery";
@@ -10,7 +10,41 @@ import { useContext } from "react";
 import { ColorModeContext, tokens } from "../../../theme";
 import BrandCard from "../../../components/BrandCard";
 import PopularBrand from "../../../components/PopularBrand";
+import axiosClient from "../../../axios-client";
+
 const Home = () => {
+    const [watches, setWatches] = useState([]);
+    const [brands, setBrands] = useState([]);
+    // Fetch Watches
+    useEffect(() => {
+        const fetchWatches = async () => {
+            try {
+                const { data } = await axiosClient.get(
+                    "api/get-display-watches"
+                );
+
+                console.log(data.data);
+                setWatches(data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchWatches();
+    }, []);
+
+    // Fetch Brands
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const { data } = await axiosClient.get("api/get-brands");
+                console.log();
+                setBrands(data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchBrands();
+    }, []);
     return (
         <Box>
             <SwiperBanner />
@@ -21,9 +55,13 @@ const Home = () => {
             <Divider />
             <WatchList gender="female" watches={watches} />
             <Divider />
-            <PopularBrand />
+            <PopularBrand brands={brands} />
             <Divider />
-            <PopularBrand type="high-end-swiss" title="High-end Swiss Brand" />
+            <PopularBrand
+                brands={brands}
+                type="high-end-swiss"
+                title="High-end Swiss Brand"
+            />
         </Box>
     );
 };
