@@ -38,6 +38,7 @@ const CreateWatch = () => {
     const [dialColors, setDialColors] = useState([]);
     const [dialSizes, setDialSizes] = useState([]);
     const [dialShapes, setDialShapes] = useState([]);
+    const [watchCollections, setWatchCollections] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,6 +56,7 @@ const CreateWatch = () => {
                 setDialColors(data.dialColors);
                 setDialSizes(data.dialSizes);
                 setDialShapes(data.dialShapes);
+                setWatchCollections(data.watchCollections);
             } catch (error) {
                 console.error("Error fetching select options", error);
             }
@@ -130,7 +132,6 @@ const CreateWatch = () => {
                                             formik.errors.name
                                         }
                                     />
-
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
@@ -217,6 +218,58 @@ const CreateWatch = () => {
                                             )}
                                         </FormControl>
                                     </Box>
+                                    {/* Watch Collection */}
+                                    <FormControl>
+                                        <InputLabel
+                                            error={
+                                                formik.touched
+                                                    .watch_collection_id &&
+                                                formik.errors
+                                                    .watch_collection_id
+                                            }
+                                            id="watch_collection_id-label"
+                                        >
+                                            Watch Collection
+                                        </InputLabel>
+                                        <Select
+                                            labelId="watch_collection_id-label"
+                                            id="watch_collection_id"
+                                            label="watch collection"
+                                            defaultValue=""
+                                            error={
+                                                formik.touched
+                                                    .watch_collection_id &&
+                                                formik.errors
+                                                    .watch_collection_id
+                                            }
+                                            {...formik.getFieldProps(
+                                                "watch_collection_id"
+                                            )}
+                                        >
+                                            {watchCollections.map(
+                                                (watch_collection) => (
+                                                    <MenuItem
+                                                        key={
+                                                            watch_collection.id
+                                                        }
+                                                        value={
+                                                            watch_collection.id
+                                                        }
+                                                    >
+                                                        {watch_collection.name}
+                                                    </MenuItem>
+                                                )
+                                            )}
+                                        </Select>
+                                        {formik.touched.watch_collection_id && (
+                                            <FormHelperText error>
+                                                {
+                                                    formik.errors
+                                                        .watch_collection_id
+                                                }
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
@@ -324,22 +377,7 @@ const CreateWatch = () => {
                                             formik.errors.price
                                         }
                                     />
-                                    {/* Slug */}
-                                    <TextField
-                                        type="text"
-                                        variant="outlined"
-                                        name="slug"
-                                        label="Slug"
-                                        {...formik.getFieldProps("slug")}
-                                        error={
-                                            formik.touched.slug &&
-                                            formik.errors.slug
-                                        }
-                                        helperText={
-                                            formik.touched.slug &&
-                                            formik.errors.slug
-                                        }
-                                    />
+
                                     {/* Origin */}
                                     <TextField
                                         type="text"
@@ -356,7 +394,6 @@ const CreateWatch = () => {
                                             formik.errors.origin
                                         }
                                     />
-
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
@@ -685,7 +722,6 @@ const CreateWatch = () => {
                                             )}
                                         </FormControl>
                                     </Box>
-
                                     {/* SKU */}
                                     <TextField
                                         type="text"
@@ -720,7 +756,6 @@ const CreateWatch = () => {
                                             formik.errors.stock_quantity
                                         }
                                     />
-
                                     {/* Weight */}
                                     <TextField
                                         type="number"
@@ -753,7 +788,6 @@ const CreateWatch = () => {
                                             formik.errors.warranty
                                         }
                                     />
-
                                     {/* Meta Title */}
                                     <TextField
                                         type="text"
@@ -788,7 +822,6 @@ const CreateWatch = () => {
                                             formik.errors.meta_description
                                         }
                                     />
-
                                     {/* Meta Keywords */}
                                     <TextField
                                         type="text"
@@ -825,7 +858,6 @@ const CreateWatch = () => {
                                             formik.errors.release_date
                                         }
                                     />
-
                                     {/* Description */}
                                     <TextField
                                         type="text"
@@ -902,11 +934,11 @@ const validationSchema = yup.object().shape({
     gender: yup.string().required("Gender is required"),
     price: yup.number().required("Price is required"),
     strap_id: yup.string().required("Strap is required"),
-    slug: yup.string().required("Slug is required"),
     origin: yup.string().required("Origin is required"),
     water_resistance_level_id: yup
         .string()
         .required("Water resistance level is required"),
+    watch_collection_id: yup.string().required("Watch Collection is required"),
     case_color_id: yup.string().required("Case color is required"),
     dial_color_id: yup.string().required("Dial color is required"),
     dial_size_id: yup.string().required("Dial size is required"),

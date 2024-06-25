@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("banner"); 
             $table->string("name"); 
             $table->string("title"); 
-            $table->string("watch_id"); 
+            $table->string("slug"); 
             $table->text('description');
             $table->timestamps();
         });

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string("origin"); 
             $table->string("strap_id"); 
             $table->string("water_resistance_level_id"); 
+            $table->string("watch_collection_id"); 
             $table->string("case_color_id"); 
             $table->string("dial_color_id"); 
             $table->string("dial_size_id"); 

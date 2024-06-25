@@ -12,6 +12,7 @@ use App\Http\Controllers\GlassMaterialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WatchCollectionController;
 use App\Http\Controllers\WatchController;
 use App\Http\Controllers\WaterResistanceLevelController;
 use App\Models\User;
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
 Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
+Route::get("/get-detail-watches/{slug}",[HomeController::class,'getDetailWatch']);
+
 // Get current user / authenticated user 
 
 Route::get("authenticated-user",function(){
@@ -72,6 +75,8 @@ Route::middleware('auth:sanctum')->group(function () {
         // Feature API
         Route::apiResource("features",FeatureController::class);    
 
+        // Watch Collection API
+        Route::apiResource("watch-collections",WatchCollectionController::class);   
 
         // Watch API   
         // Watch Gallery API 

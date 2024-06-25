@@ -7,10 +7,8 @@ import "swiper/css/thumbs";
 import "../swiper.css";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { Box } from "@mui/material";
-import { watches } from "../constants";
 import ThumbBanner from "./ThumbBanner";
-const exampleWatch = watches[0];
-export default function ProductDetailGallery() {
+export default function ProductDetailGallery({ galleries }) {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     return (
         <Box className="product-detail-gallery">
@@ -33,12 +31,11 @@ export default function ProductDetailGallery() {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper2"
             >
-                <SwiperSlide>
-                    <ThumbBanner src={exampleWatch.frontImage} />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ThumbBanner src={exampleWatch.backImage} />
-                </SwiperSlide>
+                {galleries?.map((e) => (
+                    <SwiperSlide>
+                        <ThumbBanner src={e.banner} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
             <Swiper
                 onSwiper={setThumbsSwiper}
@@ -50,12 +47,11 @@ export default function ProductDetailGallery() {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper"
             >
-                <SwiperSlide>
-                    <ThumbBanner src={exampleWatch.frontImage} />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ThumbBanner src={exampleWatch.backImage} />
-                </SwiperSlide>
+                {galleries?.map((e) => (
+                    <SwiperSlide>
+                        <ThumbBanner src={e.banner} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
         </Box>
     );

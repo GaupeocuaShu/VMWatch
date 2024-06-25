@@ -179,6 +179,13 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
+                            title="Manage Watch Collection"
+                            to="/admin/watch-collection"
+                            icon={<PunchClockOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
                             title="Manage Watch "
                             to="/admin/watch"
                             icon={<PunchClockOutlinedIcon />}

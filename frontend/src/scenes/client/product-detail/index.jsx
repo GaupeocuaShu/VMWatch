@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Button, Divider } from "@mui/material";
 import Breadcrumb from "../../../components/Breadcrumb";
 import { useParams } from "react-router-dom";
-import { watches } from "../../../constants/index";
 import ProductDetailGallery from "../../../components/ProductDetailGallery";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -21,9 +20,21 @@ import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-const exampleWatch = watches[0];
+import { useEffect } from "react";
+import axiosClient from "../../../axios-client";
 const ProductDetail = () => {
     const { productSlug } = useParams();
+    const [watch, setWatch] = useState({});
+    useEffect(() => {
+        const fetchWatchBySlug = async () => {
+            const { data } = await axiosClient.get(
+                `api/get-detail-watches/${productSlug}`
+            );
+            console.log(data.data);
+            setWatch(data.data);
+        };
+        fetchWatchBySlug();
+    }, []);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     return (
@@ -37,25 +48,25 @@ const ProductDetail = () => {
                 my={8}
             >
                 <Box>
-                    <ProductDetailGallery />
+                    <ProductDetailGallery galleries={watch.galleries} />
                 </Box>
-                <Box display="flex" gap={2} flexDirection="column">
+                <Box
+                    display="flex"
+                    gap={2}
+                    flexDirection="column"
+                    textTransform="capitalize"
+                >
                     <Typography variant="h2" textTransform="uppercase">
-                        {exampleWatch.brand}
+                        {watch.brand}
                     </Typography>
                     <Typography variant="h3">
-                        {exampleWatch.name} - {exampleWatch.dial} -{" "}
-                        {exampleWatch.crystal} - {exampleWatch.gender}
+                        {watch.name} - Dial Size {watch.dialSize} - Glass
+                        Material {watch.glassMaterial} - {watch.gender}
                     </Typography>
                     <Typography variant="h1" color="secondary">
-                        {exampleWatch.price}
+                        ${watch.price}
                     </Typography>
-                    <Typography>
-                        Citizen Tsuyosa NJ0154-80H kích thước 40mm, kết hợp cùng
-                        dây đeo kim loại dây mạ vàng demi phong cách thời trang
-                        sang trọng. Trang bị bộ máy cơ Miyota Nhật Bản tích cót
-                        khoảng 40 giờ bền bỉ.
-                    </Typography>
+                    <Typography>{watch.description}</Typography>
                     <Button
                         sx={{ my: "1rem" }}
                         fullWidth
@@ -100,7 +111,7 @@ const ProductDetail = () => {
             </Box>
 
             <Gurantees matches={matches} />
-            <Box my={8} sx={{ fontSize: "large" }}>
+            <Box my={8} sx={{ fontSize: "large" }} textTransform="capitalize">
                 <Accordion defaultExpanded>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -125,31 +136,96 @@ const ProductDetail = () => {
                                 <span style={{ fontWeight: "bolder" }}>
                                     Brand: &emsp;
                                 </span>
-                                {exampleWatch.brand}
+                                {watch.brand}
                             </li>
                             <li>
                                 <span style={{ fontWeight: "bolder" }}>
-                                    name:&emsp;
+                                    Origin: &emsp;
                                 </span>
-                                {exampleWatch.name}
+                                {watch.origin}
                             </li>
                             <li>
                                 <span style={{ fontWeight: "bolder" }}>
-                                    crystal:&emsp;
+                                    Name:&emsp;
                                 </span>
-                                {exampleWatch.crystal}
+                                {watch.name}
                             </li>
                             <li>
                                 <span style={{ fontWeight: "bolder" }}>
-                                    dial:&emsp;
+                                    Collection:&emsp;
                                 </span>
-                                {exampleWatch.dial}
+                                {watch.watchCollection}
                             </li>
                             <li>
                                 <span style={{ fontWeight: "bolder" }}>
-                                    gender:&emsp;
+                                    Glass Material:&emsp;
                                 </span>
-                                {exampleWatch.gender}
+                                {watch.glassMaterial}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Dial Size:&emsp;
+                                </span>
+                                {watch.dialSize}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Dial Shape:&emsp;
+                                </span>
+                                {watch.dialShape}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Dial Color:&emsp;
+                                </span>
+                                {watch.dialColor}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Case Color:&emsp;
+                                </span>
+                                {watch.caseColor}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Energy:&emsp;
+                                </span>
+                                {watch.energy}
+                            </li>
+
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Gender:&emsp;
+                                </span>
+                                {watch.gender}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Features:&emsp;
+                                </span>
+                                {watch?.features?.map((e, i) =>
+                                    i === watch.features.length - 1
+                                        ? e.name
+                                        : e.name + ", "
+                                )}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Water Resistance Levels:&emsp;
+                                </span>
+                                {watch.waterResistanceLevels} ATM
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Weight:&emsp;
+                                </span>
+                                {watch.weight}
+                            </li>
+                            <li>
+                                <span style={{ fontWeight: "bolder" }}>
+                                    Warranty:&emsp;
+                                </span>
+                                {watch.warranty} years
                             </li>
                         </ul>
                     </AccordionDetails>

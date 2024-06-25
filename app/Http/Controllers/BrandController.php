@@ -58,7 +58,8 @@ class BrandController extends Controller
             'name' => $request->name, 
             'type' => $request->type, 
             'description' => $request->description, 
-            'banner' =>  $path ? $path : $brand->url
+            'banner' =>  $path ? $path : $brand->url,
+            'slug' => Str::slug($request->name),
         ]);
         return new BrandResource($brand);
     }

@@ -45,7 +45,7 @@ const WatchList = (props) => {
                         onMouseEnter={() => handleMouseEnter(i)}
                         onMouseLeave={handleMouseLeave}
                         component={Link}
-                        to="/product/abc"
+                        to={`/product/${e.slug}`}
                         display="flex"
                         flexDirection="column"
                         justifyContent="space-between"

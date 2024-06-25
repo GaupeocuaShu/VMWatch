@@ -1,49 +1,3 @@
-// import { Navigate, createBrowserRouter } from "react-router-dom";
-// import SignUp from "./scenes/auth/sign-up";
-// import Login from "./scenes/auth/login";
-// import Master from "./scenes/client/layout/master";
-// import Home from "./scenes/client/home";
-// import Dashboard from "./scenes/dashboard/home";
-// import ProductDetail from "./scenes/client/product-detail";
-// import AdminMaster from "./scenes/admin/global/master";
-// import User from "./scenes/admin/users";
-// import { CreateUser } from "./scenes/admin/users/CreateUser";
-// import { EditUser } from "./scenes/admin/users/EditUser";
-// const router = createBrowserRouter([
-//     {
-//         path: "/sign-up",
-//         element: <SignUp />,
-//     },
-//     {
-//         path: "/login",
-//         element: <Login />,
-//     },
-//     {
-//         path: "/",
-//         element: <Master />,
-//         children: [
-//             { path: "/", element: <Home /> },
-//             { path: "/home", element: <Home /> },
-//             { path: "/product/:productSlug", element: <ProductDetail /> },
-//         ],
-//     },
-//     {
-//         path: "/dashboard",
-//         element: <Dashboard />,
-//     },
-//     {
-//         path: "/admin",
-//         element: <AdminMaster />,
-//         children: [
-//             { path: "/admin/user", element: <User /> },
-//             { path: "/admin/user/create", element: <CreateUser /> },
-//             { path: "/admin/user/:id/edit", element: <EditUser /> },
-//             { path: "/admin/banner-slider", element: <EditUser /> },
-//         ],
-//     },
-// ]);
-
-// export default router;
 import Test from "./scenes/admin/test";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
@@ -85,6 +39,15 @@ const CreateWatchGallery = lazy(() =>
     import("./scenes/admin/watchs/Gallery/CreateWatchGallery")
 );
 
+const WatchCollectionList = lazy(() =>
+    import("./scenes/admin/watch-collection/index")
+);
+const EditWatchCollection = lazy(() =>
+    import("./scenes/admin/watch-collection/EditWatchCollection")
+);
+const CreateWatchCollection = lazy(() =>
+    import("./scenes/admin/watch-collection/CreateWatchCollection")
+);
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const routes = {
     SIGN_UP: "/sign-up",
@@ -122,6 +85,11 @@ const routes = {
         WATCH_GALLERY: "/admin/watch/:id/watch-gallery",
         CREATE_WATCH_GALLERY: "/admin/watch/:id/watch-gallery/create",
         EDIT_WATCH_GALLERY: "/admin/watch/:watchID/watch-gallery/:id/edit",
+
+        // Watch Collection
+        WATCH_COLLECTION: "/admin/watch-collection",
+        CREATE_WATCH_COLLECTION: "/admin/watch-collection/create",
+        EDIT_WATCH_COLLECTION: "/admin/watch-collection/:id/edit",
 
         // WATCH FEATURE
         WATCH_FEATURE: "/admin/watch/:watchID/watch-feature",
@@ -327,6 +295,33 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <EditWatchGallery />
+                    </Suspense>
+                ),
+            },
+
+            //  Collection ---------------------------------------------------------
+
+            {
+                path: routes.ADMIN.WATCH_COLLECTION,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <WatchCollectionList />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.CREATE_WATCH_COLLECTION,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <CreateWatchCollection />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_WATCH_COLLECTION,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditWatchCollection />
                     </Suspense>
                 ),
             },

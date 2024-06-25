@@ -23,6 +23,7 @@ class Watch extends Model
         'dial_color_id',
         'dial_size_id',
         'dial_shape_id',
+        'watch_collection_id',
         'glass_material_id',
         'energy_id',
         'sku',
@@ -33,8 +34,14 @@ class Watch extends Model
         'meta_title',
         'meta_description',
         'meta_keywords',
-        'release_date'
-    ];
+        'release_date', 
+    ]; 
+    public function features(){
+        return $this->belongsToMany(Feature::class,'feature_watches');
+    }
+    public function watchCollection(){
+        return $this->belongsTo(WatchCollection::class);
+    }
     public function watchGalleries(){
         return $this->hasMany(WatchGallery::class);
     }
@@ -93,7 +100,8 @@ class Watch extends Model
             'dialSizes' => DialSize::all(['id', 'name']),
             'dialShapes' => DialShape::all(['id', 'name']),
             'glassMaterials' => GlassMaterial::all(['id', 'name']),
-            'energies' => Energy::all(['id', 'name']),
+            'energies' => Energy::all(['id', 'name']), 
+            'watchCollections' => WatchCollection::all(['id','name']),
         ];
     }
 }

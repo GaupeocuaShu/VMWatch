@@ -12,7 +12,7 @@ use App\Models\Watch;
 use App\Traits\ImageHandle;
 use Illuminate\Http\Request;
 use App\Models\WatchGallery;
-
+use Illuminate\Support\Str;
 use function Laravel\Prompts\error;
 
 class WatchController extends Controller
@@ -105,8 +105,9 @@ class WatchController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $watch = Watch::create($request->all());
+    { 
+        
+        $watch = Watch::create([...$request->all(),'slug' =>Str::slug($request->name)]); 
         return new WatchResource($watch);
     }
 
@@ -125,10 +126,8 @@ class WatchController extends Controller
     public function update(Request $request, string $id)
     {
         $watch = Watch::findOrFail($id); 
-        $watch->update($request->all());
+        $watch->update([...$request->all(),'slug' => Str::slug($request->name)]);
         return new EditWatchResource($watch);
-
-
     }
 
     /**

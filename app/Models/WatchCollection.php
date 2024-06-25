@@ -9,7 +9,7 @@ class WatchCollection extends Model
 {
     use HasFactory; 
     protected $fillable = [
-        'banner','name','title','description','watch_id'
+        'banner','name','title','description','slug'
     ];
 
 }
