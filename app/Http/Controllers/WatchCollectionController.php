@@ -30,6 +30,7 @@ class WatchCollectionController extends Controller
             'banner' => $path, 
             'title' => $request->title, 
             'slug' => Str::slug($request->name),
+            'brand_id' => $request->brand_id,
             'description' => $request->description, 
         ]);
         return new WatchCollectionResource($banner);
@@ -59,7 +60,9 @@ class WatchCollectionController extends Controller
             'title' => $request->title, 
             'description' => $request->description,  
             'slug' => Str::slug($request->name),
-            'banner' =>  $path ? $path : $watchCollection->banner
+            'banner' =>  $path ? $path : $watchCollection->banner,
+            'brand_id' => $request->brand_id,
+
         ]);
         return new WatchCollectionResource($watchCollection);
     }

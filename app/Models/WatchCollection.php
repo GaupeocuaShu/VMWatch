@@ -9,7 +9,9 @@ class WatchCollection extends Model
 {
     use HasFactory; 
     protected $fillable = [
-        'banner','name','title','description','slug'
+        'banner','name','title','description','slug','brand_id'
     ];
-
+    public function brand(){
+        return $this->belongsTo(Brand::class);
+    }
 }

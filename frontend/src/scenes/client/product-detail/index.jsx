@@ -22,6 +22,8 @@ import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
 import axiosClient from "../../../axios-client";
+import { Helmet } from "react-helmet-async";
+
 const ProductDetail = () => {
     const { productSlug } = useParams();
     const [watch, setWatch] = useState({});
@@ -39,8 +41,12 @@ const ProductDetail = () => {
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
-            <Breadcrumb />
+            <Helmet>
+                <title>{watch?.meta_title}</title>
+                <meta name="description" content={watch?.meta_description} />
+            </Helmet>
 
+            <Breadcrumb />
             <Box
                 display="grid"
                 gap={5}
@@ -109,7 +115,6 @@ const ProductDetail = () => {
                     </Box>
                 </Box>
             </Box>
-
             <Gurantees matches={matches} />
             <Box my={8} sx={{ fontSize: "large" }} textTransform="capitalize">
                 <Accordion defaultExpanded>

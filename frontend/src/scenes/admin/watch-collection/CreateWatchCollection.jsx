@@ -4,11 +4,15 @@ import * as yup from "yup";
 import Header from "../../../components/Header";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosClient from "../../../axios-client";
 import ShowSnackbar from "../../../components/SnackBar";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
 import NoImage from "../../../components/NoImage";
 const VisuallyHiddenInput = styled("input")({
@@ -36,6 +40,21 @@ const CreateWatchCollection = () => {
     const [banner, setBanner] = useState(null);
     const [file, setFile] = useState(null);
     // Upload -------------------------------
+
+    // Data ---------------------------
+    const [brands, setBrands] = useState([]);
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const { data } = await axiosClient.get("/api/brands");
+                setBrands(data.data);
+            } catch (error) {
+                console.error("Error fetching select options", error);
+            }
+        };
+        fetchBrands();
+    }, []);
+    // Data ---------------------------
 
     // Handle Reset
     const handleReset = (handleReset) => {
@@ -145,6 +164,42 @@ const CreateWatchCollection = () => {
                                         formik.errors.name
                                     }
                                 />
+                                <FormControl>
+                                    <InputLabel
+                                        error={
+                                            formik.touched.brand_id &&
+                                            formik.errors.brand_id
+                                        }
+                                        id="brand_id-label"
+                                    >
+                                        Brand
+                                    </InputLabel>
+                                    <Select
+                                        labelId="brand_id-label"
+                                        id="brand_id"
+                                        label="Brand"
+                                        defaultValue=""
+                                        error={
+                                            formik.touched.brand_id &&
+                                            formik.errors.brand_id
+                                        }
+                                        {...formik.getFieldProps("brand_id")}
+                                    >
+                                        {brands.map((brand) => (
+                                            <MenuItem
+                                                key={brand.id}
+                                                value={brand.id}
+                                            >
+                                                {brand.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {formik.touched.brand_id && (
+                                        <FormHelperText error>
+                                            {formik.errors.brand_id}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
                                 <TextField
                                     type="text"
                                     variant="outlined"
@@ -226,10 +281,12 @@ const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
     title: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    brand_id: yup.string().required("Brand is required"),
 });
 
 const initialValues = {
     name: "",
     title: "",
     description: "",
+    brand_id: "",
 };

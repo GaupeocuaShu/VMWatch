@@ -11,6 +11,7 @@ import { ColorModeContext, tokens } from "../../../theme";
 import BrandCard from "../../../components/BrandCard";
 import PopularBrand from "../../../components/PopularBrand";
 import axiosClient from "../../../axios-client";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
     const [watches, setWatches] = useState([]);
@@ -47,6 +48,13 @@ const Home = () => {
     }, []);
     return (
         <Box>
+            <Helmet>
+                <title>VM Watch</title>
+                <meta
+                    name="description"
+                    content="Credibility - Responsibility - Promptness"
+                />
+            </Helmet>
             <SwiperBanner />
             <BannerGallery />
             <Collection />

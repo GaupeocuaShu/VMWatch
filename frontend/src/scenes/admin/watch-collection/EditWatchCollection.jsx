@@ -37,7 +37,20 @@ const EditWatchCollection = () => {
     const [file, setFile] = useState(null);
 
     // Upload -------------------------------
-
+    // Data ---------------------------
+    const [brands, setBrands] = useState([]);
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const { data } = await axiosClient.get("/api/brands");
+                setBrands(data.data);
+            } catch (error) {
+                console.error("Error fetching select options", error);
+            }
+        };
+        fetchBrands();
+    }, []);
+    // Data ---------------------------
     // Submit preview image
     const handleSubmitPreviewImage = async (event) => {
         setPreviewBanner(null);
@@ -67,6 +80,7 @@ const EditWatchCollection = () => {
                         description: rawBrand.description,
                         title: rawBrand.title,
                         banner: rawBrand.banner,
+                        brand_id: rawBrand.brand_id,
                     };
 
                     setWatchCollection(brandObject);
@@ -85,6 +99,7 @@ const EditWatchCollection = () => {
         const formData = new FormData();
         formData.append("_method", "PUT");
         formData.append("name", data.name);
+        formData.append("brand_id", data.brand_id);
         formData.append("title", data.title);
         formData.append("description", data.description);
         // Append file if it exists
@@ -112,9 +127,10 @@ const EditWatchCollection = () => {
             {watchCollection ? (
                 <Box m="20px">
                     <Header
-                        title="EDIT BRAND"
-                        subtitle="Edit Brand "
-                        router="brand"
+                        title="EDIT WATCH COLLECTION"
+                        subtitle="Edit Watch Collection "
+                        router="watch-collection"
+                        action="edit"
                     />
                     <Formik
                         initialValues={watchCollection}
@@ -175,6 +191,45 @@ const EditWatchCollection = () => {
                                                 formik.errors.name
                                             }
                                         />
+                                        {/* Brand */}
+                                        <FormControl sx={{ flex: "1" }}>
+                                            <InputLabel
+                                                error={
+                                                    formik.touched.brand_id &&
+                                                    formik.errors.brand_id
+                                                }
+                                                id="brand_id-label"
+                                            >
+                                                Brand
+                                            </InputLabel>
+                                            <Select
+                                                labelId="brand_id-label"
+                                                id="brand_id"
+                                                label="Brand"
+                                                defaultValue=""
+                                                error={
+                                                    formik.touched.brand_id &&
+                                                    formik.errors.brand_id
+                                                }
+                                                {...formik.getFieldProps(
+                                                    "brand_id"
+                                                )}
+                                            >
+                                                {brands.map((brand) => (
+                                                    <MenuItem
+                                                        key={brand.id}
+                                                        value={brand.id}
+                                                    >
+                                                        {brand.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                            {formik.touched.brand_id && (
+                                                <FormHelperText error>
+                                                    {formik.errors.brand_id}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
                                         <TextField
                                             type="text"
                                             variant="outlined"
@@ -265,4 +320,5 @@ const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
     title: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    brand_id: yup.string().required("Brand is required"),
 });

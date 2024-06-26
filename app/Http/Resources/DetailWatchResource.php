@@ -54,6 +54,8 @@ class DetailWatchResource extends DisplayWatchResource
             'galleries' => $this->whenLoaded('watchGalleries', function () {
                 return $this->watchGalleries->sortBy('serial')->select('banner');
             }),
+            'meta_title' => $this->meta_title,
+            'meta_description' => $this->meta_description,
         ];
         return array_merge($data,$additionalData);
     }

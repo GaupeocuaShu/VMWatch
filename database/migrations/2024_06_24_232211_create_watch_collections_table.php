@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->string("banner"); 
             $table->string("name"); 
+            $table->string("brand_id"); 
             $table->string("title"); 
             $table->string("slug"); 
             $table->text('description');
