@@ -66,8 +66,11 @@ const EditBrand = () => {
                         name: rawBrand.name,
                         description: rawBrand.description,
                         banner: rawBrand.banner,
+                        type: rawBrand.type,
+                        meta_title: rawBrand.meta_title,
+                        meta_description: rawBrand.meta_description,
+                        meta_keywords: rawBrand.meta_keywords,
                     };
-
                     setBrand(brandObject);
                     setPreviewBanner(brandObject.banner);
                 })
@@ -85,6 +88,10 @@ const EditBrand = () => {
         formData.append("_method", "PUT");
         formData.append("name", data.name);
         formData.append("description", data.description);
+        formData.append("type", data.type);
+        formData.append("meta_title", data.meta_title);
+        formData.append("meta_description", data.meta_description);
+        formData.append("meta_keywords", data.meta_keywords);
 
         // Append file if it exists
         if (file) {
@@ -114,6 +121,7 @@ const EditBrand = () => {
                         title="EDIT BRAND"
                         subtitle="Edit Brand "
                         router="brand"
+                        action="edit"
                     />
                     <Formik
                         initialValues={brand}
@@ -227,6 +235,59 @@ const EditBrand = () => {
                                                 formik.errors.description
                                             }
                                         />
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="meta_title"
+                                            label="meta_title"
+                                            {...formik.getFieldProps(
+                                                "meta_title"
+                                            )}
+                                            error={
+                                                formik.touched.meta_title &&
+                                                formik.errors.meta_title
+                                            }
+                                            helperText={
+                                                formik.touched.meta_title &&
+                                                formik.errors.meta_title
+                                            }
+                                        />
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="meta_description"
+                                            label="meta_description"
+                                            {...formik.getFieldProps(
+                                                "meta_description"
+                                            )}
+                                            error={
+                                                formik.touched
+                                                    .meta_description &&
+                                                formik.errors.meta_description
+                                            }
+                                            helperText={
+                                                formik.touched
+                                                    .meta_description &&
+                                                formik.errors.meta_description
+                                            }
+                                        />
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="meta_keywords"
+                                            label="meta_keywords"
+                                            {...formik.getFieldProps(
+                                                "meta_keywords"
+                                            )}
+                                            error={
+                                                formik.touched.meta_keywords &&
+                                                formik.errors.meta_keywords
+                                            }
+                                            helperText={
+                                                formik.touched.meta_keywords &&
+                                                formik.errors.meta_keywords
+                                            }
+                                        />
                                         <Box
                                             display="flex"
                                             justifyContent="end"
@@ -283,4 +344,7 @@ export default EditBrand;
 const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: "",
 });

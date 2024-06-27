@@ -2,6 +2,7 @@ import Test from "./scenes/admin/test";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingComponent from "./components/LoadingComponent";
+const DetailBrand = lazy(() => import("./scenes/client/detail-brand"));
 const SignUp = lazy(() => import("./scenes/auth/sign-up"));
 const Login = lazy(() => import("./scenes/auth/login"));
 const Master = lazy(() => import("./scenes/client/layout/master"));
@@ -20,9 +21,21 @@ const EditBanner = lazy(() =>
 const CreateBanner = lazy(() =>
     import("./scenes/admin/banner-slider/CreateBanner")
 );
+
 const BrandList = lazy(() => import("./scenes/admin/brands/index"));
 const EditBrand = lazy(() => import("./scenes/admin/brands/EditBrand"));
 const CreateBrand = lazy(() => import("./scenes/admin/brands/CreateBrand"));
+
+const BrandGalleryList = lazy(() =>
+    import("./scenes/admin/brands/Gallery/index")
+);
+const EditBrandGallery = lazy(() =>
+    import("./scenes/admin/brands/Gallery/EditBrandGallery")
+);
+const CreateBrandGallery = lazy(() =>
+    import("./scenes/admin/brands/Gallery/CreateBrandGallery")
+);
+
 const WatchVariant = lazy(() => import("./scenes/admin/watch-variant"));
 
 const WatchList = lazy(() => import("./scenes/admin/watchs/index"));
@@ -71,6 +84,12 @@ const routes = {
         BRAND: "/admin/brand",
         CREATE_BRAND: "/admin/brand/create",
         EDIT_BRAND: "/admin/brand/:id/edit",
+
+        // Brand GALLERY
+
+        BRAND_GALLERY: "/admin/brand/:id/brand-gallery",
+        CREATE_BRAND_GALLERY: "/admin/brand/:id/brand-gallery/create",
+        EDIT_BRAND_GALLERY: "/admin/brand/:brandID/brand-gallery/:id/edit",
 
         // Brand
         WATCH_VARIANT: "/admin/watch-variant",
@@ -126,6 +145,8 @@ const router = createBrowserRouter([
         children: [
             { path: routes.HOME, element: <Home /> },
             { path: "/home", element: <Home /> },
+            { path: "/brand/:brandSlug", element: <DetailBrand /> },
+
             {
                 path: routes.PRODUCT_DETAIL,
                 element: (
@@ -229,6 +250,33 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <EditBrand />
+                    </Suspense>
+                ),
+            },
+
+            //  GALLERY ---------------------------------------------------------
+
+            {
+                path: routes.ADMIN.BRAND_GALLERY,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <BrandGalleryList />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.CREATE_BRAND_GALLERY,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <CreateBrandGallery />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.ADMIN.EDIT_BRAND_GALLERY,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <EditBrandGallery />
                     </Suspense>
                 ),
             },

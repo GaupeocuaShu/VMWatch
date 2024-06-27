@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Brand extends Model
+class BrandGallery extends Model
 {
     use HasFactory; 
-    protected $fillable = [ 
-        'name','slug','description','banner','type','meta_title','meta_description','meta_keywords',
+
+    protected $fillable = [
+        'brand_id','serial','banner'
     ];
 }

@@ -1,20 +1,21 @@
 import { Box, Button, TextField, Skeleton } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Header from "../../../components/Header";
+import Header from "../../../../components/Header";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useState } from "react";
-import axiosClient from "../../../axios-client";
-import ShowSnackbar from "../../../components/SnackBar";
+import axiosClient from "../../../../axios-client";
+import ShowSnackbar from "../../../../components/SnackBar";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+import { styled } from "@mui/material/styles";
+import NoImage from "../../../../components/NoImage";
+import { useParams } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
-import { styled } from "@mui/material/styles";
-import NoImage from "../../../components/NoImage";
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -27,7 +28,8 @@ const VisuallyHiddenInput = styled("input")({
     width: 1,
 });
 
-const CreateBrand = () => {
+const CreateBrandGallery = () => {
+    const { id } = useParams();
     // Notification --------------------------------
     const [loading, setLoading] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -66,15 +68,15 @@ const CreateBrand = () => {
     // Submit the form
     const handleFormSubmit = async (data, { resetForm }) => {
         setLoading(true);
-        data = { ...data, banner: file };
+        data = { ...data, banner: file, brand_id: id };
         await axiosClient
-            .post("api/brands", data, {
+            .post("api/brands/save-upload", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
             .then(({ data }) => {
                 setSeverity("success");
                 setSnackBarOpen(true);
-                setSnackBarMessage("Create Banner Successfully");
+                setSnackBarMessage("Create Brand Gallery Successfully");
                 handleReset(resetForm);
             })
             .catch(({ response }) => {
@@ -87,10 +89,10 @@ const CreateBrand = () => {
     return (
         <Box m="20px">
             <Header
-                title="CREATE BANNER"
-                subtitle="Create a New Brand "
+                title="CREATE GALLERY"
+                subtitle="Create a New Gallery"
                 action="create"
-                router="brand"
+                router={`brand/${id}/brand-gallery`}
             />
             <Formik
                 initialValues={initialValues}
@@ -105,9 +107,13 @@ const CreateBrand = () => {
                                 flexDirection="column"
                                 rowGap={4}
                             >
-                                <Box border="1px dashed white">
+                                <Box
+                                    border="1px dashed white"
+                                    width="50%"
+                                    height="600px"
+                                >
                                     <Button
-                                        sx={{ height: "400px", width: "100%" }}
+                                        sx={{ height: "100%", width: "100%" }}
                                         component="label"
                                     >
                                         {isImageEmpty ? (
@@ -134,117 +140,23 @@ const CreateBrand = () => {
                                         />
                                     </Button>
                                 </Box>
+
                                 <TextField
                                     type="text"
                                     variant="outlined"
-                                    name="name"
-                                    label="name"
-                                    {...formik.getFieldProps("name")}
+                                    name="serial"
+                                    label="serial"
+                                    {...formik.getFieldProps("serial")}
                                     error={
-                                        formik.touched.name &&
-                                        formik.errors.name
+                                        formik.touched.serial &&
+                                        formik.errors.serial
                                     }
                                     helperText={
-                                        formik.touched.name &&
-                                        formik.errors.name
+                                        formik.touched.serial &&
+                                        formik.errors.serial
                                     }
                                 />
-                                <FormControl>
-                                    <InputLabel
-                                        error={
-                                            formik.touched.type &&
-                                            formik.errors.type
-                                        }
-                                        id="demo-simple-select-helper-label"
-                                    >
-                                        type
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-helper-label"
-                                        id="demo-simple-select-helper"
-                                        label="type"
-                                        defaultValue="user"
-                                        error={
-                                            formik.touched.type &&
-                                            formik.errors.type
-                                        }
-                                        {...formik.getFieldProps("type")}
-                                    >
-                                        <MenuItem value="high-end-swiss">
-                                            High-end from Swiss
-                                        </MenuItem>
-                                        <MenuItem value="famous">
-                                            Famous
-                                        </MenuItem>
-                                    </Select>
-                                    {formik.touched.type && (
-                                        <FormHelperText error>
-                                            {formik.errors.type}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="description"
-                                    label="description"
-                                    {...formik.getFieldProps("description")}
-                                    error={
-                                        formik.touched.description &&
-                                        formik.errors.description
-                                    }
-                                    helperText={
-                                        formik.touched.description &&
-                                        formik.errors.description
-                                    }
-                                />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="meta_title"
-                                    label="meta_title"
-                                    {...formik.getFieldProps("meta_title")}
-                                    error={
-                                        formik.touched.meta_title &&
-                                        formik.errors.meta_title
-                                    }
-                                    helperText={
-                                        formik.touched.meta_title &&
-                                        formik.errors.meta_title
-                                    }
-                                />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="meta_description"
-                                    label="meta_description"
-                                    {...formik.getFieldProps(
-                                        "meta_description"
-                                    )}
-                                    error={
-                                        formik.touched.meta_description &&
-                                        formik.errors.meta_description
-                                    }
-                                    helperText={
-                                        formik.touched.meta_description &&
-                                        formik.errors.meta_description
-                                    }
-                                />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    name="meta_keywords"
-                                    label="meta_keywords"
-                                    {...formik.getFieldProps("meta_keywords")}
-                                    error={
-                                        formik.touched.meta_keywords &&
-                                        formik.errors.meta_keywords
-                                    }
-                                    helperText={
-                                        formik.touched.meta_keywords &&
-                                        formik.errors.meta_keywords
-                                    }
-                                />
+
                                 <Box
                                     display="flex"
                                     justifyContent="end"
@@ -288,22 +200,14 @@ const CreateBrand = () => {
         </Box>
     );
 };
-export default CreateBrand;
+export default CreateBrandGallery;
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required("Required"),
-    type: yup.string().required("Required"),
-    description: yup.string().required("Required"),
-    meta_title: yup.string().required("Meta title is required"),
-    meta_description: yup.string().required("Meta description is required"),
-    meta_keywords: yup.string().required("Meta keywords are required"),
+    serial: yup.number().integer("Must be number").required("Required"),
+    type: yup.string().required("required"),
 });
 
 const initialValues = {
-    name: "",
-    type: "",
-    description: "",
-    meta_title: "",
-    meta_description: "",
-    meta_keywords: "",
+    serial: "",
+    type: "gallery",
 };

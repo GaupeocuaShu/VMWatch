@@ -6,10 +6,53 @@ use App\Http\Resources\BrandResource;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Traits\ImageHandle;
-use Illuminate\Support\Str;
+use Illuminate\Support\Str; 
+use App\Models\BrandGallery; 
+use App\Http\Resources\BrandGalleryResource;
 class BrandController extends Controller
 {
     use ImageHandle;
+    // Brand Gallery -----------------------------------------------------
+    public function saveUpload(Request $request){
+        $path = $this->uploadImage($request,'uploads','banner');  
+        BrandGallery::create([
+            'serial' => $request->serial, 
+            'brand_id' => $request->brand_id, 
+            'type' => $request->type,
+            'banner' => $path
+        ]);
+        return response(['status' => "success"],200);
+}
+    public function brandGalleryEdit(string $brandID,string $id){
+        return new BrandGalleryResource(BrandGallery::findOrFail($id));
+    }
+    public function brandGalleryUpdate(Request $request, string $brandID,string $id){
+        $gallery = BrandGallery::findOrFail($id); 
+        $path = null;
+        if($request->banner) {
+            $path = $this->updateImage($request,$gallery->banner,'uploads','banner'); 
+        }
+        $gallery->update([
+            'serial' => $request->serial, 
+            'type' => $request->type, 
+            'banner' =>  $path ? $path : $gallery->banner
+        ]);
+        return new BrandGalleryResource($gallery);
+    }
+    
+    public function brandGalleryIndex(string $brandID){
+        $gallery = BrandGallery::where("brand_id",$brandID)->get(); 
+        return BrandGalleryResource::collection($gallery);
+    }
+
+    public function brandGalleryDelete(string $brandID,string $id){
+        $gallery = BrandGallery::findOrFail($id); 
+        $this->deleteImage($gallery->banner);
+        $gallery->delete(); 
+        return response(['status' => 'Delete Brand Gallery Successfully']);
+    }
+
+    // Brand Gallery -----------------------------------------------------
     /**
      * Display a listing of the resource.
      */
@@ -31,6 +74,10 @@ class BrandController extends Controller
             'type' => $request->type, 
             'slug' => Str::slug($request->name),
             'description' => $request->description, 
+            'meta_title' => $request->meta_title, 
+            'meta_description' => $request->meta_description, 
+            'meta_keywords' => $request->meta_keywords, 
+
         ]);
         return new BrandResource($banner);
     }
@@ -58,7 +105,10 @@ class BrandController extends Controller
             'name' => $request->name, 
             'type' => $request->type, 
             'description' => $request->description, 
-            'banner' =>  $path ? $path : $brand->url,
+            'banner' =>  $path ? $path : $brand->banner,
+            'meta_title' => $request->meta_title, 
+            'meta_description' => $request->meta_description, 
+            'meta_keywords' => $request->meta_keywords, 
             'slug' => Str::slug($request->name),
         ]);
         return new BrandResource($brand);

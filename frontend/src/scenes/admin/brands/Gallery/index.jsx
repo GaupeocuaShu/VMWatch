@@ -1,18 +1,18 @@
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
-import Header from "../../../components/Header";
+import { tokens } from "../../../../theme";
+import Header from "../../../../components/Header";
 import { useEffect, useState } from "react";
-import axiosClient from "../../../axios-client";
+import axiosClient from "../../../../axios-client";
 import LinearProgress from "@mui/material/LinearProgress";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
-import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
-
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-const Brand = () => {
+
+const BrandGalleryList = () => {
+    const { id: brandID } = useParams();
     const [filterModel, setFilterModel] = useState({
         items: [],
         quickFilterValues: [],
@@ -42,20 +42,11 @@ const Brand = () => {
             },
         },
         {
-            field: "name",
-            headerName: "Name",
+            field: "serial",
+            headerName: "serial",
             cellClassName: "name-column--cell",
         },
-        {
-            field: "slug",
-            headerName: "slug",
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "description",
-            headerName: "description",
-            cellClassName: "name-column--cell",
-        },
+
         {
             field: "Action",
             headerName: "Action",
@@ -64,23 +55,13 @@ const Brand = () => {
                 return (
                     <Box textAlign="center">
                         <Button
-                            variant="outlined"
-                            size="small"
-                            color="green"
-                            endIcon={<CollectionsOutlinedIcon />}
-                            component={Link}
-                            to={`/admin/brand/${id}/brand-gallery`}
-                        >
-                            Image
-                        </Button>
-                        <Button
                             sx={{ mx: "0.5rem" }}
                             variant="outlined"
                             size="small"
                             color="primary"
                             endIcon={<EditNoteOutlinedIcon />}
                             component={Link}
-                            to={`/admin/brand/${id}/edit`}
+                            to={`/admin/brand/${brandID}/brand-gallery/${id}/edit`}
                         >
                             Edit
                         </Button>
@@ -89,7 +70,7 @@ const Brand = () => {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDeleteBrand(id)}
+                            onClick={() => handleDeleteGallery(id)}
                         >
                             Delete
                         </Button>
@@ -101,11 +82,11 @@ const Brand = () => {
     const MySwal = withReactContent(Swal);
     // Use Effect Hook
     useEffect(() => {
-        fetchBrand();
+        fetchWachGallery();
     }, []);
 
     // Handle Delete
-    const handleDeleteBrand = async (id) => {
+    const handleDeleteGallery = async (id) => {
         setIsLoading(true);
         //Show alert
         const result = await MySwal.fire({
@@ -119,9 +100,9 @@ const Brand = () => {
         });
         if (result.isConfirmed) {
             await axiosClient
-                .delete(`api/brands/${id}`)
+                .delete(`api/brands/${brandID}/brand-gallery/${id}/delete`)
                 .then(({ data }) => {
-                    fetchBrand();
+                    fetchWachGallery();
                     MySwal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
@@ -135,9 +116,9 @@ const Brand = () => {
     };
 
     // Fetch Brand
-    const fetchBrand = async () => {
+    const fetchWachGallery = async () => {
         await axiosClient
-            .get("api/brands")
+            .get(`api/brands/${brandID}/brand-gallery`)
             .then(({ data }) => {
                 setBrands(data.data);
                 setIsLoading(false);
@@ -147,9 +128,9 @@ const Brand = () => {
     return (
         <Box m="20px" height="100%">
             <Header
-                title="Brand"
-                subtitle="Managing the Brands"
-                router="brand"
+                title="Brand Gallery"
+                subtitle="Managing the Brand Gallery"
+                router={`brand/${brandID}/brand-gallery`}
             />
             <Box
                 height="100vh"
@@ -207,4 +188,4 @@ const Brand = () => {
     );
 };
 
-export default Brand;
+export default BrandGalleryList;

@@ -16,7 +16,11 @@ return new class extends Migration
             $table->string("name"); 
             $table->string("slug"); 
             $table->text("description"); 
-            $table->string("banner")->nullable(); 
+            $table->string("main_banner")->nullable(); 
+            $table->string("minor_banner")->nullable(); 
+            $table->string("meta_title") ;
+            $table->string("meta_description") ;
+            $table->string("meta_keywords") ;
             $table->timestamps();
         });
     }

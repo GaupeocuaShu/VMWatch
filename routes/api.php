@@ -24,6 +24,7 @@ Route::get("/get-banners",[HomeController::class,'getBanners']);
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
 Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
 Route::get("/get-detail-watches/{slug}",[HomeController::class,'getDetailWatch']);
+Route::get("/get-detail-brand/{slug}",[HomeController::class,'getDetailBrand']); 
 
 // Get current user / authenticated user 
 
@@ -49,6 +50,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource("banners",BannerController::class); 
 
         // Brand API 
+        // Watch Gallery API 
+        Route::get("brands/select-options",[BrandController::class,"selectOptions"]);  
+        Route::post("brands/save-upload",[BrandController::class,"saveUpload"]);
+        Route::get("brands/{brandID}/brand-gallery/{id}/edit",[BrandController::class,"brandGalleryEdit"]);
+        Route::put("brands/{brandID}/brand-gallery/{id}/update",[BrandController::class,"brandGalleryUpdate"]);
+        Route::delete("brands/{brandID}/brand-gallery/{id}/delete",[BrandController::class,"brandGalleryDelete"]);
+        Route::get("brands/{brandID}/brand-gallery",[BrandController::class,"brandGalleryIndex"]);
+        // Watch Gallery API                 
         Route::apiResource("brands",BrandController::class);  
 
         // Strap API 

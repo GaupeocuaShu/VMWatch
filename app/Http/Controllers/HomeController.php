@@ -34,4 +34,9 @@ class HomeController extends Controller
         'dialColor','dialShape','watchCollection','features'])->where('slug',$slug)->first(); 
         return new DetailWatchResource($watch);
     }
+
+    public function getDetailBrand(string $slug){ 
+        $brand= Brand::where("slug",$slug)->first(); 
+        return new BrandResource($brand);
+    }
 }
