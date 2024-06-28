@@ -109,7 +109,7 @@ const CreateBrandGallery = () => {
                             >
                                 <Box
                                     border="1px dashed white"
-                                    width="50%"
+                                    width="100%"
                                     height="600px"
                                 >
                                     <Button

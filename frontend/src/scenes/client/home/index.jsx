@@ -16,6 +16,22 @@ import { Helmet } from "react-helmet-async";
 const Home = () => {
     const [watches, setWatches] = useState([]);
     const [brands, setBrands] = useState([]);
+    const [banners, setBanners] = useState([]);
+
+    // Fetch Banner
+    useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const { data } = await axiosClient.get("api/get-banners");
+
+                setBanners(data.data.sort((a, b) => a.serial - b.serial));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchBanners();
+    }, []);
+
     // Fetch Watches
     useEffect(() => {
         const fetchWatches = async () => {
@@ -55,7 +71,7 @@ const Home = () => {
                     content="Credibility - Responsibility - Promptness"
                 />
             </Helmet>
-            <SwiperBanner />
+            <SwiperBanner banners={banners} />
             <BannerGallery />
             <Collection />
             <Divider />

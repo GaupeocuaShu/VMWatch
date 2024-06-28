@@ -117,7 +117,7 @@ const EditBrandGallery = () => {
                         title="EDIT GALLERY"
                         subtitle="Create A New Gallery "
                         action="edit"
-                        router={`brand/${id}/brand-gallery`}
+                        router={`brand/${brandID}/brand-gallery`}
                     />
                     <Formik
                         initialValues={brand}

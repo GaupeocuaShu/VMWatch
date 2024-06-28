@@ -67,6 +67,7 @@ const EditBrand = () => {
                         description: rawBrand.description,
                         banner: rawBrand.banner,
                         type: rawBrand.type,
+                        title: rawBrand.title,
                         meta_title: rawBrand.meta_title,
                         meta_description: rawBrand.meta_description,
                         meta_keywords: rawBrand.meta_keywords,
@@ -89,6 +90,7 @@ const EditBrand = () => {
         formData.append("name", data.name);
         formData.append("description", data.description);
         formData.append("type", data.type);
+        formData.append("title", data.title);
         formData.append("meta_title", data.meta_title);
         formData.append("meta_description", data.meta_description);
         formData.append("meta_keywords", data.meta_keywords);
@@ -238,6 +240,21 @@ const EditBrand = () => {
                                         <TextField
                                             type="text"
                                             variant="outlined"
+                                            name="title"
+                                            label="title"
+                                            {...formik.getFieldProps("title")}
+                                            error={
+                                                formik.touched.title &&
+                                                formik.errors.title
+                                            }
+                                            helperText={
+                                                formik.touched.title &&
+                                                formik.errors.title
+                                            }
+                                        />
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
                                             name="meta_title"
                                             label="meta_title"
                                             {...formik.getFieldProps(
@@ -344,6 +361,7 @@ export default EditBrand;
 const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    title: yup.string().required("Required"),
     meta_title: "",
     meta_description: "",
     meta_keywords: "",

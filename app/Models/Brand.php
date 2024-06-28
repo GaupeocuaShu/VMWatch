@@ -9,6 +9,13 @@ class Brand extends Model
 {
     use HasFactory; 
     protected $fillable = [ 
-        'name','slug','description','banner','type','meta_title','meta_description','meta_keywords',
-    ];
+        'name','slug','description','title','banner','type','meta_title','meta_description','meta_keywords',
+    ]; 
+
+    public function brandGalleries(){
+        return $this->hasMany(BrandGallery::class);
+    }
+    public function watchCollections(){
+        return $this->hasMany(WatchCollection::class);
+    }
 }

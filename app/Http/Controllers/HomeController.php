@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Http\Resources\BannerResource; 
 use App\Models\Brand;
 use App\Http\Resources\BrandResource;
+use App\Http\Resources\DetailBrandResource;
 use App\Http\Resources\DetailWatchResource;
 use App\Http\Resources\DisplayWatchResource;
 use App\Models\Watch;
@@ -36,7 +37,7 @@ class HomeController extends Controller
     }
 
     public function getDetailBrand(string $slug){ 
-        $brand= Brand::where("slug",$slug)->first(); 
-        return new BrandResource($brand);
+        $brand= Brand::with(['brandGalleries','watchCollections'])->where("slug",$slug)->first(); 
+        return new DetailBrandResource($brand);
     }
 }

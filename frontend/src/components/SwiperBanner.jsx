@@ -12,22 +12,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import Banner from "./Banner";
 import axiosClient from "../axios-client";
 import { Skeleton } from "@mui/material";
-export default function SwiperBanner() {
-    const [banners, setBanners] = useState([]);
-    // Fetch Banner
-    useEffect(() => {
-        const fetchBanners = async () => {
-            try {
-                const { data } = await axiosClient.get("api/get-banners");
-
-                setBanners(data.data.sort((a, b) => a.serial - b.serial));
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchBanners();
-    }, []);
-
+export default function SwiperBanner({ banners }) {
     return (
         <>
             <Swiper
@@ -44,7 +29,7 @@ export default function SwiperBanner() {
                 className="mySwiper"
                 style={{ backgroundColor: "#EEEEEE" }}
             >
-                {!banners.length ? (
+                {!banners?.length ? (
                     <Skeleton
                         variant="rectangular"
                         width="100%"
@@ -53,7 +38,7 @@ export default function SwiperBanner() {
                 ) : (
                     banners.map((e, i) => (
                         <SwiperSlide>
-                            <Banner src={e.banner} alt={e.name} />
+                            <Banner src={e.banner} alt={e.name ?? "banner"} />
                         </SwiperSlide>
                     ))
                 )}

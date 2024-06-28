@@ -186,6 +186,21 @@ const CreateBrand = () => {
                                 <TextField
                                     type="text"
                                     variant="outlined"
+                                    name="title"
+                                    label="title"
+                                    {...formik.getFieldProps("title")}
+                                    error={
+                                        formik.touched.title &&
+                                        formik.errors.title
+                                    }
+                                    helperText={
+                                        formik.touched.title &&
+                                        formik.errors.title
+                                    }
+                                />
+                                <TextField
+                                    type="text"
+                                    variant="outlined"
                                     name="description"
                                     label="description"
                                     {...formik.getFieldProps("description")}
@@ -294,6 +309,7 @@ const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
     type: yup.string().required("Required"),
     description: yup.string().required("Required"),
+    title: yup.string().required("Meta title is required"),
     meta_title: yup.string().required("Meta title is required"),
     meta_description: yup.string().required("Meta description is required"),
     meta_keywords: yup.string().required("Meta keywords are required"),
@@ -303,6 +319,7 @@ const initialValues = {
     name: "",
     type: "",
     description: "",
+    title: "",
     meta_title: "",
     meta_description: "",
     meta_keywords: "",

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->string("name"); 
             $table->string("slug"); 
+            $table->text("title");
             $table->text("description"); 
             $table->string("main_banner")->nullable(); 
             $table->string("minor_banner")->nullable(); 
