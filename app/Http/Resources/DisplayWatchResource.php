@@ -33,8 +33,9 @@ class DisplayWatchResource extends JsonResource
             'thumb' => $this->whenLoaded('watchGalleries', function () {
                 $thumbImage = $this->watchGalleries->where('type', 'thumb')->first();
                 return $thumbImage ? $thumbImage->banner : null;
-            }),
+            }), 
             'price'=> $this->price,   
+            'description'=> $this->description,   
             'slug' => $this->slug,
         ];
     }

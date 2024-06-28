@@ -10,11 +10,15 @@ import { useParams } from "react-router-dom";
 import SwiperBanner from "../../../components/SwiperBanner";
 import LineThroughTitle from "../../../components/LineThroughTitle";
 import Filter from "../../../components/Filter";
+import WatchList from "../../../components/WatchList";
+import WatchesFilter from "../../../components/WatchesFilter";
 const DetailBrand = () => {
     const [brand, setBrand] = useState({});
     const { brandSlug } = useParams();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
+    const [watches, setWatches] = useState([]);
+
     useEffect(() => {
         const fetchBrandBySlug = async () => {
             const { data } = await axiosClient.get(
@@ -24,6 +28,22 @@ const DetailBrand = () => {
             setBrand(data.data);
         };
         fetchBrandBySlug();
+    }, []);
+    // Fetch Watches
+    useEffect(() => {
+        const fetchWatches = async () => {
+            try {
+                const { data } = await axiosClient.get(
+                    "api/get-display-watches"
+                );
+
+                console.log(data.data);
+                setWatches(data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchWatches();
     }, []);
     return (
         brand && (
@@ -70,10 +90,12 @@ const DetailBrand = () => {
                     ))}
                 </Box>
 
-                <Divider />
                 <LineThroughTitle title="Choose Your Style" />
 
-                <Filter />
+                <Box display="flex" gap={5}>
+                    <Filter />
+                    <WatchesFilter watches={watches} />
+                </Box>
             </Box>
         )
     );

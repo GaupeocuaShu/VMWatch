@@ -19,6 +19,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
 
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
@@ -89,7 +90,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Watch API   
         // Watch Gallery API 
-        Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
         Route::post("watches/save-upload",[WatchController::class,"saveUpload"]);
         Route::get("watches/{watchID}/watch-gallery/{id}/edit",[WatchController::class,"watchGalleryEdit"]);
         Route::put("watches/{watchID}/watch-gallery/{id}/update",[WatchController::class,"watchGalleryUpdate"]);
