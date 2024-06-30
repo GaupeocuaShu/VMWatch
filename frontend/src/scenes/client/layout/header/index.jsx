@@ -97,6 +97,8 @@ const Header = () => {
                         sx={{ p: "10px" }}
                         aria-label="search"
                         color="secondary"
+                        LinkComponent={Link}
+                        to="/search-results"
                     >
                         <SearchIcon />
                     </IconButton>

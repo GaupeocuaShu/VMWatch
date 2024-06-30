@@ -92,16 +92,16 @@ class Watch extends Model
     public static function selectOptions()
     {
         return [
-            'brands' => Brand::all(['id', 'name']),
-            'straps' => Strap::all(['id', 'name']),
-            'waterResistanceLevels' => WaterResistanceLevel::all(['id', 'name']),
-            'caseColors' => CaseColor::all(['id', 'name']),
-            'dialColors' => DialColor::all(['id', 'name']),
-            'dialSizes' => DialSize::all(['id', 'name']),
-            'dialShapes' => DialShape::all(['id', 'name']),
-            'glassMaterials' => GlassMaterial::all(['id', 'name']),
-            'energies' => Energy::all(['id', 'name']), 
-            'watchCollections' => WatchCollection::all(['id','name']),
+            'brands' => Brand::all(['id', 'name','slug']),
+            'straps' => Strap::all(['id', 'name','slug']),
+            'waterResistanceLevels' => WaterResistanceLevel::all(['id', 'name','slug']),
+            'caseColors' => CaseColor::all(['id', 'name','slug']),
+            'dialColors' => DialColor::all(['id', 'name','slug']),
+            'dialSizes' => DialSize::all(['id', 'name','slug']),
+            'dialShapes' => DialShape::all(['id', 'name','slug']),
+            'glassMaterials' => GlassMaterial::all(['id', 'name','slug']),
+            'energies' => Energy::all(['id', 'name','slug']), 
+            'watchCollections' => WatchCollection::all(['id','name','slug']),
         ];
     }
 }

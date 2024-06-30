@@ -1,5 +1,6 @@
 <?php
 
+use App\Filters\V1\WatchesFilter;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CaseColorController;
@@ -20,13 +21,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
-
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
 Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
 Route::get("/get-detail-watches/{slug}",[HomeController::class,'getDetailWatch']);
 Route::get("/get-detail-brand/{slug}",[HomeController::class,'getDetailBrand']); 
-
+Route::get("/search-results",[HomeController::class,'searchResults']);
 // Get current user / authenticated user 
 
 Route::get("authenticated-user",function(){

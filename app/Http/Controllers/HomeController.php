@@ -40,4 +40,8 @@ class HomeController extends Controller
         $brand= Brand::with(['brandGalleries','watchCollections'])->where("slug",$slug)->first(); 
         return new DetailBrandResource($brand);
     }
+
+    public function searchResults(Request $request){
+        dd($request->query());
+    }
 }

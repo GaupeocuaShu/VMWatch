@@ -4,15 +4,15 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import FormControl from "@mui/material/FormControl";
 import { Formik } from "formik";
 import { useState, useEffect } from "react";
 import axiosClient from "../axios-client";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-const Filter = () => {
-    // State for select options
+import { useNavigate, useLocation } from "react-router-dom"; // Import useNavigate
+
+const Filter = ({ query, setQuery }) => {
     const [brands, setBrands] = useState([]);
     const [energies, setEnergies] = useState([]);
     const [caseColors, setCaseColors] = useState([]);
@@ -23,6 +23,31 @@ const Filter = () => {
     const [dialSizes, setDialSizes] = useState([]);
     const [dialShapes, setDialShapes] = useState([]);
     const [watchCollections, setWatchCollections] = useState([]);
+    const [initialValues, setInitialValues] = useState({
+        name: "",
+        brand: [],
+        gender: "",
+        price: "",
+        strap: [],
+        water_resistance_level: [],
+        case_color: [],
+        dial_color: [],
+        dial_size: [],
+        dial_shape: [],
+        glass_material: [],
+        energy: [],
+        watch_collection: [],
+    });
+    const navigate = useNavigate();
+    console.log("naviga");
+
+    useEffect(() => {
+        const queryParams = {};
+        query.forEach((value, key) => {
+            queryParams[key] = value.split("|");
+        });
+        setInitialValues((prevValues) => ({ ...prevValues, ...queryParams }));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,10 +73,44 @@ const Filter = () => {
 
         fetchData();
     }, []);
-    const handleFormSubmit = async (data, { resetForm }) => {};
+
+    const myHandleFormSubmit = async (values) => {
+        const queryParams = new URLSearchParams();
+        for (const key in values) {
+            if (values[key].length > 0) {
+                if (Array.isArray(values[key]))
+                    queryParams.append(`${key}`, values[key].join("|"));
+                else queryParams.append(`${key}`, values[key]);
+            }
+        }
+        const newUrl = `/search-results?${queryParams.toString()}`;
+        setQuery(queryParams);
+        navigate(newUrl);
+    };
+
+    const handleCheckboxChange = (formik, group, value) => {
+        const currentValues = formik.values[group];
+        if (currentValues.includes(value)) {
+            formik.setFieldValue(
+                group,
+                currentValues.filter((item) => item !== value)
+            );
+        } else {
+            formik.setFieldValue(group, [...currentValues, value]);
+        }
+        const currentFormData = {
+            ...formik.values,
+            [group]: [...currentValues, value],
+        };
+        myHandleFormSubmit(currentFormData);
+    };
     return (
         <Box>
-            <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
+            <Formik
+                initialValues={initialValues}
+                onSubmit={handleFormSubmit}
+                enableReinitialize
+            >
                 {(formik) => (
                     <form onSubmit={formik.handleSubmit}>
                         <div>
@@ -65,7 +124,7 @@ const Filter = () => {
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1-content"
-                                    id="panel1-header"
+                                    slug="panel1-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -79,8 +138,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {brands?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.brand.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "brand",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -90,7 +163,6 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
@@ -98,7 +170,7 @@ const Filter = () => {
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    slug="panel2-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -112,8 +184,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {energies?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.energy.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "energy",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -123,15 +209,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel3-content"
+                                    slug="panel3-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -145,8 +230,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {caseColors?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.case_color.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "case_color",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -156,15 +255,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel4-content"
+                                    slug="panel4-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -178,8 +276,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {glassMaterials?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.glass_material.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "glass_material",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -189,15 +301,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel5-content"
+                                    slug="panel5-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -211,8 +322,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {straps?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.strap.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "strap",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -222,15 +347,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel6-content"
+                                    slug="panel6-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -244,8 +368,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {waterResistanceLevels?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.water_resistance_level.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "water_resistance_level",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -255,15 +393,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel7-content"
+                                    slug="panel7-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -277,8 +414,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {dialColors?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.dial_color.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "dial_color",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -288,15 +439,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel8-content"
+                                    slug="panel8-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -310,8 +460,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {dialSizes?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.dial_size.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "dial_size",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -321,15 +485,14 @@ const Filter = () => {
                             <Accordion
                                 sx={{
                                     my: 2,
-
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel9-content"
+                                    slug="panel9-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -343,8 +506,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {dialShapes?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.dial_shape.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "dial_shape",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -360,8 +537,8 @@ const Filter = () => {
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
+                                    aria-controls="panel10-content"
+                                    slug="panel10-header"
                                 >
                                     <Typography
                                         variant="h5"
@@ -375,8 +552,22 @@ const Filter = () => {
                                     <FormGroup>
                                         {watchCollections?.map((e) => (
                                             <FormControlLabel
-                                                control={<Checkbox />}
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.watch_collection.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "watch_collection",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
                                                 label={e.name}
+                                                key={e.slug}
                                             />
                                         ))}
                                     </FormGroup>
@@ -391,19 +582,3 @@ const Filter = () => {
 };
 
 export default Filter;
-
-const initialValues = {
-    name: "",
-    brand_id: "",
-    gender: "",
-    price: "",
-    strap_id: "",
-    water_resistance_level_id: "",
-    case_color_id: "",
-    dial_color_id: "",
-    dial_size_id: "",
-    dial_shape_id: "",
-    glass_material_id: "",
-    energy_id: "",
-    watch_collection_id: "",
-};

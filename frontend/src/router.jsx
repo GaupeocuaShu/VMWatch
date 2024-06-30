@@ -61,6 +61,7 @@ const EditWatchCollection = lazy(() =>
 const CreateWatchCollection = lazy(() =>
     import("./scenes/admin/watch-collection/CreateWatchCollection")
 );
+const SearchResults = lazy(() => import("./scenes/client/search-results"));
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const routes = {
     SIGN_UP: "/sign-up",
@@ -116,6 +117,8 @@ const routes = {
         TEST: "/admin/test",
     },
     PRODUCT_DETAIL: "/product/:productSlug",
+
+    SEARCH_RESULTS: "/search-results",
 };
 
 const router = createBrowserRouter([
@@ -152,6 +155,14 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <ProductDetail />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.SEARCH_RESULTS,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <SearchResults />
                     </Suspense>
                 ),
             },
