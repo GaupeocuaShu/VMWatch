@@ -15,7 +15,7 @@ const WatchesFilter = ({ watches }) => {
     console.log(isHovered);
     return (
         <Box display="grid" gridTemplateColumns="repeat(12,1fr)" width="80%">
-            {watches.map((e, i) => (
+            {watches?.map((e, i) => (
                 <Box
                     key={i}
                     gridColumn="span 4"

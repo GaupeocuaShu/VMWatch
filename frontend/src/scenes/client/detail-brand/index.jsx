@@ -91,11 +91,6 @@ const DetailBrand = () => {
                 </Box>
 
                 <LineThroughTitle title="Choose Your Style" />
-
-                <Box display="flex" gap={5}>
-                    <Filter />
-                    <WatchesFilter watches={watches} />
-                </Box>
             </Box>
         )
     );

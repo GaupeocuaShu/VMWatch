@@ -25,18 +25,18 @@ const Filter = ({ query, setQuery }) => {
     const [watchCollections, setWatchCollections] = useState([]);
     const [initialValues, setInitialValues] = useState({
         name: "",
-        brand: [],
+        brands: [],
         gender: "",
         price: "",
-        strap: [],
-        water_resistance_level: [],
-        case_color: [],
-        dial_color: [],
-        dial_size: [],
-        dial_shape: [],
-        glass_material: [],
-        energy: [],
-        watch_collection: [],
+        straps: [],
+        water_resistance_levels: [],
+        case_colors: [],
+        dial_colors: [],
+        dial_sizes: [],
+        dial_shapes: [],
+        glass_materials: [],
+        energies: [],
+        watch_collections: [],
     });
     const navigate = useNavigate();
     console.log("naviga");
@@ -74,7 +74,7 @@ const Filter = ({ query, setQuery }) => {
         fetchData();
     }, []);
 
-    const myHandleFormSubmit = async (values) => {
+    const handleFormSubmit = async (values) => {
         const queryParams = new URLSearchParams();
         for (const key in values) {
             if (values[key].length > 0) {
@@ -84,12 +84,14 @@ const Filter = ({ query, setQuery }) => {
             }
         }
         const newUrl = `/search-results?${queryParams.toString()}`;
+        console.log(queryParams);
         setQuery(queryParams);
         navigate(newUrl);
     };
 
     const handleCheckboxChange = (formik, group, value) => {
         const currentValues = formik.values[group];
+
         if (currentValues.includes(value)) {
             formik.setFieldValue(
                 group,
@@ -98,11 +100,8 @@ const Filter = ({ query, setQuery }) => {
         } else {
             formik.setFieldValue(group, [...currentValues, value]);
         }
-        const currentFormData = {
-            ...formik.values,
-            [group]: [...currentValues, value],
-        };
-        myHandleFormSubmit(currentFormData);
+
+        formik.submitForm();
     };
     return (
         <Box>
@@ -140,13 +139,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.brand.includes(
+                                                        checked={formik.values.brands.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "brand",
+                                                                "brands",
                                                                 e.slug
                                                             )
                                                         }
@@ -186,13 +185,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.energy.includes(
+                                                        checked={formik.values.energies.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "energy",
+                                                                "energies",
                                                                 e.slug
                                                             )
                                                         }
@@ -232,13 +231,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.case_color.includes(
+                                                        checked={formik.values.case_colors.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "case_color",
+                                                                "case_colors",
                                                                 e.slug
                                                             )
                                                         }
@@ -278,13 +277,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.glass_material.includes(
+                                                        checked={formik.values.glass_materials.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "glass_material",
+                                                                "glass_materials",
                                                                 e.slug
                                                             )
                                                         }
@@ -324,13 +323,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.strap.includes(
+                                                        checked={formik.values.straps.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "strap",
+                                                                "straps",
                                                                 e.slug
                                                             )
                                                         }
@@ -370,13 +369,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.water_resistance_level.includes(
+                                                        checked={formik.values.water_resistance_levels.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "water_resistance_level",
+                                                                "water_resistance_levels",
                                                                 e.slug
                                                             )
                                                         }
@@ -416,13 +415,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.dial_color.includes(
+                                                        checked={formik.values.dial_colors.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "dial_color",
+                                                                "dial_colors",
                                                                 e.slug
                                                             )
                                                         }
@@ -462,13 +461,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.dial_size.includes(
+                                                        checked={formik.values.dial_sizes.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "dial_size",
+                                                                "dial_sizes",
                                                                 e.slug
                                                             )
                                                         }
@@ -508,13 +507,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.dial_shape.includes(
+                                                        checked={formik.values.dial_shapes.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "dial_shape",
+                                                                "dial_shapes",
                                                                 e.slug
                                                             )
                                                         }
@@ -554,13 +553,13 @@ const Filter = ({ query, setQuery }) => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={formik.values.watch_collection.includes(
+                                                        checked={formik.values.watch_collections.includes(
                                                             e.slug
                                                         )}
                                                         onChange={() =>
                                                             handleCheckboxChange(
                                                                 formik,
-                                                                "watch_collection",
+                                                                "watch_collections",
                                                                 e.slug
                                                             )
                                                         }
