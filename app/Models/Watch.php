@@ -89,6 +89,7 @@ class Watch extends Model
     {
         return $this->belongsTo(Energy::class);
     }
+
     public static function selectOptions()
     {
         return [
@@ -101,7 +102,8 @@ class Watch extends Model
             'dialShapes' => DialShape::all(['id', 'name','slug']),
             'glassMaterials' => GlassMaterial::all(['id', 'name','slug']),
             'energies' => Energy::all(['id', 'name','slug']), 
-            'watchCollections' => WatchCollection::all(['id','name','slug']),
+            'watchCollections' => WatchCollection::all(['id','name','slug']), 
+            'features' => Feature::all(['id','name','slug']), 
         ];
     }
 }

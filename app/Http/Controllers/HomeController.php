@@ -111,7 +111,11 @@ class HomeController extends Controller
                         $query->whereIn('slug', $slugs);
                     });
                     break;
-
+                case 'features':
+                    $watchQuery->whereHas('features', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
                 default:
                     // Handle other cases or ignore unknown features
                     break;
@@ -124,4 +128,8 @@ class HomeController extends Controller
         ])->get();
         return DisplayWatchResource::collection($watches);
     }
+    
+    public function selectOptions(){
+        return response([Watch::selectOptions()],202);
+    }    
 }

@@ -23,6 +23,8 @@ const Filter = ({ query, setQuery }) => {
     const [dialSizes, setDialSizes] = useState([]);
     const [dialShapes, setDialShapes] = useState([]);
     const [watchCollections, setWatchCollections] = useState([]);
+    const [features, setFeatures] = useState([]);
+
     const [initialValues, setInitialValues] = useState({
         name: "",
         brands: [],
@@ -37,9 +39,9 @@ const Filter = ({ query, setQuery }) => {
         glass_materials: [],
         energies: [],
         watch_collections: [],
+        features: [],
     });
     const navigate = useNavigate();
-    console.log("naviga");
 
     useEffect(() => {
         const queryParams = {};
@@ -53,7 +55,7 @@ const Filter = ({ query, setQuery }) => {
         const fetchData = async () => {
             try {
                 const response = await axiosClient.get(
-                    "/api/watches/select-options"
+                    "/api/watches-filter/select-options"
                 );
                 const data = response.data[0];
                 setBrands(data.brands);
@@ -66,6 +68,7 @@ const Filter = ({ query, setQuery }) => {
                 setDialSizes(data.dialSizes);
                 setDialShapes(data.dialShapes);
                 setWatchCollections(data.watchCollections);
+                setFeatures(data.features);
             } catch (error) {
                 console.error("Error fetching select options", error);
             }
@@ -119,6 +122,7 @@ const Filter = ({ query, setQuery }) => {
                                     maxHeight: "400px",
                                     overflow: "scroll",
                                 }}
+                                defaultExpanded
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -126,7 +130,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel1-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -160,6 +164,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -172,7 +177,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel2-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -206,6 +211,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -218,7 +224,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel3-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -252,6 +258,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -264,7 +271,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel4-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -298,6 +305,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -310,7 +318,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel5-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -344,6 +352,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -356,7 +365,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel6-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -390,6 +399,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -402,7 +412,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel7-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -436,6 +446,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -448,7 +459,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel8-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -482,6 +493,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -494,7 +506,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel9-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -528,6 +540,7 @@ const Filter = ({ query, setQuery }) => {
                             </Accordion>
 
                             <Accordion
+                                defaultExpanded
                                 sx={{
                                     my: 2,
                                     maxHeight: "400px",
@@ -540,7 +553,7 @@ const Filter = ({ query, setQuery }) => {
                                     slug="panel10-header"
                                 >
                                     <Typography
-                                        variant="h5"
+                                        variant="h6"
                                         color="gray"
                                         fontWeight="bold"
                                     >
@@ -560,6 +573,53 @@ const Filter = ({ query, setQuery }) => {
                                                             handleCheckboxChange(
                                                                 formik,
                                                                 "watch_collections",
+                                                                e.slug
+                                                            )
+                                                        }
+                                                    />
+                                                }
+                                                label={e.name}
+                                                key={e.slug}
+                                            />
+                                        ))}
+                                    </FormGroup>
+                                </AccordionDetails>
+                            </Accordion>
+
+                            <Accordion
+                                defaultExpanded
+                                sx={{
+                                    my: 2,
+                                    maxHeight: "400px",
+                                    overflow: "scroll",
+                                }}
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel10-content"
+                                    slug="panel10-header"
+                                >
+                                    <Typography
+                                        variant="h6"
+                                        color="gray"
+                                        fontWeight="bold"
+                                    >
+                                        Features
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <FormGroup>
+                                        {features?.map((e) => (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={formik.values.features.includes(
+                                                            e.slug
+                                                        )}
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                formik,
+                                                                "features",
                                                                 e.slug
                                                             )
                                                         }

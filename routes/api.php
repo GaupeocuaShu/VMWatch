@@ -20,7 +20,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
+Route::get("watches-filter/select-options",[HomeController::class,"selectOptions"]);  
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
 Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
@@ -104,7 +104,8 @@ Route::middleware('auth:sanctum')->group(function () {
         
         // Watch Feature API   
         
-
+        
+        Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
         Route::apiResource("watches",WatchController::class);
         // Watch API   
    
