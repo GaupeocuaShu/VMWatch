@@ -15,7 +15,8 @@ class DetailWatchResource extends DisplayWatchResource
     public function toArray(Request $request): array
     { 
         $data = parent::toArray($request);
-        $additionalData = [ 
+        $additionalData = [  
+            'id' => $this->id,
             'brand' => $this->whenLoaded('brand',function(){
                 return $this->brand->name;
             }), 

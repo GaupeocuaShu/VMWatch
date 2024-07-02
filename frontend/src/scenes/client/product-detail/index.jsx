@@ -23,10 +23,26 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
 import axiosClient from "../../../axios-client";
 import { Helmet } from "react-helmet-async";
+import { useCart } from "../../../cart/cart";
 
 const ProductDetail = () => {
     const { productSlug } = useParams();
     const [watch, setWatch] = useState({});
+    const {
+        cart,
+        getCartTotal,
+        increaseItemQuantity,
+        decreaseItemQuantity,
+        getCartQuantity,
+        addToCart,
+    } = useCart((state) => ({
+        cart: state.cart,
+        getCartTotal: state.getCartTotal,
+        getCartQuantity: state.getCartQuantity,
+        addToCart: state.addToCart,
+        increaseItemQuantity: state.increaseItemQuantity,
+        decreaseItemQuantity: state.decreaseItemQuantity,
+    }));
     useEffect(() => {
         const fetchWatchBySlug = async () => {
             const { data } = await axiosClient.get(
@@ -39,6 +55,9 @@ const ProductDetail = () => {
     }, []);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
+    console.log(cart);
+    console.log(getCartQuantity() + " " + getCartTotal());
+
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
             <Helmet>
@@ -78,6 +97,29 @@ const ProductDetail = () => {
                         fullWidth
                         variant="contained"
                         color="secondary"
+                        onClick={() => increaseItemQuantity(watch.id)}
+                    >
+                        <Typography variant="h4" p={1}>
+                            +
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{ my: "1rem" }}
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => decreaseItemQuantity(watch.id)}
+                    >
+                        <Typography variant="h4" p={1}>
+                            -
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{ my: "1rem" }}
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => addToCart(watch)}
                     >
                         <Typography variant="h4" p={1}>
                             Add To Cart
