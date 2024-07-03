@@ -232,7 +232,11 @@ function LaptopNavigation({ user, handleLogOut }) {
                         </MenuItem>
                     </Menu>
                     &emsp;
-                    <IconButton color="secondary">
+                    <IconButton
+                        color="secondary"
+                        LinkComponent={Link}
+                        to="/my-cart"
+                    >
                         <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
                     </IconButton>
                 </Box>

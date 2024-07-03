@@ -63,6 +63,7 @@ const CreateWatchCollection = lazy(() =>
 );
 const SearchResults = lazy(() => import("./scenes/client/search-results"));
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
+const Cart = lazy(() => import("./scenes/client/cart"));
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -119,6 +120,8 @@ const routes = {
     PRODUCT_DETAIL: "/product/:productSlug",
 
     SEARCH_RESULTS: "/search-results",
+
+    CART: "/my-cart",
 };
 
 const router = createBrowserRouter([
@@ -163,6 +166,14 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <SearchResults />
+                    </Suspense>
+                ),
+            },
+            {
+                path: routes.CART,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <Cart />
                     </Suspense>
                 ),
             },

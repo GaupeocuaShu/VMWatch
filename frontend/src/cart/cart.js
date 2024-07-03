@@ -35,11 +35,11 @@ export const useCart = create((set, get) => ({
     clearCart: () => set({ cart: [] }),
 
     decreaseItemQuantity: (watchID) => set((state) => ({
-        cart: state.cart.map((item) => item.id === watchID ? { ...item, quantity: item.quantity - 1 } : item),
+        cart: state.cart.map((item) => item.id === watchID ? { ...item, total: item.total - item.price, quantity: item.quantity - 1 } : item),
     })),
 
     increaseItemQuantity: (watchID) => set((state) => ({
-        cart: state.cart.map((item) => item.id === watchID ? { ...item, quantity: item.quantity + 1 } : item),
+        cart: state.cart.map((item) => item.id === watchID ? { ...item, total: item.total + item.price, quantity: item.quantity + 1 } : item),
     }))
 }));
 

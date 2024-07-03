@@ -92,28 +92,7 @@ const ProductDetail = () => {
                         ${watch.price}
                     </Typography>
                     <Typography>{watch.description}</Typography>
-                    <Button
-                        sx={{ my: "1rem" }}
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => increaseItemQuantity(watch.id)}
-                    >
-                        <Typography variant="h4" p={1}>
-                            +
-                        </Typography>
-                    </Button>
-                    <Button
-                        sx={{ my: "1rem" }}
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => decreaseItemQuantity(watch.id)}
-                    >
-                        <Typography variant="h4" p={1}>
-                            -
-                        </Typography>
-                    </Button>
+
                     <Button
                         sx={{ my: "1rem" }}
                         fullWidth
