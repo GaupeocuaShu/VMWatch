@@ -9,6 +9,7 @@ import {
     Button,
     MenuItem,
     Menu,
+    Badge,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -32,7 +33,7 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Navbar from "../navbar";
-
+import { useCart } from "../../../../cart/cart";
 // "Account", "Order", "Cart", "Log out"
 const settings = [
     {
@@ -56,6 +57,7 @@ const Header = () => {
             setUser(null);
         });
     };
+
     useEffect(() => {
         const fetchUser = async () => {
             await axiosClient
@@ -129,7 +131,9 @@ export default Header;
 function LaptopNavigation({ user, handleLogOut }) {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-
+    const { getCartQuantity } = useCart((state) => ({
+        getCartQuantity: state.getCartQuantity,
+    }));
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -237,7 +241,14 @@ function LaptopNavigation({ user, handleLogOut }) {
                         LinkComponent={Link}
                         to="/my-cart"
                     >
-                        <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
+                        <Badge
+                            badgeContent={getCartQuantity()}
+                            color="secondary"
+                        >
+                            <ShoppingCartOutlinedIcon
+                                sx={{ fontSize: "30px" }}
+                            />
+                        </Badge>
                     </IconButton>
                 </Box>
             )}

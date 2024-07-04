@@ -12,6 +12,7 @@ import BrandCard from "../../../components/BrandCard";
 import PopularBrand from "../../../components/PopularBrand";
 import axiosClient from "../../../axios-client";
 import { Helmet } from "react-helmet-async";
+import { useCart } from "../../../cart/cart";
 
 const Home = () => {
     const [watches, setWatches] = useState([]);

@@ -3,6 +3,7 @@
 use App\Filters\V1\WatchesFilter;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CaseColorController;
 use App\Http\Controllers\DialColorController;
 use App\Http\Controllers\DialShapeController;
@@ -20,6 +21,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+
+
+// --------------------
 Route::get("watches-filter/select-options",[HomeController::class,"selectOptions"]);  
 Route::get("/get-banners",[HomeController::class,'getBanners']); 
 Route::get("/get-brands",[HomeController::class,'getBrands']); 
@@ -34,7 +39,17 @@ Route::get("authenticated-user",function(){
 });
 
 
-Route::middleware('auth:sanctum')->group(function () { 
+Route::middleware('auth:sanctum')->group(function () {  
+
+    // -------- Cart --------------
+
+    Route::put("{id}/increase-item-quantity",[CartController::class,"increaseItemQuantity"]);
+    Route::put("{id}/decrease-item-quantity",[CartController::class,"decreaseItemQuantity"]);
+    Route::delete('{id}/remove-from-cart',[CartController::class,"removeFromCart"]);
+    Route::post("add-to-cart",[CartController::class,"addToCart"]);
+    Route::get("get-my-cart",[CartController::class,"index"]);
+
+    
     // Check Admin 
     Route::get("is-admin", function (Request $request) {
         $isAdmin = $request->user()->role === 'admin';

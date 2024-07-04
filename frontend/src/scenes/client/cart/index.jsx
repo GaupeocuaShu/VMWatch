@@ -75,7 +75,6 @@ const Cart = () => {
                                     variant="h4"
                                     fontWeight="bolder"
                                     color="gray"
-                                    ml={2}
                                 >
                                     {watch.brand}
                                     {watch.name} - Dial Size {watch.dialSize} -
@@ -111,6 +110,7 @@ const Cart = () => {
                                 <Box display="flex" alignItems="center">
                                     <Button
                                         color="secondary"
+                                        variant="contained"
                                         aria-label="delete"
                                         startIcon={
                                             <DeleteForeverIcon fontSize="large" />

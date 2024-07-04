@@ -88,6 +88,10 @@ class Watch extends Model
     public function energy()
     {
         return $this->belongsTo(Energy::class);
+    } 
+    
+    public function cartItem(){
+        return $this->hasOne(CartItem::class);
     }
 
     public static function selectOptions()
