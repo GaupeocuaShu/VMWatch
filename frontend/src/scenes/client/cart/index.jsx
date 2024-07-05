@@ -18,6 +18,7 @@ import LineThroughTitle from "../../../components/LineThroughTitle";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
+import axiosClient from "../../../axios-client";
 const Cart = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -39,6 +40,14 @@ const Cart = () => {
         removeFromCart: state.removeFromCart,
     }));
     console.log(cart);
+
+    const handleMakePayment = async () => {
+        const {
+            data: { url },
+        } = await axiosClient.post("api/payments/make-payment", cart);
+
+        window.location.replace(url);
+    };
     return (
         <Box
             margin={matches ? "20px 200px" : "20px 20px"}
@@ -207,6 +216,7 @@ const Cart = () => {
                     fullWidth
                     variant="contained"
                     color="secondary"
+                    onClick={handleMakePayment}
                 >
                     <Typography variant="h5" p={1}>
                         Purchase

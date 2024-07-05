@@ -64,6 +64,13 @@ const CreateWatchCollection = lazy(() =>
 const SearchResults = lazy(() => import("./scenes/client/search-results"));
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const Cart = lazy(() => import("./scenes/client/cart"));
+const PaymentSuccess = lazy(() =>
+    import("./scenes/client/payment/payment-success")
+);
+const PaymentCancel = lazy(() =>
+    import("./scenes/client/payment/payment-cancel")
+);
+
 const routes = {
     SIGN_UP: "/sign-up",
     LOGIN: "/login",
@@ -122,6 +129,9 @@ const routes = {
     SEARCH_RESULTS: "/search-results",
 
     CART: "/my-cart",
+
+    PAYMENT_SUCCESS: "/payment/success",
+    PAYMENT_CANCEL: "/payment/cancel",
 };
 
 const router = createBrowserRouter([
@@ -174,6 +184,24 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingComponent />}>
                         <Cart />
+                    </Suspense>
+                ),
+            },
+
+            {
+                path: routes.PAYMENT_SUCCESS,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <PaymentSuccess />
+                    </Suspense>
+                ),
+            },
+
+            {
+                path: routes.PAYMENT_CANCEL,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <PaymentCancel />
                     </Suspense>
                 ),
             },

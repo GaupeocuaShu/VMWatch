@@ -12,6 +12,7 @@ use App\Http\Controllers\EnergyController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GlassMaterialController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WatchCollectionController;
@@ -41,6 +42,10 @@ Route::get("authenticated-user",function(){
 
 Route::middleware('auth:sanctum')->group(function () {  
 
+    // -------- Payment --------------
+    Route::prefix('payments')->group(function() {
+        Route::post('make-payment',[PaymentController::class,'makePayment']);
+    });
     // -------- Cart --------------
 
     Route::put("{id}/increase-item-quantity",[CartController::class,"increaseItemQuantity"]);
