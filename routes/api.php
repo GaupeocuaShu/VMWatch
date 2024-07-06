@@ -43,6 +43,9 @@ Route::get("authenticated-user",function(){
 Route::middleware('auth:sanctum')->group(function () {  
 
     // -------- Payment --------------
+
+    
+
     Route::prefix('payments')->group(function() {
         Route::post('make-payment',[PaymentController::class,'makePayment']);
     });

@@ -36,7 +36,14 @@ class PaymentController extends Controller
             'mode' => 'payment', 
             'success_url' => 'http://localhost:3000/payment/success', 
             'cancel_url' => 'http://localhost:3000/payment/cancel', 
-        ]);
+        ]); 
         return response(['url' => $session->url]);
+    } 
+
+    public function paymentSuccesss(){
+        
+    }
+    public function paymentCancel(){
+        
     }
 }
