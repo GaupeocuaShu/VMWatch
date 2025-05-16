@@ -11,6 +11,7 @@ import {
     Menu,
     Badge,
 } from "@mui/material";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -34,7 +35,16 @@ import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Navbar from "../navbar";
 import { useCart } from "../../../../cart/cart";
+import SearchResults from "../../search-results";
+import WatchesFilter from "../../../../components/WatchesFilter";
 // "Account", "Order", "Cart", "Log out"
+const topSearches = [
+    "Rolex",
+    "Audemars Piguet",
+    "Patek Philippe",
+    "Daniel Wellington",
+    "Hamilton",
+];
 const settings = [
     {
         name: "Profile",
@@ -49,15 +59,40 @@ const settings = [
 ];
 const Header = () => {
     const { user, setUser } = useAuthContext();
+    const [watches, setWatches] = useState([]);
+    const [showPannelResult, setShowPannelResult] = useState(false);
+    const [query, setQuery] = useState("");
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("sm"));
     console.log(matches);
+    console.log(query);
     const handleLogOut = () => {
         axiosClient.post("/logout").then(() => {
             setUser(null);
         });
     };
 
+    // Fetch Searching-Watching
+    useEffect(() => {
+        const fetchSearch = async () => {
+            try {
+                if (query) {
+                    const { data } = await axiosClient.get(
+                        "/api/search/" + query
+                    );
+
+                    setWatches(data.data);
+                } else {
+                    setWatches([]);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchSearch();
+    }, [query]);
+
+    // Fetch User
     useEffect(() => {
         const fetchUser = async () => {
             await axiosClient
@@ -87,32 +122,95 @@ const Header = () => {
                     <Logo isMobile={!matches} />
                 </Box>
                 {/* Search */}
-                <Box
-                    display="flex"
-                    bgcolor="#f0f0f0"
-                    borderRadius="5px"
-                    flex={1}
-                    height="40px"
-                >
-                    <IconButton
-                        type="button"
-                        sx={{ p: "10px" }}
-                        aria-label="search"
-                        color="secondary"
-                        LinkComponent={Link}
-                        to="/search-results"
-                    >
-                        <SearchIcon />
-                    </IconButton>
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="search your favorite watchs"
-                        inputProps={{
-                            "aria-label": "search your favorite watchs",
-                        }}
-                    />
-                </Box>
 
+                <Box flex={1} position="relative">
+                    <Box
+                        display="flex"
+                        bgcolor="#f0f0f0"
+                        borderRadius="5px"
+                        height="40px"
+                    >
+                        <IconButton
+                            type="button"
+                            sx={{ p: "10px" }}
+                            aria-label="search"
+                            color="secondary"
+                            LinkComponent={Link}
+                            to="/search-results"
+                        >
+                            <SearchIcon />
+                        </IconButton>
+                        <InputBase
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="search your favorite watchs"
+                            inputProps={{
+                                "aria-label": "search your favorite watchs",
+                            }}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onClick={() => {
+                                setShowPannelResult(true);
+                            }}
+                            value={query}
+                        />
+                    </Box>
+                    {showPannelResult && (
+                        <Box
+                            position="absolute"
+                            minHeight="300px"
+                            width="100%"
+                            zIndex={1000}
+                            display="flex"
+                            borderRadius={3}
+                            p={2}
+                            border={1}
+                            bgcolor="white"
+                            sx={{ boxShadow: 2 }}
+                        >
+                            {/* Top Search */}
+                            <Box>
+                                <Typography pb={2}>Top Search</Typography>
+                                <Divider />
+                                <List>
+                                    {topSearches.map((e) => (
+                                        <ListItem disablePadding>
+                                            <ListItemButton color="secondary">
+                                                <ListItemText primary={e} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Box>
+                            <Box flex={1} ml={3}>
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                >
+                                    <Typography pb={2}>Products</Typography>
+                                    <IconButton
+                                        aria-label="delete"
+                                        color="red"
+                                        onClick={() => {
+                                            setQuery("");
+                                            setShowPannelResult(false);
+                                        }}
+                                    >
+                                        <HighlightOffOutlinedIcon />
+                                    </IconButton>
+                                </Box>
+                                <Divider />
+                                <Box pt={2}>
+                                    <WatchesFilter
+                                        watches={watches}
+                                        setShowPannelResult={
+                                            setShowPannelResult
+                                        }
+                                        setQuery={setQuery}
+                                    />
+                                </Box>
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
                 {/* User Information */}
 
                 {/* Laptop */}

@@ -35,8 +35,18 @@ class HomeController extends Controller
     public function getDetailWatch(string $slug)
     {
         $watch = Watch::with([
-            'energy', 'dialSize', 'glassMaterial', 'watchGalleries', 'strap', 'brand', 'waterResistanceLevel', 'caseColor',
-            'dialColor', 'dialShape', 'watchCollection', 'features'
+            'energy',
+            'dialSize',
+            'glassMaterial',
+            'watchGalleries',
+            'strap',
+            'brand',
+            'waterResistanceLevel',
+            'caseColor',
+            'dialColor',
+            'dialShape',
+            'watchCollection',
+            'features'
         ])->where('slug', $slug)->first();
         return new DetailWatchResource($watch);
     }
@@ -123,13 +133,44 @@ class HomeController extends Controller
         }
 
         $watches = $watchQuery->with([
-            'energy', 'dialSize', 'glassMaterial', 'watchGalleries', 'strap', 'brand', 'waterResistanceLevel', 'caseColor',
-            'dialColor', 'dialShape', 'watchCollection', 'features'
+            'energy',
+            'dialSize',
+            'glassMaterial',
+            'watchGalleries',
+            'strap',
+            'brand',
+            'waterResistanceLevel',
+            'caseColor',
+            'dialColor',
+            'dialShape',
+            'watchCollection',
+            'features'
         ])->get();
         return DisplayWatchResource::collection($watches);
     }
-    
-    public function selectOptions(){
-        return response([Watch::selectOptions()],202);
-    }    
+
+    // Search By Keys 
+    public function searchByKeys(string $keys)
+    {
+        $watchQuery =  Watch::with([
+            'energy',
+            'dialSize',
+            'glassMaterial',
+            'watchGalleries',
+            'strap',
+            'brand',
+            'waterResistanceLevel',
+            'caseColor',
+            'dialColor',
+            'dialShape',
+            'watchCollection',
+            'features'
+        ])->where("name", "like", "%$keys%")->get();
+        return DisplayWatchResource::collection($watchQuery);
+    }
+
+    public function selectOptions()
+    {
+        return response([Watch::selectOptions()], 202);
+    }
 }

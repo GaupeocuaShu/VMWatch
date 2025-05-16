@@ -19,6 +19,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
 import axiosClient from "../../../axios-client";
+import { Formik } from "formik";
 const Cart = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -211,17 +212,25 @@ const Cart = () => {
                         </Typography>
                     </Box>
                 </Box>
-                <Button
-                    sx={{ my: "1rem" }}
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleMakePayment}
-                >
-                    <Typography variant="h5" p={1}>
-                        Purchase
-                    </Typography>
-                </Button>
+                <Formik initialValues={cart} onSubmit={handleMakePayment}>
+                    {(formik) => {
+                        return (
+                            <form onSubmit={formik.handleSubmit}>
+                                <Button
+                                    sx={{ my: "1rem" }}
+                                    fullWidth
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleMakePayment}
+                                >
+                                    <Typography variant="h5" p={1}>
+                                        Purchase
+                                    </Typography>
+                                </Button>
+                            </form>
+                        );
+                    }}
+                </Formik>
             </Paper>
         </Box>
     );

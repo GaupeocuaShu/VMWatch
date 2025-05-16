@@ -59,9 +59,9 @@ const DetailBrand = () => {
                 <Breadcrumb />
                 <Box>
                     <Typography
-                        variant="h3"
+                        variant="h4"
                         color="gray"
-                        fontWeight="bold"
+                        fontWeight={700}
                         textAlign="center"
                         my={3}
                     >

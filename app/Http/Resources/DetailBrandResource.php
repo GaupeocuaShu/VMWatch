@@ -14,12 +14,12 @@ class DetailBrandResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $parentDatas =  parent::toArray($request); 
+        $parentDatas =  parent::toArray($request);
 
-        $moreDatas = [ 
+        $moreDatas = [
             'banners' => $this->whenLoaded('brandGalleries'),
             'collections' => $this->whenLoaded('watchCollections'),
         ];
-        return array_merge($parentDatas,$moreDatas);
+        return array_merge($parentDatas, $moreDatas);
     }
 }

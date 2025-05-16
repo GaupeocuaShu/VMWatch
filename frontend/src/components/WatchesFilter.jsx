@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const WatchesFilter = ({ watches }) => {
+const WatchesFilter = ({ watches, setShowPannelResult, setQuery }) => {
     const [isHovered, setIsHovered] = useState(null);
 
     const handleMouseEnter = (index) => {
@@ -14,7 +14,7 @@ const WatchesFilter = ({ watches }) => {
     };
     console.log(isHovered);
     return (
-        <Box display="grid" gridTemplateColumns="repeat(12,1fr)" width="80%">
+        <Box display="grid" gridTemplateColumns="repeat(12,1fr)">
             {watches?.map((e, i) => (
                 <Box
                     key={i}
@@ -27,6 +27,10 @@ const WatchesFilter = ({ watches }) => {
                     to={`/product/${e.slug}`}
                     display="flex"
                     flexDirection="column"
+                    onClick={() => {
+                        setShowPannelResult?.(false);
+                        setQuery?.("");
+                    }}
                 >
                     <img
                         src={isHovered === i ? e.thumb : e.front}

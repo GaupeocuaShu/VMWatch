@@ -156,6 +156,7 @@ export const themeSettings = (mode) => {
                 background: { default: colors.primary[500] },
                 green: { main: colors.greenAccent[500] },
                 blue: { main: colors.blueAccent[400] },
+                red: { main: colors.redAccent[400] }
             } : {
 
                 secondary: { main: colors.pink[500] },
@@ -163,6 +164,7 @@ export const themeSettings = (mode) => {
                 background: { default: "#fcfcfc" },
                 green: { main: colors.greenAccent[500] },
                 blue: { main: colors.blueAccent[400] },
+                red: { main: colors.redAccent[400] }
 
             })
         },

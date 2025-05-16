@@ -52,7 +52,7 @@ const ProductDetail = () => {
             setWatch(data.data);
         };
         fetchWatchBySlug();
-    }, []);
+    }, [productSlug]);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     console.log(cart);

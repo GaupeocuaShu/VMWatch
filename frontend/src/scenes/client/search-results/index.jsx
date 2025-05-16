@@ -14,9 +14,9 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
 const SearchResults = () => {
-    const [watches, setWatches] = useState([]);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
+    const [watches, setWatches] = useState([]);
     const [query, setQuery] = useState(useQuery());
     const [loading, setLoading] = useState(false);
 

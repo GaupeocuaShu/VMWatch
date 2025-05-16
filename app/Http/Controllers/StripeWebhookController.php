@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class StripeWebhookController extends Controller
 {
@@ -13,7 +15,7 @@ class StripeWebhookController extends Controller
 
         // Handle event based on its type
         switch ($event->type) {
-            case 'charge.updated':
+            case 'payment_intent.succeeded':
                 // Handle successful payment
                 $session = $event->data->object;
                 $this->handleSuccessfulPayment($session);
@@ -35,6 +37,11 @@ class StripeWebhookController extends Controller
 
     private function handleSuccessfulPayment($session)
     {
+        $userID = Auth::user()->id; 
+        $cart = Cart::with('cartItems')->where('user_id',$userID)->first(); 
+        $cart->cartItems()->delete();
+        $cart->delete();
+        return response(['status' => "success"],200);
         return ($session);
     }
 

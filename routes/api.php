@@ -25,112 +25,113 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// --------------------
-Route::get("watches-filter/select-options",[HomeController::class,"selectOptions"]);  
-Route::get("/get-banners",[HomeController::class,'getBanners']); 
-Route::get("/get-brands",[HomeController::class,'getBrands']); 
-Route::get("/get-display-watches",[HomeController::class,'getDisplayWatches']);
-Route::get("/get-detail-watches/{slug}",[HomeController::class,'getDetailWatch']);
-Route::get("/get-detail-brand/{slug}",[HomeController::class,'getDetailBrand']); 
-Route::get("/search-results",[HomeController::class,'searchResults']);
-// Get current user / authenticated user 
+// -------------------- guests 
+Route::get("watches-filter/select-options", [HomeController::class, "selectOptions"]);
+Route::get("/get-banners", [HomeController::class, 'getBanners']);
+Route::get("/get-brands", [HomeController::class, 'getBrands']);
+Route::get("/get-display-watches", [HomeController::class, 'getDisplayWatches']);
+Route::get("/get-detail-watches/{slug}", [HomeController::class, 'getDetailWatch']);
+Route::get("/get-detail-brand/{slug}", [HomeController::class, 'getDetailBrand']);
+Route::get("/search-results", [HomeController::class, 'searchResults']);
+// Get Searching watch 
+Route::get("/search/{keys}", [HomeController::class, 'searchByKeys']);
 
-Route::get("authenticated-user",function(){
+
+// Get current user / authenticated user 
+Route::get("authenticated-user", function () {
     return response(["user" => auth()->user()]);
 });
 
 
-Route::middleware('auth:sanctum')->group(function () {  
+Route::middleware('auth:sanctum')->group(function () {
 
     // -------- Payment --------------
 
-    
-
-    Route::prefix('payments')->group(function() {
-        Route::post('make-payment',[PaymentController::class,'makePayment']);
+    Route::prefix('payments')->group(function () {
+        Route::post('make-payment', [PaymentController::class, 'makePayment']);
     });
     // -------- Cart --------------
 
-    Route::put("{id}/increase-item-quantity",[CartController::class,"increaseItemQuantity"]);
-    Route::put("{id}/decrease-item-quantity",[CartController::class,"decreaseItemQuantity"]);
-    Route::delete('{id}/remove-from-cart',[CartController::class,"removeFromCart"]);
-    Route::post("add-to-cart",[CartController::class,"addToCart"]);
-    Route::get("get-my-cart",[CartController::class,"index"]);
+    Route::put("{id}/increase-item-quantity", [CartController::class, "increaseItemQuantity"]);
+    Route::put("{id}/decrease-item-quantity", [CartController::class, "decreaseItemQuantity"]);
+    Route::delete('{id}/remove-from-cart', [CartController::class, "removeFromCart"]);
+    Route::post("add-to-cart", [CartController::class, "addToCart"]);
+    Route::get("get-my-cart", [CartController::class, "index"]);
 
-    
+
     // Check Admin 
     Route::get("is-admin", function (Request $request) {
         $isAdmin = $request->user()->role === 'admin';
         return response()->json(['isAdmin' => $isAdmin]);
-    }); 
+    });
 
 
-    Route::middleware('role:admin')->group(function() {
+    Route::middleware('role:admin')->group(function () {
         // User API 
-        Route::apiResource("users",UserController::class); 
+        Route::apiResource("users", UserController::class);
 
         // Banner API 
-        Route::post("banners/preview-upload",[BannerController::class,"previewUpload"]);
-        Route::apiResource("banners",BannerController::class); 
+        Route::post("banners/preview-upload", [BannerController::class, "previewUpload"]);
+        Route::apiResource("banners", BannerController::class);
 
         // Brand API 
         // Watch Gallery API 
-        Route::get("brands/select-options",[BrandController::class,"selectOptions"]);  
-        Route::post("brands/save-upload",[BrandController::class,"saveUpload"]);
-        Route::get("brands/{brandID}/brand-gallery/{id}/edit",[BrandController::class,"brandGalleryEdit"]);
-        Route::put("brands/{brandID}/brand-gallery/{id}/update",[BrandController::class,"brandGalleryUpdate"]);
-        Route::delete("brands/{brandID}/brand-gallery/{id}/delete",[BrandController::class,"brandGalleryDelete"]);
-        Route::get("brands/{brandID}/brand-gallery",[BrandController::class,"brandGalleryIndex"]);
+        Route::get("brands/select-options", [BrandController::class, "selectOptions"]);
+        Route::post("brands/save-upload", [BrandController::class, "saveUpload"]);
+        Route::get("brands/{brandID}/brand-gallery/{id}/edit", [BrandController::class, "brandGalleryEdit"]);
+        Route::put("brands/{brandID}/brand-gallery/{id}/update", [BrandController::class, "brandGalleryUpdate"]);
+        Route::delete("brands/{brandID}/brand-gallery/{id}/delete", [BrandController::class, "brandGalleryDelete"]);
+        Route::get("brands/{brandID}/brand-gallery", [BrandController::class, "brandGalleryIndex"]);
         // Watch Gallery API                 
-        Route::apiResource("brands",BrandController::class);  
+        Route::apiResource("brands", BrandController::class);
 
         // Strap API 
-        Route::apiResource("straps",StrapController::class); 
+        Route::apiResource("straps", StrapController::class);
 
         // Dial Size API 
-        Route::apiResource("dial-sizes",DialSizeController::class); 
-        
+        Route::apiResource("dial-sizes", DialSizeController::class);
+
         // Dial Shape API 
-        Route::apiResource("dial-shapes",DialShapeController::class); 
+        Route::apiResource("dial-shapes", DialShapeController::class);
         // Dial colors API 
-        Route::apiResource("dial-colors",DialColorController::class); 
+        Route::apiResource("dial-colors", DialColorController::class);
 
         // Dial materials API 
-        Route::apiResource("glass-materials",GlassMaterialController::class); 
+        Route::apiResource("glass-materials", GlassMaterialController::class);
         // Case Color API 
-        Route::apiResource("case-colors",CaseColorController::class); 
+        Route::apiResource("case-colors", CaseColorController::class);
         // Water Resistance Level API
-        Route::apiResource("water-resistance-levels",WaterResistanceLevelController::class); 
+        Route::apiResource("water-resistance-levels", WaterResistanceLevelController::class);
 
         // Energy API
-        Route::apiResource("energies",EnergyController::class);         
+        Route::apiResource("energies", EnergyController::class);
 
         // Feature API
-        Route::apiResource("features",FeatureController::class);    
+        Route::apiResource("features", FeatureController::class);
 
         // Watch Collection API
-        Route::apiResource("watch-collections",WatchCollectionController::class);   
+        Route::apiResource("watch-collections", WatchCollectionController::class);
 
         // Watch API   
         // Watch Gallery API 
-        Route::post("watches/save-upload",[WatchController::class,"saveUpload"]);
-        Route::get("watches/{watchID}/watch-gallery/{id}/edit",[WatchController::class,"watchGalleryEdit"]);
-        Route::put("watches/{watchID}/watch-gallery/{id}/update",[WatchController::class,"watchGalleryUpdate"]);
-        Route::delete("watches/{watchID}/watch-gallery/{id}/delete",[WatchController::class,"watchGalleryDelete"]);
-        Route::get("watches/{watchID}/watch-gallery",[WatchController::class,"watchGalleryIndex"]);
+        Route::post("watches/save-upload", [WatchController::class, "saveUpload"]);
+        Route::get("watches/{watchID}/watch-gallery/{id}/edit", [WatchController::class, "watchGalleryEdit"]);
+        Route::put("watches/{watchID}/watch-gallery/{id}/update", [WatchController::class, "watchGalleryUpdate"]);
+        Route::delete("watches/{watchID}/watch-gallery/{id}/delete", [WatchController::class, "watchGalleryDelete"]);
+        Route::get("watches/{watchID}/watch-gallery", [WatchController::class, "watchGalleryIndex"]);
         // Watch Gallery API 
 
         // Watch Feature API    
-        Route::get("watches/{watchID}/feature-watch",[WatchController::class,"watchFeatureIndex"]);
-        Route::put("watches/{watchID}/feature-watch/{id}",[WatchController::class,"watchFeatureUpdateOrCreate"]);
-        Route::delete("watches/{watchID}/feature-watch/{id}",[WatchController::class,"watchFeatureDelete"]);
-        
+        Route::get("watches/{watchID}/feature-watch", [WatchController::class, "watchFeatureIndex"]);
+        Route::put("watches/{watchID}/feature-watch/{id}", [WatchController::class, "watchFeatureUpdateOrCreate"]);
+        Route::delete("watches/{watchID}/feature-watch/{id}", [WatchController::class, "watchFeatureDelete"]);
+
         // Watch Feature API   
-        
-        
-        Route::get("watches/select-options",[WatchController::class,"selectOptions"]);  
-        Route::apiResource("watches",WatchController::class);
+
+
+        Route::get("watches/select-options", [WatchController::class, "selectOptions"]);
+        Route::apiResource("watches", WatchController::class);
         // Watch API   
-   
+
     });
 });
