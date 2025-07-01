@@ -52,8 +52,8 @@ const settings = [
         icon: <PersonOutlinedIcon />,
     },
     {
-        name: "Order",
-        link: "/order",
+        name: "Orders",
+        link: "/orders",
         icon: <WatchOutlinedIcon />,
     },
 ];
@@ -305,8 +305,7 @@ function LaptopNavigation({ user, handleLogOut }) {
                             <MenuItem
                                 sx={{ width: "150px" }}
                                 key={key + 1}
-                                onClick={handleCloseUserMenu}
-                                LinkComponent={Link}
+                                component={Link}
                                 to={setting.link}
                             >
                                 {setting.icon}

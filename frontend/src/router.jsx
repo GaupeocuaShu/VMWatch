@@ -2,6 +2,7 @@ import Test from "./scenes/admin/test";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingComponent from "./components/LoadingComponent";
+
 const DetailBrand = lazy(() => import("./scenes/client/detail-brand"));
 const SignUp = lazy(() => import("./scenes/auth/sign-up"));
 const Login = lazy(() => import("./scenes/auth/login"));
@@ -64,6 +65,7 @@ const CreateWatchCollection = lazy(() =>
 const SearchResults = lazy(() => import("./scenes/client/search-results"));
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const Cart = lazy(() => import("./scenes/client/cart"));
+const Order = lazy(() => import("./scenes/client/order"));
 const PaymentSuccess = lazy(() =>
     import("./scenes/client/payment/payment-success")
 );
@@ -130,6 +132,8 @@ const routes = {
 
     CART: "/my-cart",
 
+    ORDER: "/orders",
+
     PAYMENT_SUCCESS: "/payment/success",
     PAYMENT_CANCEL: "/payment/cancel",
 };
@@ -162,7 +166,7 @@ const router = createBrowserRouter([
             { path: routes.HOME, element: <Home /> },
             { path: "/home", element: <Home /> },
             { path: "/brand/:brandSlug", element: <DetailBrand /> },
-
+            // Product Detail
             {
                 path: routes.PRODUCT_DETAIL,
                 element: (
@@ -171,6 +175,7 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            // Search Results
             {
                 path: routes.SEARCH_RESULTS,
                 element: (
@@ -179,6 +184,7 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            // Cart
             {
                 path: routes.CART,
                 element: (
@@ -187,7 +193,16 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-
+            // Order
+            {
+                path: routes.ORDER,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <Order />
+                    </Suspense>
+                ),
+            },
+            // Payment Success
             {
                 path: routes.PAYMENT_SUCCESS,
                 element: (
@@ -196,7 +211,7 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-
+            // Payment Cancel
             {
                 path: routes.PAYMENT_CANCEL,
                 element: (

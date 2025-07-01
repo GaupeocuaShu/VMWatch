@@ -16,9 +16,7 @@ const Navbar = ({ isMobile = false }) => {
         { name: "Male", link: "/" },
         { name: "Female", link: "/" },
         { name: "Couple", link: "/" },
-        { name: "Item", link: "/" },
         { name: "Contact", link: "/" },
-        { name: "News", link: "/" },
     ];
     // Fetch Brands
 

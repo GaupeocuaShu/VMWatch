@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Box,
     Button,
@@ -20,7 +20,42 @@ import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
 import axiosClient from "../../../axios-client";
 import { Formik } from "formik";
+import * as yup from "yup";
+import { Form } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+    Elements,
+    CardElement,
+    useStripe,
+    useElements,
+    PaymentElement,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import StripeCardInput from "../../../components/StripeCardInput";
+import { useNavigate } from "react-router-dom";
+const stripePromise = loadStripe(
+    "pk_test_51Rg5nOQXFZRxFvJKt5ZxUWEwICXz5Jp1mccv8Wq12758EJ8ZqD6VxwXv4iUXhNOx1tHKYqZkUOgqSSAO0Qj0Bt3H006tV5gU42"
+);
+const initialValues = {
+    phoneNumber: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+};
+
+const validationSchema = yup.object({
+    phoneNumber: yup.string().required("Phone Number is required"),
+    address: yup.string().required("Address is required"),
+    city: yup.string().required("City is required"),
+    state: yup.string().required("State is required"),
+    zipCode: yup.string().required("Zip Code is required"),
+});
+
 const Cart = () => {
+    const navigate = useNavigate();
+    const stripe = useStripe();
+    const elements = useElements();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const {
@@ -28,27 +63,69 @@ const Cart = () => {
         getCartTotal,
         increaseItemQuantity,
         decreaseItemQuantity,
-        getCartQuantity,
-        addToCart,
         removeFromCart,
+        clearCart,
     } = useCart((state) => ({
         cart: state.cart,
         getCartTotal: state.getCartTotal,
-        getCartQuantity: state.getCartQuantity,
-        addToCart: state.addToCart,
         increaseItemQuantity: state.increaseItemQuantity,
         decreaseItemQuantity: state.decreaseItemQuantity,
         removeFromCart: state.removeFromCart,
+        clearCart: state.clearCart,
     }));
     console.log(cart);
+    const [loading, setLoading] = useState(false);
 
-    const handleMakePayment = async () => {
-        const {
-            data: { url },
-        } = await axiosClient.post("api/payments/make-payment", cart);
+    const handleMakePayment = async (values) => {
+        setLoading(true);
+        try {
+            const res = await axiosClient.post("api/payments/make-payment", {
+                cart,
+                customerInfo: values,
+            });
+            const { clientSecret } = res.data;
 
-        window.location.replace(url);
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardElement),
+                    billing_details: {
+                        phone: values.phoneNumber,
+                        address: {
+                            line1: values.address,
+                            city: values.city,
+                            state: values.state,
+                            postal_code: values.zipCode,
+                        },
+                    },
+                },
+            });
+
+            if (result.error) {
+                console.error(result.error);
+                alert("Payment failed: " + result.error.message);
+            } else {
+                const transactionId = result.paymentIntent.id;
+                alert("Payment successful!");
+                const { status } = await axiosClient.post("api/orders", {
+                    cart,
+                    total: getCartTotal(),
+                    customerInfo: values,
+                    transaction_id: transactionId,
+                });
+                console.log("Order status:", status);
+                // Clear Cart
+                clearCart();
+                // Redirect
+                navigate("/orders");
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
+            alert("Payment failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
+
     return (
         <Box
             margin={matches ? "20px 200px" : "20px 20px"}
@@ -152,88 +229,131 @@ const Cart = () => {
                     </Typography>
                 </Box>
                 <Divider />
-                {/* Customer Information */}
-                <Box my={3}>
-                    <LineThroughTitle
-                        icon={<AccountBoxIcon fontSize="large" />}
-                        title="Customer"
-                        place="start"
-                    />
-                    <Box my={2}>
-                        <Typography bgcolor="#EEECED" p={2} borderRadius={3}>
-                            Hoang Vu My Tran
-                        </Typography>
-                        <Typography
-                            my={2}
-                            bgcolor="#EEECED"
-                            p={2}
-                            borderRadius={3}
-                        >
-                            tranhoangvumy22@gmail.com
-                        </Typography>
-                        <Typography bgcolor="#EEECED" p={2} borderRadius={3}>
-                            7176788589
-                        </Typography>
-                    </Box>
-                </Box>
 
-                {/* Address Information */}
-                <Box my={3}>
-                    <LineThroughTitle
-                        icon={<HomeIcon fontSize="large" />}
-                        title="Address"
-                        place="end"
-                    />
-                    <Box my={2}>
-                        <Typography bgcolor="#EEECED" p={2} borderRadius={3}>
-                            158 Huong Lo Ngoc Hiep
-                        </Typography>
-                        <Typography
-                            my={2}
-                            bgcolor="#EEECED"
-                            p={2}
-                            borderRadius={3}
-                        >
-                            Nha Trang - Khanh Hoa
-                        </Typography>
-                    </Box>
-                </Box>
+                {/* Address Input + Checkout Button */}
+                <Box my={2}>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={handleMakePayment}
+                        validationSchema={validationSchema}
+                    >
+                        {(formik) => {
+                            return (
+                                <form onSubmit={formik.handleSubmit}>
+                                    <Box
+                                        display="flex"
+                                        flexDirection="column"
+                                        rowGap={4}
+                                    >
+                                        {/* Phone Number */}
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="phoneNumber"
+                                            label="Phone Number"
+                                            {...formik.getFieldProps(
+                                                "phoneNumber"
+                                            )}
+                                            error={
+                                                formik.touched.phoneNumber &&
+                                                formik.errors.phoneNumber
+                                            }
+                                            helperText={
+                                                formik.touched.phoneNumber &&
+                                                formik.errors.phoneNumber
+                                            }
+                                        />
 
-                {/* Payment Information */}
-                <Box my={3}>
-                    <LineThroughTitle
-                        icon={<PaymentIcon fontSize="large" />}
-                        title="Payment"
-                        place="start"
-                    />
-                    <Box my={2}>
-                        <Typography bgcolor="#EEECED" p={2} borderRadius={3}>
-                            Pay directly
-                        </Typography>
-                    </Box>
+                                        {/* Address */}
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="address"
+                                            label="Address"
+                                            {...formik.getFieldProps("address")}
+                                            error={
+                                                formik.touched.address &&
+                                                formik.errors.address
+                                            }
+                                            helperText={
+                                                formik.touched.address &&
+                                                formik.errors.address
+                                            }
+                                        />
+                                        {/* City */}
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="city"
+                                            label="City"
+                                            {...formik.getFieldProps("city")}
+                                            error={
+                                                formik.touched.city &&
+                                                formik.errors.city
+                                            }
+                                            helperText={
+                                                formik.touched.city &&
+                                                formik.errors.city
+                                            }
+                                        />
+                                        {/* State */}
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="state"
+                                            label="State"
+                                            {...formik.getFieldProps("state")}
+                                            error={
+                                                formik.touched.state &&
+                                                formik.errors.state
+                                            }
+                                            helperText={
+                                                formik.touched.state &&
+                                                formik.errors.state
+                                            }
+                                        />
+                                        {/* Zip Code */}
+                                        <TextField
+                                            type="text"
+                                            variant="outlined"
+                                            name="zipCode"
+                                            label="Zip Code"
+                                            {...formik.getFieldProps("zipCode")}
+                                            error={
+                                                formik.touched.zipCode &&
+                                                formik.errors.zipCode
+                                            }
+                                            helperText={
+                                                formik.touched.zipCode &&
+                                                formik.errors.zipCode
+                                            }
+                                        />
+                                        <StripeCardInput />
+                                        <LoadingButton
+                                            loading={loading}
+                                            endIcon={<PaymentIcon />}
+                                            color="primary"
+                                            type="submit"
+                                            variant="contained"
+                                            loadingPosition="center"
+                                        >
+                                            Make Payment
+                                        </LoadingButton>
+                                    </Box>
+                                </form>
+                            );
+                        }}
+                    </Formik>
                 </Box>
-                <Formik initialValues={cart} onSubmit={handleMakePayment}>
-                    {(formik) => {
-                        return (
-                            <form onSubmit={formik.handleSubmit}>
-                                <Button
-                                    sx={{ my: "1rem" }}
-                                    fullWidth
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={handleMakePayment}
-                                >
-                                    <Typography variant="h5" p={1}>
-                                        Purchase
-                                    </Typography>
-                                </Button>
-                            </form>
-                        );
-                    }}
-                </Formik>
             </Paper>
         </Box>
     );
 };
 
-export default Cart;
+export default function StripeWrapper() {
+    return (
+        <Elements stripe={stripePromise}>
+            <Cart />
+        </Elements>
+    );
+}

@@ -12,6 +12,7 @@ use App\Http\Controllers\EnergyController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GlassMaterialController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StrapController;
 use App\Http\Controllers\UserController;
@@ -64,6 +65,9 @@ Route::middleware('auth:sanctum')->group(function () {
         $isAdmin = $request->user()->role === 'admin';
         return response()->json(['isAdmin' => $isAdmin]);
     });
+
+    // Order API
+    Route::apiResource("orders", OrderController::class);
 
 
     Route::middleware('role:admin')->group(function () {

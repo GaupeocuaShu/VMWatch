@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,Billable;
+    use HasApiTokens, HasFactory, Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,10 +20,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email', 
-        'avatar', 
-        'phone', 
-        'password', 
+        'email',
+        'avatar',
+        'phone',
+        'password',
         'role',
     ];
 
@@ -46,4 +46,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the user's cart.
+     */
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    // Clear Cart after successful payment
+    public function clearCart()
+    {
+        $cart = $this->cart;
+        if ($cart) {
+            $cart->cartItems()->delete();
+            $cart->delete();
+        }
+        return true;
+    }
 }
