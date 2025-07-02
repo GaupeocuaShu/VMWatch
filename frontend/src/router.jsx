@@ -66,6 +66,7 @@ const SearchResults = lazy(() => import("./scenes/client/search-results"));
 const WatchFeature = lazy(() => import("./scenes/admin/watchs/Feature/index"));
 const Cart = lazy(() => import("./scenes/client/cart"));
 const Order = lazy(() => import("./scenes/client/order"));
+const OrderDetail = lazy(() => import("./scenes/client/order-detail"));
 const PaymentSuccess = lazy(() =>
     import("./scenes/client/payment/payment-success")
 );
@@ -133,7 +134,7 @@ const routes = {
     CART: "/my-cart",
 
     ORDER: "/orders",
-
+    ORDER_DETAIL: "/orders/:id",
     PAYMENT_SUCCESS: "/payment/success",
     PAYMENT_CANCEL: "/payment/cancel",
 };
@@ -202,6 +203,17 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+
+            // Order Detail
+            {
+                path: routes.ORDER_DETAIL,
+                element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                        <OrderDetail />
+                    </Suspense>
+                ),
+            },
+
             // Payment Success
             {
                 path: routes.PAYMENT_SUCCESS,

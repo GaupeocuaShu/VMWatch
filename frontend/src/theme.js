@@ -150,7 +150,6 @@ export const themeSettings = (mode) => {
         palette: {
             mode: mode,
             ...(mode === 'dark' ? {
-
                 secondary: { main: colors.pink[500] },
                 neutral: { dark: colors.grey[700], main: colors.grey[500], light: colors.grey[100] },
                 background: { default: colors.primary[500] },

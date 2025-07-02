@@ -45,6 +45,7 @@ const Footer = () => {
             display="flex"
             flexDirection={matches ? "row" : "column"}
             gap={5}
+            justifyContent="space-between"
         >
             <Box>
                 <Logo />
@@ -57,6 +58,7 @@ const Footer = () => {
                             textTransform: "uppercase",
                             listStyleType: "none",
                             columnGap: "5rem",
+                            justifyContent: "end",
                         }}
                     >
                         {footerLinks.map((e, i) => (

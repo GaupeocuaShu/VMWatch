@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class OrderController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Order::class, 'order');
+    }
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -62,7 +69,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return new OrderResource($order->load(['items.watch.watchThumb', 'user']));
     }
 
     /**

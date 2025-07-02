@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Watch extends Model
 {
-    use HasFactory; 
+    use HasFactory;
 
     protected $fillable = [
         "name",
@@ -34,16 +34,23 @@ class Watch extends Model
         'meta_title',
         'meta_description',
         'meta_keywords',
-        'release_date', 
-    ]; 
-    public function features(){
-        return $this->belongsToMany(Feature::class,'feature_watches');
+        'release_date',
+    ];
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'feature_watches');
     }
-    public function watchCollection(){
+    public function watchCollection()
+    {
         return $this->belongsTo(WatchCollection::class);
     }
-    public function watchGalleries(){
+    public function watchGalleries()
+    {
         return $this->hasMany(WatchGallery::class);
+    }
+    public function watchThumb()
+    {
+        return $this->hasOne(WatchGallery::class)->where('type', 'thumb');
     }
     public function brand()
     {
@@ -88,26 +95,27 @@ class Watch extends Model
     public function energy()
     {
         return $this->belongsTo(Energy::class);
-    } 
-    
-    public function cartItem(){
+    }
+
+    public function cartItem()
+    {
         return $this->hasOne(CartItem::class);
     }
 
     public static function selectOptions()
     {
         return [
-            'brands' => Brand::all(['id', 'name','slug']),
-            'straps' => Strap::all(['id', 'name','slug']),
-            'waterResistanceLevels' => WaterResistanceLevel::all(['id', 'name','slug']),
-            'caseColors' => CaseColor::all(['id', 'name','slug']),
-            'dialColors' => DialColor::all(['id', 'name','slug']),
-            'dialSizes' => DialSize::all(['id', 'name','slug']),
-            'dialShapes' => DialShape::all(['id', 'name','slug']),
-            'glassMaterials' => GlassMaterial::all(['id', 'name','slug']),
-            'energies' => Energy::all(['id', 'name','slug']), 
-            'watchCollections' => WatchCollection::all(['id','name','slug']), 
-            'features' => Feature::all(['id','name','slug']), 
+            'brands' => Brand::all(['id', 'name', 'slug']),
+            'straps' => Strap::all(['id', 'name', 'slug']),
+            'waterResistanceLevels' => WaterResistanceLevel::all(['id', 'name', 'slug']),
+            'caseColors' => CaseColor::all(['id', 'name', 'slug']),
+            'dialColors' => DialColor::all(['id', 'name', 'slug']),
+            'dialSizes' => DialSize::all(['id', 'name', 'slug']),
+            'dialShapes' => DialShape::all(['id', 'name', 'slug']),
+            'glassMaterials' => GlassMaterial::all(['id', 'name', 'slug']),
+            'energies' => Energy::all(['id', 'name', 'slug']),
+            'watchCollections' => WatchCollection::all(['id', 'name', 'slug']),
+            'features' => Feature::all(['id', 'name', 'slug']),
         ];
     }
 }

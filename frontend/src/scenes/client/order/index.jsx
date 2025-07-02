@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Backdrop, CircularProgress, useTheme } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 import {
     Table,
@@ -41,6 +42,12 @@ const Order = () => {
         };
         fetchOrders();
     }, [page]);
+
+    if (orders.length === 0) {
+        return (
+            <Box margin={matches ? "20px 200px" : "20px 20px"}>Loading...</Box>
+        );
+    }
 
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
@@ -100,6 +107,9 @@ const Order = () => {
                                         <Button
                                             variant="contained"
                                             size="small"
+                                            component={Link}
+                                            to={`/orders/${order.id}`}
+                                            color="secondary"
                                         >
                                             See Detail
                                         </Button>

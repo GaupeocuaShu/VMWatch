@@ -47,11 +47,6 @@ const topSearches = [
 ];
 const settings = [
     {
-        name: "Profile",
-        link: "/profile",
-        icon: <PersonOutlinedIcon />,
-    },
-    {
         name: "Orders",
         link: "/orders",
         icon: <WatchOutlinedIcon />,
