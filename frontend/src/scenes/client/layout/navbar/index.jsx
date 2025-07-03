@@ -8,30 +8,19 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useState, useEffect } from "react";
 import axiosClient from "../../../../axios-client";
+import useFetchBrands from "../../../../utils/hooks/brands/useFetchBrands";
 const Navbar = ({ isMobile = false }) => {
-    const [brands, setBrands] = useState([]);
+    const { brands, loading, error } = useFetchBrands({});
 
     const navItems = [
         { name: "Brand", childs: brands },
-        { name: "Male", link: "/" },
-        { name: "Female", link: "/" },
-        { name: "Couple", link: "/" },
+        { name: "Male", link: "/watches?type=male" },
+        { name: "Female", link: "/watches?type=female" },
+        { name: "Unisex", link: "/watches?type=unisex" },
+        { name: "Couple", link: "/watches?type=couple" },
         { name: "Contact", link: "/" },
     ];
-    // Fetch Brands
 
-    useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                const { data } = await axiosClient.get("api/get-brands");
-                console.log();
-                setBrands(data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchBrands();
-    }, []);
     return (
         <Box
             display="flex"

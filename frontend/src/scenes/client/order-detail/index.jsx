@@ -13,29 +13,22 @@ import {
     useTheme,
 } from "@mui/material";
 import axiosClient from "../../../axios-client";
+import LoadingComponent from "../../../components/LoadingComponent";
+import useFetchOrderDetail from "../../../utils/hooks/orders/useFetchOrderDetail";
+import Error from "../../../components/Error";
+import OrderStatus from "../../../components/OrderStatus";
 const OrderDetail = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const { id: orderId } = useParams(); // Get order ID from URL parameters
-    const [orderDetail, setOrderDetail] = useState(null);
-    useEffect(() => {
-        const fetchOrderDetail = async () => {
-            try {
-                const { data } = await axiosClient.get(`api/orders/${orderId}`);
-                setOrderDetail(data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchOrderDetail();
-    }, [orderId]);
+    const { orderDetail, loading, error } = useFetchOrderDetail({ orderId });
 
-    if (!orderDetail) {
-        return (
-            <Box margin={matches ? "20px 200px" : "20px 20px"}>Loading...</Box>
-        );
+    if (loading) {
+        return <LoadingComponent />;
     }
-
+    if (error) {
+        return <Error errorMessage={error} />;
+    }
     const {
         items = [],
         user: { name, email },
@@ -61,135 +54,157 @@ const OrderDetail = () => {
                 Back
             </Button>
             <Box mb={4}>
-                <h2>Order Detail</h2>
+                <Typography variant="h2" component="h2" gutterBottom>
+                    Order Detail
+                </Typography>
             </Box>
             {/* Customer Information */}
             <Box mb={4}>
-                <h3>Customer Information</h3>
+                <Typography variant="h3" component="h3" gutterBottom>
+                    Customer Information
+                </Typography>
                 <Box>
-                    <div>
-                        <strong>Name:</strong> {name}
-                    </div>
-                    <div>
-                        <strong>Email:</strong> {email}
-                    </div>
-                    <div>
-                        <strong>Phone:</strong> {phone_number}
-                    </div>
+                    <Typography>
+                        <Box component="span" fontWeight="fontWeightBold">
+                            Name:
+                        </Box>{" "}
+                        {name}
+                    </Typography>
+                    <Typography>
+                        <Box component="span" fontWeight="fontWeightBold">
+                            Email:
+                        </Box>{" "}
+                        {email}
+                    </Typography>
+                    <Typography>
+                        <Box component="span" fontWeight="fontWeightBold">
+                            Phone:
+                        </Box>{" "}
+                        {phone_number}
+                    </Typography>
                 </Box>
             </Box>
             {/* Shipping Address */}
             <Box mb={4}>
-                <h3>Shipping Address</h3>
+                <Typography variant="h3" component="h3" gutterBottom>
+                    Shipping Address
+                </Typography>
                 <Box>
-                    <div>{shipping_address}</div>
-                    <div>
+                    <Typography>{shipping_address}</Typography>
+                    <Typography>
                         {shipping_city}, {shipping_state} {shipping_zip}
-                    </div>
-                    <div>{shipping_country}</div>
+                    </Typography>
+                    <Typography>{shipping_country}</Typography>
                 </Box>
             </Box>
             {/* Order Items */}
             <Box mb={4}>
-                <h3>Order Items</h3>
-                <Box>
-                    <Table
-                        sx={{ minWidth: 650 }}
-                        aria-label="order items table"
-                    >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ fontWeight: "bold" }}>
-                                    Image
+                <Typography variant="h3" component="h3" gutterBottom>
+                    Order Items
+                </Typography>
+                <Table sx={{ minWidth: 650 }} aria-label="order items table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                Image
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                Product
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                Unit Price
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                Quantity
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                Total
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {items.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell>
+                                    <Box
+                                        component="img"
+                                        src={item.watch.watch_thumb?.banner}
+                                        alt={item.watch.name}
+                                        sx={{
+                                            width: 100,
+                                            height: 100,
+                                            objectFit: "cover",
+                                            borderRadius: 1,
+                                        }}
+                                    />
                                 </TableCell>
-                                <TableCell sx={{ fontWeight: "bold" }}>
-                                    Product
+                                <TableCell>
+                                    <Button
+                                        component={Link}
+                                        to={`/product/${item.watch.slug}`}
+                                        sx={{
+                                            color: "primary.main",
+                                            textTransform: "none",
+                                            "&:hover": {
+                                                color: "secondary.main",
+                                                background: "transparent",
+                                            },
+                                            p: 0,
+                                            minWidth: 0,
+                                        }}
+                                    >
+                                        <Typography variant="body1">
+                                            {item.watch.name}
+                                        </Typography>
+                                    </Button>
                                 </TableCell>
-                                <TableCell sx={{ fontWeight: "bold" }}>
-                                    Unit Price
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: "bold" }}>
-                                    Quantity
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: "bold" }}>
-                                    Total
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {items.map((item) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>
-                                        <img
-                                            src={item.watch.watch_thumb?.banner}
-                                            alt={item.watch.name}
-                                            style={{
-                                                width: 100,
-                                                height: 100,
-                                                objectFit: "cover",
-                                                borderRadius: 4,
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Link
-                                            to={`/product/${item.watch.slug}`}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    color: "primary.main",
-                                                    "&:hover": {
-                                                        color: "secondary.main",
-                                                    },
-                                                    transition:
-                                                        "color 0.3s ease",
-                                                }}
-                                            >
-                                                {item.watch.name}
-                                            </Typography>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
+                                <TableCell>
+                                    <Typography variant="body2">
                                         $
                                         {Number(item.watch.price || 0).toFixed(
                                             2
                                         )}
-                                    </TableCell>
-                                    <TableCell>{item.quantity}</TableCell>
-                                    <TableCell>
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2">
+                                        {item.quantity}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2">
                                         $
                                         {(
                                             Number(item.watch.price || 0) *
                                             Number(item.quantity || 0)
                                         ).toFixed(2)}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Box>
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </Box>
             {/* Order Status */}
             <Box mb={2} display="flex" justifyContent="flex-end">
                 <Box>
-                    <div>
-                        <strong>Order Status:</strong> {status}
-                    </div>
-                    <div>
-                        <strong>Payment Method:</strong> {paymentMethod}
-                    </div>
-                    <div
-                        style={{
-                            fontSize: 20,
-                            fontWeight: "bold",
-                            marginTop: 8,
-                        }}
-                    >
+                    <Typography variant="h5" component="h5" gutterBottom>
+                        <Box component="span" fontWeight="fontWeightBold">
+                            Order Status:
+                        </Box>{" "}
+                        <OrderStatus status={status} />
+                    </Typography>
+                    <Typography variant="h5" component="h5" gutterBottom>
+                        <Box component="span" fontWeight="fontWeightBold">
+                            Payment Method:
+                        </Box>{" "}
+                        {paymentMethod}
+                    </Typography>
+                    <Typography variant="h5" component="h5" gutterBottom>
                         Total: ${Number(totalAmount || 0).toFixed(2)}
-                    </div>
+                    </Typography>
                 </Box>
             </Box>
-
             <Button
                 variant="contained"
                 component={Link}

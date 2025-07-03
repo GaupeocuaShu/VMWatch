@@ -15,40 +15,21 @@ import {
     TablePagination,
 } from "@mui/material";
 import axiosClient from "../../../axios-client";
+import useFetchOrders from "../../../utils/hooks/orders/useFetchOrders";
+import LoadingComponent from "../../../components/LoadingComponent";
+import Error from "../../../components/Error";
+import OrderStatus from "../../../components/OrderStatus";
 
 const Order = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    // Orders state
-    const [orders, setOrders] = useState([]);
-
-    // Pagination state
-    const [page, setPage] = useState(1);
-
-    // Get Orders from server
-
-    // Fetch Orders
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const { data } = await axiosClient.get(
-                    "api/orders?page=" + page
-                );
-                console.log(data.data);
-                setOrders(data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchOrders();
-    }, [page]);
-
-    if (orders.length === 0) {
-        return (
-            <Box margin={matches ? "20px 200px" : "20px 20px"}>Loading...</Box>
-        );
+    const { orders, setPage, loading, error } = useFetchOrders();
+    if (loading) {
+        return <LoadingComponent />;
     }
-
+    if (error) {
+        return <Error errorMessage={error} />;
+    }
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
             <TableContainer component={Paper}>
@@ -92,16 +73,7 @@ const Order = () => {
                                         {order.shipping_address}
                                     </TableCell>
                                     <TableCell>
-                                        <Button
-                                            variant="contained"
-                                            size="small"
-                                            sx={{
-                                                pointerEvents: "none",
-                                                fontWeight: 600,
-                                            }}
-                                        >
-                                            {order.status}
-                                        </Button>
+                                        <OrderStatus status={order.status} />
                                     </TableCell>
                                     <TableCell>
                                         <Button

@@ -2,6 +2,7 @@ import Test from "./scenes/admin/test";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingComponent from "./components/LoadingComponent";
+import Watches from "./scenes/client/watches";
 
 const DetailBrand = lazy(() => import("./scenes/client/detail-brand"));
 const SignUp = lazy(() => import("./scenes/auth/sign-up"));
@@ -132,7 +133,8 @@ const routes = {
     SEARCH_RESULTS: "/search-results",
 
     CART: "/my-cart",
-
+    WATCHES: "/watches",
+    BRANDS: "/brands/:brandSlug",
     ORDER: "/orders",
     ORDER_DETAIL: "/orders/:id",
     PAYMENT_SUCCESS: "/payment/success",
@@ -140,6 +142,7 @@ const routes = {
 };
 
 const router = createBrowserRouter([
+    // Auth Routes
     {
         path: routes.SIGN_UP,
         element: (
@@ -166,7 +169,8 @@ const router = createBrowserRouter([
         children: [
             { path: routes.HOME, element: <Home /> },
             { path: "/home", element: <Home /> },
-            { path: "/brand/:brandSlug", element: <DetailBrand /> },
+            { path: routes.WATCHES, element: <Watches /> },
+            { path: routes.BRANDS, element: <DetailBrand /> },
             // Product Detail
             {
                 path: routes.PRODUCT_DETAIL,
@@ -242,6 +246,8 @@ const router = createBrowserRouter([
             </Suspense>
         ),
     },
+
+    // Admin Routes
     {
         path: routes.ADMIN.ROOT,
         element: (
@@ -469,6 +475,7 @@ const router = createBrowserRouter([
             },
         ],
     },
+    // Not Found Route
     {
         path: "*",
         element: (

@@ -1,24 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, TextField, Typography, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
 
-const WatchList = (props) => {
+const WatchList = ({ gender, watches }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const [isHovered, setIsHovered] = useState(null);
-    const watches = props.watches.filter((e) => e.gender === props.gender);
-
     const handleMouseEnter = (index) => {
         setIsHovered(index);
     };
-
     const handleMouseLeave = () => {
         setIsHovered(null);
     };
-    console.log(isHovered);
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
             <Typography
@@ -28,7 +23,7 @@ const WatchList = (props) => {
                 color="gray"
                 fontWeight={600}
             >
-                Best Seller Watches For {props.gender}
+                Best Seller Watches For {gender}
             </Typography>
             <Box
                 my={5}

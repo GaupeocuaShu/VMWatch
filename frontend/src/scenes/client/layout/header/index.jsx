@@ -255,6 +255,7 @@ function LaptopNavigation({ user, handleLogOut }) {
                     to="/login"
                     endIcon={<LoginOutlinedIcon />}
                     variant="contained"
+                    color="secondary"
                 >
                     Login
                 </Button>

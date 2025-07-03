@@ -5,6 +5,9 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CaseColorController;
+use App\Http\Controllers\Client\BannerController as ClientBannerController;
+use App\Http\Controllers\Client\BrandController as ClientBrandController;
+use App\Http\Controllers\Client\WatchController as ClientWatchController;
 use App\Http\Controllers\DialColorController;
 use App\Http\Controllers\DialShapeController;
 use App\Http\Controllers\DialSizeController;
@@ -36,6 +39,15 @@ Route::get("/get-detail-brand/{slug}", [HomeController::class, 'getDetailBrand']
 Route::get("/search-results", [HomeController::class, 'searchResults']);
 // Get Searching watch 
 Route::get("/search/{keys}", [HomeController::class, 'searchByKeys']);
+
+// Restful API for watches with filters
+Route::apiResource("client/watches", ClientWatchController::class);
+
+// Restful API for brands with filters
+Route::apiResource("client/brands", ClientBrandController::class);
+
+// Restful API for banners with filters
+Route::apiResource("client/banners", ClientBannerController::class);
 
 
 // Get current user / authenticated user 

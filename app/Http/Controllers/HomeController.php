@@ -14,23 +14,9 @@ use App\Models\Watch;
 
 class HomeController extends Controller
 {
-    public function getBanners()
-    {
-        $banners = Banner::all();
-        return BannerResource::collection($banners);
-    }
 
-    public function getBrands()
-    {
-        $brands = Brand::all();
-        return  BrandResource::collection($brands);
-    }
 
-    public function getDisplayWatches()
-    {
-        $watches = Watch::with(['energy', 'dialSize', 'glassMaterial', 'watchGalleries'])->get();
-        return  DisplayWatchResource::collection($watches);
-    }
+
 
     public function getDetailWatch(string $slug)
     {
@@ -57,6 +43,8 @@ class HomeController extends Controller
         return new DetailBrandResource($brand);
     }
 
+
+    // Search by Results
     public function searchResults(Request $request)
     {
 

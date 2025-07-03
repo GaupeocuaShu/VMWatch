@@ -7,12 +7,9 @@ import { useTheme } from "@mui/material";
 import axiosClient from "../../../axios-client";
 import { useParams } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useNavigate
 import WatchSkeleton from "../../../components/WatchSkeleton";
+import useQuery from "../../../utils/hooks/queries/useQuery";
 
-const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-};
 const SearchResults = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));

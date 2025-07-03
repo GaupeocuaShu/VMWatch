@@ -3,8 +3,7 @@ import { Box, TextField, Typography, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axiosClient from "../axios-client";
 import BrandCard from "./BrandCard";
-const PopularBrand = ({ brands, title = "Famous Brands", type = "famous" }) => {
-    const filteredBrands = brands.filter((e) => e.type === type);
+const PopularBrand = ({ brands, title = "Famous Brands" }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -25,7 +24,7 @@ const PopularBrand = ({ brands, title = "Famous Brands", type = "famous" }) => {
                 display="grid"
                 gridTemplateColumns="repeat(12,2fr)"
             >
-                {filteredBrands.map((e) => (
+                {brands?.map((e) => (
                     <Box
                         gridColumn={matches ? "span 2" : "span 6"}
                         sx={{ cursor: "pointer" }}
