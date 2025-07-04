@@ -16,7 +16,6 @@ const Navbar = ({ isMobile = false }) => {
         { name: "Brand", childs: brands },
         { name: "Male", link: "/watches?type=male" },
         { name: "Female", link: "/watches?type=female" },
-        { name: "Unisex", link: "/watches?type=unisex" },
         { name: "Couple", link: "/watches?type=couple" },
         { name: "Contact", link: "/" },
     ];
@@ -54,7 +53,7 @@ const Navbar = ({ isMobile = false }) => {
                                       <ListItem
                                           disablePadding
                                           component={Link}
-                                          to={`/brand/${child.slug}`}
+                                          to={`/brands/${child.slug}`}
                                       >
                                           <ListItemButton color="secondary">
                                               <ListItemText

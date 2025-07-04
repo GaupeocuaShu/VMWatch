@@ -17,6 +17,7 @@ import useFetchBanners from "../../../utils/hooks/banners/useFetchBanners";
 import useFetchBrands from "../../../utils/hooks/brands/useFetchBrands";
 import LoadingComponent from "../../../components/LoadingComponent";
 import Error from "../../../components/Error";
+import Watches from "../watches";
 
 const Home = () => {
     const {
@@ -56,11 +57,6 @@ const Home = () => {
             {/* Collection */}
             <Collection />
 
-            <Divider />
-            {/* <WatchList gender="male" watches={watches} /> */}
-            <Divider />
-            {/* <WatchList gender="female" watches={watches} /> */}
-            <Divider />
             {loadingFamousBrands ? (
                 <LoadingComponent />
             ) : errorFamousBrands ? (
@@ -79,6 +75,22 @@ const Home = () => {
                     title="High-end Swiss Brand"
                 />
             )}
+
+            <Divider />
+            <Watches
+                watchType="male"
+                title="High-end Male Watches"
+                limit={8}
+                isPagination={false}
+            />
+            <Divider />
+            <Watches
+                watchType="female"
+                title="High-end Female Watches"
+                limit={8}
+                isPagination={false}
+            />
+            <Divider />
         </Box>
     );
 };

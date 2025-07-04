@@ -7,6 +7,8 @@ function useFetchBrands({ type = null } = {}) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        setLoading(true);
+        setError(null);
         const fetchBrands = async () => {
             try {
                 const { data } = await axiosClient.get("api/client/brands", {

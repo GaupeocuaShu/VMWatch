@@ -7,6 +7,8 @@ function useFetchBanners() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        setLoading(true);
+        setError(null);
         const fetchBanners = async () => {
             try {
                 const { data } = await axiosClient.get("api/client/banners");

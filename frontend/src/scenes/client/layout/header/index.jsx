@@ -37,6 +37,8 @@ import Navbar from "../navbar";
 import { useCart } from "../../../../cart/cart";
 import SearchResults from "../../search-results";
 import WatchesFilter from "../../../../components/WatchesFilter";
+import WatchList from "../../../../components/WatchList";
+import useFetchWatches from "../../../../utils/hooks/watches/useFetchWatchs";
 // "Account", "Order", "Cart", "Log out"
 const topSearches = [
     "Rolex",
@@ -53,41 +55,18 @@ const settings = [
     },
 ];
 const Header = () => {
-    const { user, setUser } = useAuthContext();
-    const [watches, setWatches] = useState([]);
-    const [showPannelResult, setShowPannelResult] = useState(false);
-    const [query, setQuery] = useState("");
+    // Responsive
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("sm"));
-    console.log(matches);
-    console.log(query);
+
+    //  Auth Context
+    const { user, setUser } = useAuthContext();
     const handleLogOut = () => {
         axiosClient.post("/logout").then(() => {
             setUser(null);
         });
     };
 
-    // Fetch Searching-Watching
-    useEffect(() => {
-        const fetchSearch = async () => {
-            try {
-                if (query) {
-                    const { data } = await axiosClient.get(
-                        "/api/search/" + query
-                    );
-
-                    setWatches(data.data);
-                } else {
-                    setWatches([]);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        fetchSearch();
-    }, [query]);
-
-    // Fetch User
     useEffect(() => {
         const fetchUser = async () => {
             await axiosClient
@@ -102,6 +81,11 @@ const Header = () => {
         };
         fetchUser();
     }, []);
+
+    // States
+    const [showPannelResult, setShowPannelResult] = useState(false);
+    const [key, setKey] = useState("");
+    const { watches, loading, error } = useFetchWatches({ key: key, limit: 6 });
 
     return (
         <>
@@ -141,11 +125,11 @@ const Header = () => {
                             inputProps={{
                                 "aria-label": "search your favorite watchs",
                             }}
-                            onChange={(e) => setQuery(e.target.value)}
+                            onChange={(e) => setKey(e.target.value)}
                             onClick={() => {
                                 setShowPannelResult(true);
                             }}
-                            value={query}
+                            value={key}
                         />
                     </Box>
                     {showPannelResult && (
@@ -154,28 +138,13 @@ const Header = () => {
                             minHeight="300px"
                             width="100%"
                             zIndex={1000}
-                            display="flex"
                             borderRadius={3}
                             p={2}
                             border={1}
                             bgcolor="white"
                             sx={{ boxShadow: 2 }}
                         >
-                            {/* Top Search */}
                             <Box>
-                                <Typography pb={2}>Top Search</Typography>
-                                <Divider />
-                                <List>
-                                    {topSearches.map((e) => (
-                                        <ListItem disablePadding>
-                                            <ListItemButton color="secondary">
-                                                <ListItemText primary={e} />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Box>
-                            <Box flex={1} ml={3}>
                                 <Box
                                     display="flex"
                                     justifyContent="space-between"
@@ -185,7 +154,7 @@ const Header = () => {
                                         aria-label="delete"
                                         color="red"
                                         onClick={() => {
-                                            setQuery("");
+                                            setKey("");
                                             setShowPannelResult(false);
                                         }}
                                     >
@@ -194,12 +163,9 @@ const Header = () => {
                                 </Box>
                                 <Divider />
                                 <Box pt={2}>
-                                    <WatchesFilter
+                                    <WatchList
                                         watches={watches}
-                                        setShowPannelResult={
-                                            setShowPannelResult
-                                        }
-                                        setQuery={setQuery}
+                                        forSearch={true}
                                     />
                                 </Box>
                             </Box>

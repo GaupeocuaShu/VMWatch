@@ -4,7 +4,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const WatchList = ({ gender, watches }) => {
+const WatchList = ({ gender, watches, forSearch = false }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const [isHovered, setIsHovered] = useState(null);
@@ -15,16 +15,7 @@ const WatchList = ({ gender, watches }) => {
         setIsHovered(null);
     };
     return (
-        <Box margin={matches ? "20px 200px" : "20px 20px"}>
-            <Typography
-                variant="h3"
-                textAlign="center"
-                textTransform="uppercase"
-                color="gray"
-                fontWeight={600}
-            >
-                Best Seller Watches For {gender}
-            </Typography>
+        <Box margin={!forSearch && matches ? "20px 200px" : "20px 20px"}>
             <Box
                 my={5}
                 gap={matches ? 5 : 0}
@@ -34,7 +25,7 @@ const WatchList = ({ gender, watches }) => {
                 {watches.map((e, i) => (
                     <Box
                         key={i}
-                        gridColumn={matches ? "span 3" : "span 6"}
+                        gridColumn={!forSearch && matches ? "span 3" : "span 3"}
                         sx={{ cursor: "pointer" }}
                         className="hover-unhide-back-image"
                         onMouseEnter={() => handleMouseEnter(i)}
@@ -47,22 +38,50 @@ const WatchList = ({ gender, watches }) => {
                         height="100%"
                         width="85̀%"
                     >
-                        <img
-                            height="100%"
+                        <Box
+                            position="relative"
+                            height="300px"
                             width="100%"
-                            src={isHovered === i ? e.thumb : e.front}
-                            alt={e.name}
-                            style={{ objectFit: "cover" }}
-                            className="frontImage"
-                        />
+                            overflow="hidden"
+                        >
+                            <img
+                                height="100%"
+                                width="100%"
+                                src={e.front}
+                                alt={e.name}
+                                style={{
+                                    objectFit: "cover",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    opacity: isHovered === i ? 0 : 1,
+                                    transition: "opacity 0.3s ease-in-out",
+                                }}
+                            />
+                            <img
+                                height="100%"
+                                width="100%"
+                                src={e.thumb}
+                                alt={e.name}
+                                style={{
+                                    objectFit: "cover",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    opacity: isHovered === i ? 1 : 0,
+                                    transition: "opacity 0.3s ease-in-out",
+                                }}
+                            />
+                        </Box>
                         <Typography
                             variant="h5"
                             mt={1}
                             textAlign="center"
                             color="gray"
+                            textTransform={"capitalize"}
                         >
-                            {e.name} - {e.dialSize} - {e.glassMaterial} -
-                            {e.gender}
+                            {e.name} - {e.gender} - Size: {e.dialSize} - Glass:{" "}
+                            {e.glassMaterial} - Energy: {e.energy}
                         </Typography>
                         <Typography
                             mt={1}

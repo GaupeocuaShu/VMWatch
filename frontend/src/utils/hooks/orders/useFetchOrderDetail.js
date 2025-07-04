@@ -6,6 +6,8 @@ function useFetchOrderDetail({ orderId }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
+        setLoading(true);
+        setError(null);
         const fetchOrders = async () => {
             try {
                 const { data } = await axiosClient.get(`api/orders/${orderId}`);
