@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Filter from "../../../components/Filter";
 import WatchesFilter from "../../../components/WatchesFilter";
 import { useState, useEffect } from "react";
@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import WatchSkeleton from "../../../components/WatchSkeleton";
 import useQuery from "../../../utils/hooks/queries/useQuery";
+import WatchList from "../../../components/WatchList";
 
 const SearchResults = () => {
     const theme = useTheme();
@@ -48,7 +49,7 @@ const SearchResults = () => {
                     <Box
                         display="grid"
                         gridTemplateColumns="repeat(12,1fr)"
-                        width="80%"
+                        width="70%"
                         gap={4}
                     >
                         {Array.from({ length: 10 }, (_, index) => (
@@ -56,7 +57,17 @@ const SearchResults = () => {
                         ))}
                     </Box>
                 ) : (
-                    <WatchesFilter watches={watches} />
+                    <Box>
+                        <Typography variant="h4">
+                            Search Results for:{" "}
+                            <span
+                                style={{ color: theme.palette.secondary.main }}
+                            >
+                                {query.get("key")}
+                            </span>
+                        </Typography>
+                        <WatchList watches={watches} forSearch={true} />
+                    </Box>
                 )}
             </Box>
         </>

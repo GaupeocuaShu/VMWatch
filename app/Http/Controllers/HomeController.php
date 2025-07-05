@@ -55,6 +55,13 @@ class HomeController extends Controller
 
         $watchQuery = Watch::query(); // Start with the Watch model query
 
+        if ($request->has('key')) {
+            $watchQuery->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('key') . '%')
+                    ->orWhere('slug', 'like', '%' . $request->input('key') . '%');
+            });
+        }
+
         foreach ($queries as $feature) {
             [$entity, $slugs] = $feature;
 

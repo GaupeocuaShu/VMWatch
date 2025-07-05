@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-const SeeMore = ({ router }) => {
+const SeeMore = ({ router, turnOffPannelResult }) => {
     return (
         <Button
             size="large"
@@ -9,6 +9,9 @@ const SeeMore = ({ router }) => {
             color="secondary"
             component={Link}
             to={`${router}`}
+            onClick={() => {
+                turnOffPannelResult();
+            }}
         >
             See More
         </Button>

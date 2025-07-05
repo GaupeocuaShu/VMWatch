@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Tooltip,
     Avatar,
@@ -10,6 +10,7 @@ import {
     MenuItem,
     Menu,
     Badge,
+    CircularProgress,
 } from "@mui/material";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
@@ -39,6 +40,9 @@ import SearchResults from "../../search-results";
 import WatchesFilter from "../../../../components/WatchesFilter";
 import WatchList from "../../../../components/WatchList";
 import useFetchWatches from "../../../../utils/hooks/watches/useFetchWatchs";
+import useDebounce from "../../../../utils/hooks/watches/useDebounce";
+import SeeMore from "../../../../components/SeeMore";
+import LoadingComponent from "../../../../components/LoadingComponent";
 // "Account", "Order", "Cart", "Log out"
 const topSearches = [
     "Rolex",
@@ -58,7 +62,6 @@ const Header = () => {
     // Responsive
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("sm"));
-
     //  Auth Context
     const { user, setUser } = useAuthContext();
     const handleLogOut = () => {
@@ -83,9 +86,46 @@ const Header = () => {
     }, []);
 
     // States
+    const [notifications, setNotifications] = useState(
+        "Search your favorite watches"
+    );
     const [showPannelResult, setShowPannelResult] = useState(false);
     const [key, setKey] = useState("");
-    const { watches, loading, error } = useFetchWatches({ key: key, limit: 6 });
+    const debouncedKey = useDebounce({ key, delay: 500 });
+    const searchPannelRef = useRef(null);
+    const turnOfPannelResult = () => {
+        setShowPannelResult(false);
+        setWatches([]); // Clear watches when closing the panel
+        setKey(""); // Clear the search key
+    };
+    // Reset Watches when key is empty
+    useEffect(() => {
+        if (!key) {
+            setWatches([]);
+            setNotifications("Search your favorite watches");
+        }
+    }, [key]);
+    // Close search panel when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                searchPannelRef.current &&
+                !searchPannelRef.current.contains(event.target)
+            ) {
+                turnOfPannelResult();
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const { watches, setWatches, loading, setLoading, error, notWatchesFound } =
+        useFetchWatches({
+            key: debouncedKey,
+            limit: 6,
+        });
 
     return (
         <>
@@ -102,7 +142,7 @@ const Header = () => {
                 </Box>
                 {/* Search */}
 
-                <Box flex={1} position="relative">
+                <Box flex={1} position="relative" ref={searchPannelRef}>
                     <Box
                         display="flex"
                         bgcolor="#f0f0f0"
@@ -115,7 +155,10 @@ const Header = () => {
                             aria-label="search"
                             color="secondary"
                             LinkComponent={Link}
-                            to="/search-results"
+                            to={"/search-results?key=" + key}
+                            disabled={
+                                !key.trim() || loading || watches.length <= 3
+                            }
                         >
                             <SearchIcon />
                         </IconButton>
@@ -128,6 +171,7 @@ const Header = () => {
                             onChange={(e) => setKey(e.target.value)}
                             onClick={() => {
                                 setShowPannelResult(true);
+                                setLoading(false);
                             }}
                             value={key}
                         />
@@ -135,39 +179,87 @@ const Header = () => {
                     {showPannelResult && (
                         <Box
                             position="absolute"
+                            maxHeight="800px"
                             minHeight="300px"
+                            overflow="auto"
                             width="100%"
                             zIndex={1000}
                             borderRadius={3}
                             p={2}
-                            border={1}
                             bgcolor="white"
                             sx={{ boxShadow: 2 }}
                         >
-                            <Box>
-                                <Box
-                                    display="flex"
-                                    justifyContent="space-between"
+                            <Box display="flex" justifyContent="end">
+                                <IconButton
+                                    aria-label="delete"
+                                    color="red"
+                                    onClick={() => {
+                                        turnOfPannelResult();
+                                    }}
                                 >
-                                    <Typography pb={2}>Products</Typography>
-                                    <IconButton
-                                        aria-label="delete"
-                                        color="red"
-                                        onClick={() => {
-                                            setKey("");
-                                            setShowPannelResult(false);
-                                        }}
+                                    <HighlightOffOutlinedIcon />
+                                </IconButton>
+                            </Box>
+                            <Box>
+                                {loading ? (
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        minHeight="300px"
                                     >
-                                        <HighlightOffOutlinedIcon />
-                                    </IconButton>
-                                </Box>
-                                <Divider />
-                                <Box pt={2}>
-                                    <WatchList
-                                        watches={watches}
-                                        forSearch={true}
-                                    />
-                                </Box>
+                                        <CircularProgress />
+
+                                        <Typography ml={1}>
+                                            Loading...
+                                        </Typography>
+                                    </Box>
+                                ) : watches.length === 0 ? (
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        minHeight="300px"
+                                    >
+                                        <Typography color="secondary">
+                                            {notWatchesFound
+                                                ? "No results found"
+                                                : notifications}
+                                        </Typography>
+                                    </Box>
+                                ) : (
+                                    <Box>
+                                        <Box
+                                            display="flex"
+                                            justifyContent="space-between"
+                                        >
+                                            <Typography pb={2}>
+                                                Search Results for:{" "}
+                                                <span style={{ color: "red" }}>
+                                                    {key}
+                                                </span>
+                                            </Typography>
+                                        </Box>
+                                        <Divider />
+                                        <Box pt={2}>
+                                            <WatchList
+                                                watches={watches}
+                                                forSearch={true}
+                                            />
+                                        </Box>
+                                        <Divider />
+                                        {watches && watches.length > 3 && (
+                                            <Box mt={2} textAlign="center">
+                                                <SeeMore
+                                                    router={`/search-results?key=${key}`}
+                                                    turnOffPannelResult={
+                                                        turnOfPannelResult
+                                                    }
+                                                />
+                                            </Box>
+                                        )}
+                                    </Box>
+                                )}
                             </Box>
                         </Box>
                     )}

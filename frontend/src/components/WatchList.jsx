@@ -25,7 +25,7 @@ const WatchList = ({ gender, watches, forSearch = false }) => {
                 {watches.map((e, i) => (
                     <Box
                         key={i}
-                        gridColumn={!forSearch && matches ? "span 3" : "span 3"}
+                        gridColumn={!forSearch && matches ? "span 3" : "span 4"}
                         sx={{ cursor: "pointer" }}
                         className="hover-unhide-back-image"
                         onMouseEnter={() => handleMouseEnter(i)}
