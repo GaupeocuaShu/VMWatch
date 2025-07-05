@@ -12,86 +12,83 @@ import LineThroughTitle from "../../../components/LineThroughTitle";
 import Filter from "../../../components/Filter";
 import WatchList from "../../../components/WatchList";
 import WatchesFilter from "../../../components/WatchesFilter";
+import useFetchDetailBrand from "../../../utils/hooks/brands/useFetchDetailBrand";
+import useFetchWatches from "../../../utils/hooks/watches/useFetchWatchs";
+import LoadingComponent from "../../../components/LoadingComponent";
+import Error from "../../../components/Error";
 const DetailBrand = () => {
-    const [brand, setBrand] = useState({});
-    const { brandSlug } = useParams();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    const [watches, setWatches] = useState([]);
-
-    useEffect(() => {
-        const fetchBrandBySlug = async () => {
-            const { data } = await axiosClient.get(
-                `api/get-detail-brand/${brandSlug}`
-            );
-            console.log(data.data);
-            setBrand(data.data);
-        };
-        fetchBrandBySlug();
-    }, []);
-    // Fetch Watches
-    useEffect(() => {
-        const fetchWatches = async () => {
-            try {
-                const { data } = await axiosClient.get(
-                    "api/get-display-watches"
-                );
-
-                console.log(data.data);
-                setWatches(data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchWatches();
-    }, []);
+    const { brandSlug } = useParams();
+    const {
+        brand,
+        loading: brandLoading,
+        error: brandError,
+    } = useFetchDetailBrand();
+    const {
+        watches,
+        loading: watchesLoading,
+        error: watchesError,
+    } = useFetchWatches({ brand: brandSlug });
+    if (brandLoading || watchesLoading) return <LoadingComponent />;
+    if (brandError || watchesError)
+        return <Error errorMessage={brandError || watchesError} />;
     return (
         brand && (
-            <Box margin={matches ? "20px 200px" : "20px 20px"}>
-                <Helmet>
-                    <title>{brand?.meta_title}</title>
-                    <meta
-                        name="description"
-                        content={brand?.meta_description}
-                    />
-                </Helmet>
+            <>
+                <Box margin={matches ? "20px 200px" : "20px 20px"}>
+                    <Helmet>
+                        <title>{brand?.meta_title}</title>
+                        <meta
+                            name="description"
+                            content={brand?.meta_description}
+                        />
+                    </Helmet>
 
-                <Breadcrumb />
-                <Box>
-                    <Typography
-                        variant="h4"
-                        color="gray"
-                        fontWeight={700}
-                        textAlign="center"
-                        my={3}
-                    >
-                        {brand?.title}
-                    </Typography>
-
+                    <Breadcrumb />
                     <Box>
-                        <SwiperBanner banners={brand.banners} />
+                        <Typography
+                            variant="h4"
+                            color="gray"
+                            fontWeight={700}
+                            textAlign="center"
+                            my={3}
+                        >
+                            {brand?.title}
+                        </Typography>
+
+                        <Box>
+                            <SwiperBanner banners={brand.banners} />
+                        </Box>
                     </Box>
-                </Box>
-                <Box>
-                    <Typography variant="h6" color="gray" my={3}>
-                        {brand.description}
-                    </Typography>
-                </Box>
-                <LineThroughTitle title="Collections" />
+                    <Box>
+                        <Typography variant="h6" color="gray" my={3}>
+                            {brand.description}
+                        </Typography>
+                    </Box>
+                    <LineThroughTitle title="Collections" />
 
-                <Box
-                    my={2}
-                    gap={4}
-                    display="grid"
-                    gridTemplateColumns="repeat(3,1fr)"
-                >
-                    {brand?.collections?.map((c) => (
-                        <Collection collection={c} />
-                    ))}
-                </Box>
+                    <Box
+                        my={2}
+                        gap={4}
+                        display="grid"
+                        gridTemplateColumns="repeat(3,1fr)"
+                    >
+                        {brand?.collections?.map((c) => (
+                            <Collection collection={c} />
+                        ))}
+                    </Box>
 
-                <LineThroughTitle title="Choose Your Style" />
-            </Box>
+                    <LineThroughTitle title="Choose Your Style" />
+                </Box>
+                {watchesLoading ? (
+                    <LoadingComponent />
+                ) : watchesError ? (
+                    <Error errorMessage={watchesError} />
+                ) : (
+                    <WatchList watches={watches} />
+                )}
+            </>
         )
     );
 };

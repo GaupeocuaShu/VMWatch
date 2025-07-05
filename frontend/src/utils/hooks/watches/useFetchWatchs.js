@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../../axios-client";
 
-function useFetchWatches({ type = null, key = null, limit = 8, page = 1 }) {
+function useFetchWatches({ type = null, brand = null, key = null, limit = 8, page = 1 }) {
     const [watches, setWatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -20,6 +20,7 @@ function useFetchWatches({ type = null, key = null, limit = 8, page = 1 }) {
                             limit: limit,
                             page: page,
                             key: key,
+                            brand: brand,
                         },
                     });
                     setWatches(data.data);
@@ -47,7 +48,7 @@ function useFetchWatches({ type = null, key = null, limit = 8, page = 1 }) {
             setError(null);
             setNotWatchesFound(false);
         }
-    }, [type, page, key]);
+    }, [type, page, key, brand]);
 
     return { watches, setWatches, loading, setLoading, error, notWatchesFound };
 }

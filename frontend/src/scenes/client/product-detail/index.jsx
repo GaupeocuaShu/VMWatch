@@ -46,7 +46,7 @@ const ProductDetail = () => {
     useEffect(() => {
         const fetchWatchBySlug = async () => {
             const { data } = await axiosClient.get(
-                `api/get-detail-watches/${productSlug}`
+                `api/client/watches/${productSlug}`
             );
             console.log(data.data);
             setWatch(data.data);

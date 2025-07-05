@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import Filter from "../../../components/Filter";
 import WatchesFilter from "../../../components/WatchesFilter";
 import { useState, useEffect } from "react";
@@ -10,33 +10,16 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import WatchSkeleton from "../../../components/WatchSkeleton";
 import useQuery from "../../../utils/hooks/queries/useQuery";
 import WatchList from "../../../components/WatchList";
+import useFetchWatchesBySearch from "../../../utils/hooks/watches/useFetchWatchesBySearch";
+import CustomPagination from "../../../components/Pagination";
 
 const SearchResults = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    const [watches, setWatches] = useState([]);
     const [query, setQuery] = useState(useQuery());
-    const [loading, setLoading] = useState(false);
+    const { watches, page, setPage, loading, error, notWatchesFound } =
+        useFetchWatchesBySearch(query);
 
-    // Fetch Watches
-    useEffect(() => {
-        const fetchWatches = async () => {
-            setLoading(true);
-            try {
-                const { data } = await axiosClient.get("api/search-results", {
-                    params: query,
-                });
-
-                console.log(data.data);
-                setWatches(data.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (query) fetchWatches();
-    }, [query]);
     return (
         <>
             <Box
@@ -49,25 +32,45 @@ const SearchResults = () => {
                     <Box
                         display="grid"
                         gridTemplateColumns="repeat(12,1fr)"
-                        width="70%"
+                        width="75%"
                         gap={4}
                     >
-                        {Array.from({ length: 10 }, (_, index) => (
+                        {Array.from({ length: 6 }, (_, index) => (
                             <WatchSkeleton key={index} />
                         ))}
                     </Box>
                 ) : (
-                    <Box>
-                        <Typography variant="h4">
-                            Search Results for:{" "}
-                            <span
-                                style={{ color: theme.palette.secondary.main }}
+                    <>
+                        <Box width="70%" gap={4}>
+                            <Typography variant="h4" paddingY={2}>
+                                Search Results for:{" "}
+                                <span
+                                    style={{
+                                        color: theme.palette.secondary.main,
+                                    }}
+                                >
+                                    {query.get("key")}
+                                </span>
+                            </Typography>
+                            <Divider />
+
+                            <Box paddingY={1}>
+                                <WatchList watches={watches} forSearch={true} />
+                            </Box>
+
+                            <Divider />
+                            <Box
+                                display="flex"
+                                justifyContent="center"
+                                paddingY={2}
                             >
-                                {query.get("key")}
-                            </span>
-                        </Typography>
-                        <WatchList watches={watches} forSearch={true} />
-                    </Box>
+                                <CustomPagination
+                                    setPage={setPage}
+                                    page={page}
+                                />
+                            </Box>
+                        </Box>
+                    </>
                 )}
             </Box>
         </>

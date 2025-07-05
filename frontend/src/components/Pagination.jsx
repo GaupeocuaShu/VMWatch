@@ -9,6 +9,7 @@ const CustomPagination = ({ setPage, page }) => {
             color="secondary"
             page={page}
             onChange={(event, value) => setPage(value)}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
     );
 };

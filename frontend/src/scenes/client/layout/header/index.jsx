@@ -93,7 +93,7 @@ const Header = () => {
     const [key, setKey] = useState("");
     const debouncedKey = useDebounce({ key, delay: 500 });
     const searchPannelRef = useRef(null);
-    const turnOfPannelResult = () => {
+    const turnOffPannelResult = () => {
         setShowPannelResult(false);
         setWatches([]); // Clear watches when closing the panel
         setKey(""); // Clear the search key
@@ -112,7 +112,7 @@ const Header = () => {
                 searchPannelRef.current &&
                 !searchPannelRef.current.contains(event.target)
             ) {
-                turnOfPannelResult();
+                turnOffPannelResult();
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -159,6 +159,7 @@ const Header = () => {
                             disabled={
                                 !key.trim() || loading || watches.length <= 3
                             }
+                            onClick={() => turnOffPannelResult()}
                         >
                             <SearchIcon />
                         </IconButton>
@@ -194,7 +195,7 @@ const Header = () => {
                                     aria-label="delete"
                                     color="red"
                                     onClick={() => {
-                                        turnOfPannelResult();
+                                        turnOffPannelResult();
                                     }}
                                 >
                                     <HighlightOffOutlinedIcon />
@@ -221,10 +222,19 @@ const Header = () => {
                                         alignItems="center"
                                         minHeight="300px"
                                     >
-                                        <Typography color="secondary">
-                                            {notWatchesFound
-                                                ? "No results found"
-                                                : notifications}
+                                        <Typography>
+                                            {notWatchesFound ? (
+                                                <span
+                                                    style={{
+                                                        color: theme.palette
+                                                            .secondary.main,
+                                                    }}
+                                                >
+                                                    No results found
+                                                </span>
+                                            ) : (
+                                                notifications
+                                            )}
                                         </Typography>
                                     </Box>
                                 ) : (
@@ -253,7 +263,7 @@ const Header = () => {
                                                 <SeeMore
                                                     router={`/search-results?key=${key}`}
                                                     turnOffPannelResult={
-                                                        turnOfPannelResult
+                                                        turnOffPannelResult
                                                     }
                                                 />
                                             </Box>
