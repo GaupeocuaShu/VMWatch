@@ -1,10 +1,10 @@
 import React from "react";
 import Pagination from "@mui/material/Pagination";
 
-const CustomPagination = ({ setPage, page }) => {
+const CustomPagination = ({ total, limit = 8, setPage, page }) => {
     return (
         <Pagination
-            count={4}
+            count={Math.ceil(total / limit)}
             variant="filled"
             color="secondary"
             page={page}

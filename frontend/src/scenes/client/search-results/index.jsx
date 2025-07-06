@@ -16,8 +16,9 @@ import CustomPagination from "../../../components/Pagination";
 const SearchResults = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    const [query, setQuery] = useState(useQuery());
-    const { watches, page, setPage, loading, error, notWatchesFound } =
+    const urlParams = useQuery();
+    const [query, setQuery] = useState(urlParams);
+    const { watches, page, setPage, loading, error, notWatchesFound, total } =
         useFetchWatchesBySearch(query);
 
     return (
@@ -42,16 +43,30 @@ const SearchResults = () => {
                 ) : (
                     <>
                         <Box width="70%" gap={4}>
-                            <Typography variant="h4" paddingY={2}>
-                                Search Results for:{" "}
-                                <span
-                                    style={{
-                                        color: theme.palette.secondary.main,
-                                    }}
-                                >
-                                    {query.get("key")}
-                                </span>
-                            </Typography>
+                            <Box
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                            >
+                                <Typography variant="h4" paddingY={2}>
+                                    Search Results for:{" "}
+                                    <span
+                                        style={{
+                                            color: theme.palette.secondary.main,
+                                        }}
+                                    >
+                                        {query instanceof URLSearchParams
+                                            ? query.get("key")
+                                            : query.key || ""}
+                                    </span>
+                                </Typography>
+                                <Typography variant="subtitle1" paddingY={1}>
+                                    <span style={{ color: theme.palette.secondary.main }}>
+                                        {total}{" "}
+                                    </span>
+                                    results found
+                                </Typography>
+                            </Box>
                             <Divider />
 
                             <Box paddingY={1}>
@@ -67,6 +82,8 @@ const SearchResults = () => {
                                 <CustomPagination
                                     setPage={setPage}
                                     page={page}
+                                    total={total}
+                                    limit={6}
                                 />
                             </Box>
                         </Box>

@@ -24,10 +24,16 @@ import { useEffect } from "react";
 import axiosClient from "../../../axios-client";
 import { Helmet } from "react-helmet-async";
 import { useCart } from "../../../cart/cart";
+import useFetchDetailWatch from "../../../utils/hooks/watches/useFetchDetailWatch";
+import LoadingComponent from "../../../components/LoadingComponent";
+import Error from "../../../components/Error";
+import useFetchWatches from "../../../utils/hooks/watches/useFetchWatchs";
+import WatchList from "../../../components/WatchList";
 
 const ProductDetail = () => {
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
     const { productSlug } = useParams();
-    const [watch, setWatch] = useState({});
     const {
         cart,
         getCartTotal,
@@ -43,21 +49,24 @@ const ProductDetail = () => {
         increaseItemQuantity: state.increaseItemQuantity,
         decreaseItemQuantity: state.decreaseItemQuantity,
     }));
-    useEffect(() => {
-        const fetchWatchBySlug = async () => {
-            const { data } = await axiosClient.get(
-                `api/client/watches/${productSlug}`
-            );
-            console.log(data.data);
-            setWatch(data.data);
-        };
-        fetchWatchBySlug();
-    }, [productSlug]);
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up("md"));
-    console.log(cart);
-    console.log(getCartQuantity() + " " + getCartTotal());
+    const {
+        watch,
+        loading: watchLoading,
+        error: watchError,
+    } = useFetchDetailWatch({ productSlug });
 
+    // Watch that same brand
+    const {
+        relatedWatches,
+        loading: relatedLoading,
+        error: relatedError,
+    } = useFetchWatches({
+        brand: watch?.brand,
+        key: "",
+    });
+
+    if (watchLoading) return <LoadingComponent />;
+    if (watchError) return <Error errorMessage={watchError} />;
     return (
         <Box margin={matches ? "20px 200px" : "20px 20px"}>
             <Helmet>
@@ -308,6 +317,18 @@ const ProductDetail = () => {
                         </ul>
                     </AccordionDetails>
                 </Accordion>
+            </Box>
+            <Box mt={4}>
+                <Typography variant="h4" color="secondary">
+                    Related Products
+                </Typography>
+                {relatedLoading ? (
+                    <LoadingComponent />
+                ) : relatedError ? (
+                    <Error errorMessage={relatedError} />
+                ) : (
+                    <WatchList watches={relatedWatches} />
+                )}
             </Box>
         </Box>
     );

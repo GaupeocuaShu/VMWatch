@@ -74,73 +74,72 @@ class HomeController extends Controller
                     ->orWhere('slug', 'like', '%' . $request->input('key') . '%');
             });
         }
-        if ($request->has('query')) {
-            $queries = convertQueryToArray($request->query()['query']);
-            foreach ($queries as $feature) {
-                [$entity, $slugs] = $feature;
 
-                switch ($entity) {
-                    case 'brands':
-                        $watchQuery->whereHas('brand', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'straps':
-                        $watchQuery->whereHas('strap', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'watch_collections':
-                        $watchQuery->whereHas('watchCollection', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'energies':
-                        $watchQuery->whereHas('energy', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'case_colors':
-                        $watchQuery->whereHas('caseColor', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'glass_materials':
-                        $watchQuery->whereHas('glassMaterial', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'water_resistance_levels':
-                        $watchQuery->whereHas('waterResistanceLevel', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'dial_colors':
-                        $watchQuery->whereHas('dialColor', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'dial_sizes':
-                        $watchQuery->whereHas('dialSize', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'dial_shapes':
-                        $watchQuery->whereHas('dialShape', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    case 'features':
-                        $watchQuery->whereHas('features', function ($query) use ($slugs) {
-                            $query->whereIn('slug', $slugs);
-                        });
-                        break;
-                    default:
-                        // Handle other cases or ignore unknown features
-                        break;
-                }
+        $queries = $request->except(['page', 'key']);
+        foreach ($queries as $entity => $slugs) {
+            $slugs = array_map('trim', explode('|', $slugs));
+            switch ($entity) {
+                case 'brands':
+                    $watchQuery->whereHas('brand', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'straps':
+                    $watchQuery->whereHas('strap', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'watch_collections':
+                    $watchQuery->whereHas('watchCollection', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'energies':
+                    $watchQuery->whereHas('energy', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'case_colors':
+                    $watchQuery->whereHas('caseColor', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'glass_materials':
+                    $watchQuery->whereHas('glassMaterial', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'water_resistance_levels':
+                    $watchQuery->whereHas('waterResistanceLevel', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'dial_colors':
+                    $watchQuery->whereHas('dialColor', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'dial_sizes':
+                    $watchQuery->whereHas('dialSize', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'dial_shapes':
+                    $watchQuery->whereHas('dialShape', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                case 'features':
+                    $watchQuery->whereHas('features', function ($query) use ($slugs) {
+                        $query->whereIn('slug', $slugs);
+                    });
+                    break;
+                default:
+                    // Handle other cases or ignore unknown features
+                    break;
             }
         }
+
 
         $watches = $watchQuery->with([
             'energy',

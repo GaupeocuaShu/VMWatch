@@ -87,8 +87,10 @@ const Filter = ({ query, setQuery }) => {
             }
         }
         const newUrl = `/search-results?${queryParams.toString()}`;
-        console.log(queryParams);
-        setQuery(queryParams);
+        const objectQuery = Object.fromEntries(queryParams.entries());
+        // Update the query state with the new values
+        console.log("Object Query:", objectQuery);
+        setQuery(objectQuery);
         navigate(newUrl);
     };
 

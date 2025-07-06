@@ -6,10 +6,13 @@ function useFetchWatches({ type = null, brand = null, key = null, limit = 8, pag
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [notWatchesFound, setNotWatchesFound] = useState(false);
+    const [total, setTotal] = useState(0);
     useEffect(() => {
+
         // Case 1 key is null means we don't want to search but still want to fetch watches
         // Case 2 key not empty string means we want to search by key
-        if (key === null || key !== "") {
+        // Case 3 brand is not null means we want to filter by brand
+        if (key === null || key !== "" || brand !== null) {
             setLoading(true);
             setError(null);
             const fetchWatches = async () => {
@@ -24,6 +27,8 @@ function useFetchWatches({ type = null, brand = null, key = null, limit = 8, pag
                         },
                     });
                     setWatches(data.data);
+                    setTotal(data.meta.total);
+
                 } catch (error) {
                     setError(error);
                 } finally {
@@ -50,7 +55,7 @@ function useFetchWatches({ type = null, brand = null, key = null, limit = 8, pag
         }
     }, [type, page, key, brand]);
 
-    return { watches, setWatches, loading, setLoading, error, notWatchesFound };
+    return { total, watches, setWatches, loading, setLoading, error, notWatchesFound };
 }
 
 export default useFetchWatches;

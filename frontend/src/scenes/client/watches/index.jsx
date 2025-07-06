@@ -14,7 +14,12 @@ const Watches = ({ title, watchType, limit = 8, isPagination = true }) => {
     const [page, setPage] = useState(1);
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const type = useQuery().get("type") || watchType;
-    const { watches, loading, error } = useFetchWatches({ type, limit, page });
+    const { watches, loading, error, total } = useFetchWatches({
+        type,
+        limit,
+        page,
+    });
+    console.log(total);
     if (loading) return <LoadingComponent />;
     if (error) return <Error errorMessage={error} />;
     return (
@@ -31,20 +36,26 @@ const Watches = ({ title, watchType, limit = 8, isPagination = true }) => {
                 </Typography>
             </Box>
             <WatchList watches={watches} limit={limit} />
-
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                marginY={3}
-            >
-                {" "}
-                {isPagination ? (
-                    <CustomPagination setPage={setPage} page={page} />
-                ) : (
-                    <SeeMore router={`/watches?type=${type}`} />
-                )}
-            </Box>
+            {watches && (
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    marginY={3}
+                >
+                    {" "}
+                    {isPagination ? (
+                        <CustomPagination
+                            total={total}
+                            limit={limit}
+                            setPage={setPage}
+                            page={page}
+                        />
+                    ) : (
+                        <SeeMore router={`/watches?type=${type}`} />
+                    )}
+                </Box>
+            )}
         </Box>
     );
 };
