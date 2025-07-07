@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -54,6 +56,10 @@ class OrderController extends Controller
                 'price' => $item['price'],
             ]);
         }
+
+        // Send an email to the user
+        Mail::to($user->email)->send(new OrderConfirmationMail($order->load('user')));
+
         // Clear the cart
         $user->clearCart();
 

@@ -4,7 +4,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const WatchList = ({ gender, watches, forSearch = false }) => {
+const WatchList = ({ gender, watches, forSearch = false, title = null }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     const [isHovered, setIsHovered] = useState(null);
@@ -16,13 +16,18 @@ const WatchList = ({ gender, watches, forSearch = false }) => {
     };
     return (
         <Box margin={!forSearch && matches ? "20px 200px" : "20px 20px"}>
+            {title && (
+                <Typography variant="h2" textAlign="center" color="secondary">
+                    {title}
+                </Typography>
+            )}
             <Box
                 my={5}
                 gap={matches ? 5 : 0}
                 display="grid"
                 gridTemplateColumns="repeat(12,1fr)"
             >
-                {watches.map((e, i) => (
+                {watches?.map((e, i) => (
                     <Box
                         key={i}
                         gridColumn={!forSearch && matches ? "span 3" : "span 4"}

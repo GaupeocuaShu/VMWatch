@@ -12,7 +12,8 @@ function useFetchWatches({ type = null, brand = null, key = null, limit = 8, pag
         // Case 1 key is null means we don't want to search but still want to fetch watches
         // Case 2 key not empty string means we want to search by key
         // Case 3 brand is not null means we want to filter by brand
-        if (key === null || key !== "" || brand !== null) {
+        // Case 4 type is not null means we want to filter by type(gender)
+        if (key === null || key !== "" || brand !== null || type !== null) {
             setLoading(true);
             setError(null);
             const fetchWatches = async () => {
